@@ -1,0 +1,17 @@
+# Aggregate databases (multi-GB, rebuilt via build_master_db.py from raw scan output)
+/data/
+
+# Regenerable analysis artifacts (plots, reports, clustering outputs, brain files, model weights)
+/analysis_outputs/
+/analyses_ridgeplots/
+/archive/legacy_outputs/
+/kmeans_clustering/*.csv
+/kmeans_clustering/*.txt
+/kmeans_clustering/archetype_scatters/
+/kmeans_clustering/archetype_scatters_by_lang/
+/kmeans_clustering/cluster_health_reports/
+/xgboost_threat_model/*.json
+
+# Python
+__pycache__/
+*.pyc
