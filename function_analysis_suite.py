@@ -1,3 +1,4 @@
+import argparse
 import sqlite3
 import pandas as pd
 import numpy as np
@@ -13,15 +14,15 @@ warnings.filterwarnings('ignore')
 SCRIPT_DIR = Path(__file__).parent.resolve()
 OUTPUT_DIR = SCRIPT_DIR / "analyses_ridgeplots"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-DB_PATH = SCRIPT_DIR / "data" / "gitgalaxy_master.db"
+DEFAULT_DB_PATH = SCRIPT_DIR / "data" / "gitgalaxy_master.db"
 
-def run_function_suite():
-    if not DB_PATH.exists():
-        print(f"❌ Database not found at {DB_PATH}")
+def run_function_suite(db_path):
+    if not db_path.exists():
+        print(f"❌ Database not found at {db_path}")
         sys.exit(1)
 
-    print("📡 Connecting to GitGalaxy Master Database...")
-    conn = sqlite3.connect(DB_PATH)
+    print(f"📡 Connecting to {db_path.name}...")
+    conn = sqlite3.connect(db_path)
     
     # NEW QUERY: Focus purely on the atomic functions and their new Micro-Species
     query = """
@@ -309,4 +310,8 @@ def run_function_suite():
     print("="*80 + "\n")
 
 if __name__ == "__main__":
-    run_function_suite()
+    parser = argparse.ArgumentParser(description="GitGalaxy Function Micro-Species Analysis Suite")
+    parser.add_argument("--db", type=Path, default=DEFAULT_DB_PATH,
+                         help=f"Path to the master SQLite DB. Default: {DEFAULT_DB_PATH}")
+    args = parser.parse_args()
+    run_function_suite(args.db)

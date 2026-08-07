@@ -1,101 +1,116 @@
+import argparse
 import sqlite3
 import pandas as pd
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
+DEFAULT_DB_PATH = SCRIPT_DIR / "data" / "gitgalaxy_master.db"
+OUTPUT_DIR = SCRIPT_DIR / "analysis_outputs"
 
-# 1. Configuration: Set your database file name here
-db_file = SCRIPT_DIR / "data" / "gitgalaxy_master.db"
-
-# 2. List of the 18 risk exposure columns
-risk_columns = [
-    "risk_cognitive_load_exposure",
-    "risk_error_and_exception_exposure",
-    "risk_tech_debt_exposure",
-    "risk_testing_exposure",
+# Rewritten against the current engine schema (file_data.risk_*) instead of the legacy
+# `galactic_census` table, which no longer exists for any post-#325 database -- it was a
+# hand-built denormalized table from an older schema generation that nothing regenerates.
+# See squid-protocol/gitgalaxy#1144 for how that gap was found.
+#
+# Mapping from the old 18-column galactic_census risk_*_exposure set to today's 14
+# RISK_SCHEMA columns (gitgalaxy/standards/analysis_lens.py):
+#   risk_cognitive_load_exposure        -> risk_cognitive_load
+#   risk_error_and_exception_exposure   -> risk_safety_score      (renamed concept: defensive/error handling)
+#   risk_tech_debt_exposure             -> risk_tech_debt
+#   risk_testing_exposure               -> risk_verification
+#   risk_api_exposure                   -> risk_api_exposure      (unchanged)
+#   risk_concurrency_exposure           -> risk_concurrency
+#   risk_state_flux_exposure            -> risk_state_flux
+#   risk_graveyard_exposure             -> risk_dead_code
+#   risk_specification_exposure         -> risk_spec_match
+#   risk_instability_exposure           -> risk_stability
+#   risk_volatility_exposure            -> risk_churn
+#   risk_documentation_exposure         -> risk_documentation
+#   risk_civil_war_exposure             -> risk_tabs_vs_spaces
+#   risk_hardcoded_payload_artifacts    -> risk_secrets_risk
+# Four old columns have NO current risk_* equivalent and are dropped, not just the two
+# explicitly-removed ones:
+#   risk_exploit_generation_surface (logic_bomb)     -- removed from the engine entirely, #1029
+#   risk_weaponizable_injection_vectors              -- no longer a scored risk_* dimension
+#     (raw threat_tainted_injection hit-count exists, but that's not a comparable 0-100 score)
+#   risk_obfuscation_and_evasion_surface             -- same: only threat_obfuscated (raw hits) remains
+#   risk_raw_memory_manipulation                     -- same: only state_pointers/state_memory_alloc (raw hits) remain
+RISK_COLUMNS = [
+    "risk_cognitive_load",
+    "risk_safety_score",
+    "risk_tech_debt",
+    "risk_verification",
     "risk_api_exposure",
-    "risk_concurrency_exposure",
-    "risk_state_flux_exposure",
-    "risk_graveyard_exposure",
-    "risk_specification_exposure",
-    "risk_instability_exposure",
-    "risk_volatility_exposure",
-    "risk_documentation_exposure",
-    "risk_civil_war_exposure",
-    "risk_obfuscation_and_evasion_surface",
-    "risk_exploit_generation_surface",
-    "risk_weaponizable_injection_vectors",
-    "risk_raw_memory_manipulation",
-    "risk_hardcoded_payload_artifacts"
+    "risk_concurrency",
+    "risk_state_flux",
+    "risk_dead_code",
+    "risk_spec_match",
+    "risk_stability",
+    "risk_churn",
+    "risk_documentation",
+    "risk_tabs_vs_spaces",
+    "risk_secrets_risk",
 ]
 
-# 3. Connect to the database and load the data
-print(f"Connecting to {db_file}...")
-try:
-    conn = sqlite3.connect(db_file)
-    
-    # Build the SQL query dynamically
-    columns_str = ",\n    ".join(risk_columns)
+
+def run(db_path: Path):
+    if not db_path.exists():
+        print(f"❌ Database not found at {db_path}")
+        return
+
+    print(f"Connecting to {db_path}...")
+    conn = sqlite3.connect(db_path)
+
+    columns_str = ",\n    ".join(RISK_COLUMNS)
     query = f"""
-    SELECT 
+    SELECT
         {columns_str}
-    FROM 
-        galactic_census
-    WHERE 
+    FROM
+        file_data
+    WHERE
         is_malware = 0;
     """
-    
-    print("Fetching data (this might take a moment for 2 million rows)...")
-    # Load directly into a pandas DataFrame for lightning-fast math
+
+    print("Fetching data (this might take a moment for a few hundred thousand rows)...")
     df = pd.read_sql_query(query, conn)
     conn.close()
-    
-    print(f"Successfully loaded {len(df):,} healthy files.")
-    
-    # 4. Calculate Comprehensive Statistics
+
+    print(f"Successfully loaded {len(df):,} healthy files (is_malware = 0).")
+
     print("Calculating distributions and percentiles...")
-    
-    # Basic stats (count, mean, std, min, 25%, 50% (median), 75%, max)
-    # The .T transposes it so the metrics are rows instead of columns
-    stats = df.describe().T 
-    
-    # Add high-end percentiles (90th, 95th, 99th, 99.9th) to find the extreme outliers
+    stats = df.describe().T
     percentiles = df.quantile([0.90, 0.95, 0.99, 0.999]).T
     percentiles.columns = ['90%', '95%', '99%', '99.9%']
-    
-    # Merge the standard stats and custom percentiles together
     full_stats = pd.concat([stats, percentiles], axis=1)
-    
-    # Reorder the columns so it reads cleanly from left to right
+
     ordered_columns = [
-        'count', 'mean', 'std', 'min', 
-        '25%', '50%', '75%', 
-        '90%', '95%', '99%', '99.9%', 
+        'count', 'mean', 'std', 'min',
+        '25%', '50%', '75%',
+        '90%', '95%', '99%', '99.9%',
         'max'
     ]
     full_stats = full_stats[ordered_columns]
-    
-    # Rename for readability
     full_stats.rename(columns={'50%': 'median', 'mean': 'average'}, inplace=True)
-    
-    # Round the results to 3 decimal places
     full_stats = full_stats.round(3)
-    
-    # 5. Output the results
-    print("\n" + "="*50)
+
+    print("\n" + "=" * 50)
     print("RISK EXPOSURE STATISTICS (HEALTHY BASELINE)")
-    print("="*50)
-    
-    # Force pandas to print all columns and rows without truncating them
+    print("=" * 50)
+
     pd.set_option('display.max_rows', None)
     pd.set_option('display.max_columns', None)
     pd.set_option('display.width', 1000)
     print(full_stats)
-    
-    # Save to a CSV so you don't have to deal with copy/paste formatting
-    output_file = 'comprehensive_risk_stats.csv'
+
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    output_file = OUTPUT_DIR / "comprehensive_risk_stats.csv"
     full_stats.to_csv(output_file)
     print(f"\n[+] Saved full statistics spreadsheet to: {output_file}")
 
-except Exception as e:
-    print(f"An error occurred: {e}")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="GitGalaxy Detailed Risk Exposure Statistics")
+    parser.add_argument("--db", type=Path, default=DEFAULT_DB_PATH,
+                         help=f"Path to the master SQLite DB. Default: {DEFAULT_DB_PATH}")
+    args = parser.parse_args()
+    run(args.db)
