@@ -1,16 +1,23 @@
+import argparse
+import gzip
 import os
+import shutil
 import sqlite3
+import tempfile
 from pathlib import Path
 import sys
 
 # --- CONFIGURATION ---
 SCRIPT_DIR = Path(__file__).parent.resolve()
 
-# Directories to search for individual repository .db files
+# Directories to search for individual repository .db files. Overridable via
+# --input-dir (repeatable) since the source of truth has moved over time (e.g.
+# from the old v6/updated_results_2 test dumps to the gitgalaxy-raw-output repo).
 INPUT_DIRS = [
     Path("/srv/storage_16tb/projects/gitgalaxy/v6/updated_results_2")
 ]
 
+# Overridable via --output (filename only, written under data/).
 MASTER_DB_PATH = SCRIPT_DIR / "data" / "gitgalaxy_master.db"
 
 # A source db must have these to be considered valid at all.
@@ -23,13 +30,16 @@ CORE_TABLES = ['repo_data', 'file_data', 'function_data']
 OPTIONAL_TABLES = ['folder_data', 'class_data', 'excluded_artifacts']
 
 def find_database_files():
-    """Finds all SQLite databases in the input directories."""
+    """Finds all SQLite databases (plain or gzip-compressed) in the input directories."""
     db_files = []
     for directory in INPUT_DIRS:
         if directory.exists():
             # Find all _master.db files, excluding the master database if it's in the same folder
             found = [f for f in directory.rglob("*_master.db") if f.name != MASTER_DB_PATH.name]
             db_files.extend(found)
+            # gitgalaxy-raw-output's batch_process.py gzips these to stay under
+            # GitHub's per-file limit; unzip them transparently at merge time.
+            db_files.extend(directory.rglob("*_master.db.gz"))
     return db_files
 
 def clone_table_schema(master_cursor, source_cursor, table):
@@ -97,8 +107,18 @@ def merge_databases():
             print(f"[{index}/{len(db_files)}] ⏩ Skipping (Already Merged): {db_path.name}")
             continue
 
+        tmp_decompressed = None
+        connect_path = db_path
+        if db_path.suffix == ".gz":
+            tmp_fd, tmp_name = tempfile.mkstemp(suffix=".db")
+            os.close(tmp_fd)
+            with gzip.open(db_path, "rb") as f_in, open(tmp_name, "wb") as f_out:
+                shutil.copyfileobj(f_in, f_out)
+            tmp_decompressed = Path(tmp_name)
+            connect_path = tmp_decompressed
+
         try:
-            source_conn = sqlite3.connect(db_path)
+            source_conn = sqlite3.connect(connect_path)
             source_cursor = source_conn.cursor()
 
             # 0. Basic Table Verification
@@ -277,6 +297,9 @@ def merge_databases():
 
         except Exception as e:
             print(f"❌ Error merging {db_path.name}: {e}")
+        finally:
+            if tmp_decompressed is not None:
+                tmp_decompressed.unlink(missing_ok=True)
 
     # Commit all changes to master
     master_conn.commit()
@@ -323,4 +346,17 @@ def merge_databases():
     print("="*50 + "\n")
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="GitGalaxy Master Database Builder")
+    parser.add_argument("--input-dir", type=Path, action="append", dest="input_dirs",
+                         help=f"Directory to search for source *_master.db(.gz) files "
+                              f"(repeatable). Default: {INPUT_DIRS[0]}")
+    parser.add_argument("--output", type=str, default=MASTER_DB_PATH.name,
+                         help=f"Output DB filename, written under {MASTER_DB_PATH.parent}/. "
+                              f"Default: {MASTER_DB_PATH.name}")
+    args = parser.parse_args()
+
+    if args.input_dirs:
+        INPUT_DIRS = args.input_dirs
+    MASTER_DB_PATH = SCRIPT_DIR / "data" / args.output
+
     merge_databases()
