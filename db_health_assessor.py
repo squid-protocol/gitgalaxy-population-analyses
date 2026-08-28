@@ -42,8 +42,19 @@ class GalaxyDBHealthAssessor:
         
         ACTIVE_LOGIC_ONLY_COLS = ['global_drift', 'local_drift', 'ai_threat_confidence']
         
-        # Architectural domains, security threats, and risk vectors are naturally sparse at the micro-level
-        SPARSE_PREFIXES = ('sec_', 'threat_', 'mitigated_', 'amplified_', 'risk_', 'raw_sec_', 'arch_')
+        # Architectural domains, security threats, and risk vectors are naturally sparse at the micro-level.
+        # llm_/ml_/dl_ are domain-detection signatures (AI/ML tooling): real, working features that are
+        # simply rare outside an AI-heavy corpus -- e.g. this 718-repo population is mostly non-AI code, so
+        # they read >99% zero without being dead. See squid-protocol/gitgalaxy-population-analyses#1.
+        SPARSE_PREFIXES = ('sec_', 'threat_', 'mitigated_', 'amplified_', 'risk_', 'raw_sec_', 'arch_',
+                           'llm_', 'ml_', 'dl_')
+
+        # lit_* (literature sensors: code blocks, diagrams, headers, links) only ever fire on markdown/doc
+        # files, which have coding_loc = 0 and are therefore structurally excluded from active_logic_total
+        # -- the population this check measures against. The tool would be asking "what % of non-doc source
+        # files use markdown syntax" (~0% by construction), not "is this feature dead". Confirmed working:
+        # 43,752 / 49,252 markdown files carry real lit_headers hits. Exempted here rather than silenced.
+        LANGUAGE_SCOPED_PREFIXES = ('lit_',)
         
         # Explicitly whitelist placeholders, file-level metrics, and highly specialized defensive/state hits
         SPARSE_EXACT = {
@@ -52,7 +63,8 @@ class GalaxyDBHealthAssessor:
             'state_slop_duplicates', 'state_slop_orphans', 'state_graveyard',
             'state_danger', 'state_planned_debt', 'state_fragile_debt', 'state_halt_hits',
             'def_spec_exposure', 'def_auth', 'def_telemetry', 'def_sync_locks', 
-            'def_test_skip', 'def_doc', 'def_ownership'
+            'def_test_skip', 'def_doc', 'def_ownership',
+            'lazy_evaluation'  # functional-programming signature; real signal, rare outside FP-heavy code
         }
         EXPECTED_EMPTY_TEXT = {'purpose', 'import_list', 'commit_date'}
 
@@ -132,8 +144,14 @@ class GalaxyDBHealthAssessor:
                 zeros = stats.get(f"{name}_zero", 0)
                 zero_pct = (zeros / active_logic_total) * 100
 
-                # Context Aware: Skip the "Dead Feature" check for sparse security features
-                is_sparse_expected = name.startswith(SPARSE_PREFIXES) or name in SPARSE_EXACT
+                # Context Aware: Skip the "Dead Feature" check for sparse security features, sparse
+                # domain-detection signatures, and language-scoped columns the active-logic filter
+                # structurally excludes from its own denominator.
+                is_sparse_expected = (
+                    name.startswith(SPARSE_PREFIXES)
+                    or name.startswith(LANGUAGE_SCOPED_PREFIXES)
+                    or name in SPARSE_EXACT
+                )
 
                 if zero_pct >= WARNING_ZERO_PCT and not name.endswith('id') and not name.startswith('is_') and not is_sparse_expected:
                     issues.append(f"💀 DEAD FEATURE: '{name}' is {zero_pct:.1f}% zeros. (Safe to drop or requires upstream fix).")
