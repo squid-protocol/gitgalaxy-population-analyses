@@ -58,7 +58,7 @@ def _evaluate_single_k(args):
     sil_score = silhouette_score(X_sample, sample_labels)
     return test_k, wcss, sil_score
 
-def run_dna_clustering(target_language=None, force_k=None, accuracy='standard'):
+def run_dna_clustering(target_language=None, force_k=None, accuracy='standard', encapsulation_weight=1.0):
     if not DB_PATH.exists():
         print(f"❌ Error: Master Database not found at {DB_PATH}")
         return None, 0.0, 0.0
@@ -87,20 +87,37 @@ def run_dna_clustering(target_language=None, force_k=None, accuracy='standard'):
     print("🌌 Running Global Function Clustering...\n")
     # Note: We filter out tiny functions (< 3 LOC) to prevent divide-by-zero density explosions
     # and exclude tests to focus on architectural execution logic.
+    #
+    # Sampling is a DETERMINISTIC pseudo-random order keyed on the immutable function id
+    # (multiplicative hash) rather than ORDER BY RANDOM(): runs are now reproducible, and
+    # each larger profile's sample is a strict SUPERSET of the smaller one (so the
+    # controller's convergence check reflects real stability, not resampling noise).
+    lang_clause = ""
+    params = []
+    if target_language:
+        lang_clause = "AND LOWER(c.language) = LOWER(?)"
+        params.append(target_language)
+        print(f"🗣️  Language filter active: {target_language}")
+
     query = f"""
-        SELECT f.*, c.language, c.repo_name 
+        SELECT f.*, c.language, c.repo_name
         FROM function_data f
         JOIN file_data c ON f.file_id = c.id
-        WHERE f.loc >= 3 
+        WHERE f.loc >= 3
         AND f.func_name NOT LIKE '%test%'
         AND f.func_name NOT LIKE '%mock%'
-        ORDER BY RANDOM() LIMIT {prof['limit']}
+        {lang_clause}
+        ORDER BY (f.id * 2654435761) % 2147483647
+        LIMIT {prof['limit']}
     """
-    output_csv = SCRIPT_DIR / "kmeans_function_micro_species.csv"
-    brain_output_path = SCRIPT_DIR / "ml_inference_brain_functions.txt"
-    
+    # Tag outputs when running a non-default variant so it doesn't clobber the
+    # canonical result (e.g. the encapsulation-downweighted alternate taxonomy).
+    variant_suffix = "" if encapsulation_weight == 1.0 else f"_encap{encapsulation_weight:g}"
+    output_csv = SCRIPT_DIR / f"kmeans_function_micro_species{variant_suffix}.csv"
+    brain_output_path = SCRIPT_DIR / f"ml_inference_brain_functions{variant_suffix}.txt"
+
     conn = sqlite3.connect(DB_PATH)
-    df = pd.read_sql_query(query, conn)
+    df = pd.read_sql_query(query, conn, params=params)
     conn.close()
     
     if len(df) == 0:
@@ -137,25 +154,95 @@ def run_dna_clustering(target_language=None, force_k=None, accuracy='standard'):
     }
 
     dna_hit_cols = [
-        c for c in df.columns 
-        if c not in excluded_cols 
-        and not c.startswith('log_') 
+        c for c in df.columns
+        if c not in excluded_cols
+        and not c.startswith('log_')
         and c != 'func_internal_density'
         and not c.startswith('total_')
         and not c.endswith('_total')
         and not c.startswith('summary_')
-        and not c.startswith('func_cluster_') 
+        and not c.startswith('func_cluster_')
         and not c.startswith('threat_')       # <--- NEW: Exclude threat vectors
         and not c.startswith('sec_')          # <--- NEW: Exclude sec_graveyard, etc.
     ]
-    
+
+    # The list above is a DENYLIST, so any column the scan engine adds later silently
+    # becomes a clustering feature. Two failure modes that actually bit us:
+    #   1. TEXT columns (docstring, calls_out_to) -> crash in the per-LOC density math
+    #      ('str' / 'int'); the engine added these after this tool last ran.
+    #   2. Numeric columns that are NOT architectural "hit" counts -- foreign keys
+    #      (parent_class_id), line numbers (start_line), booleans (is_public,
+    #      is_documented) -- get log-density-transformed as if they were code DNA,
+    #      polluting the distance metric (FKs even scale with DB size).
+    # Guard both: drop known non-count numerics, then keep only numeric-dtype columns.
+    NON_FEATURE_NUMERICS = {
+        'parent_class_id', 'start_line', 'is_public', 'is_documented',
+    }
+    dna_hit_cols = [
+        c for c in dna_hit_cols
+        if c not in NON_FEATURE_NUMERICS
+        and pd.api.types.is_numeric_dtype(df[c])
+    ]
+
+    # -------------------------------------------------------------------------
+    # ROSETTA-INFORMED FEATURE GOVERNANCE (keyword-rosetta docs/bias_data.json)
+    # rosetta plants ONE identical program in 46 languages, so a metric that fires
+    # consistently there measures architecture; one that varies measures language.
+    #
+    # (a) HARD DROP: inert on the 46-language control corpus (0 in every language)
+    #     and <1% non-zero here -- they carry no cross-language signal at all, just
+    #     pad the vector and seed spurious micro-clusters.
+    # -------------------------------------------------------------------------
+    ROSETTA_INERT_DROP = {
+        'llm_api', 'llm_orchestrator', 'llm_vector_store', 'llm_local_compute',
+        'ml_traditional', 'dl_frameworks', 'vectorized_math', 'lazy_evaluation',
+        'state_slop_duplicates', 'arch_crypto', 'arch_regex', 'arch_time',
+        'lit_code_blocks', 'lit_diagrams', 'lit_headers', 'lit_links',
+        'prompt_injection', 'agentic_rce',
+    }
+    n_inert_dropped = sum(1 for c in dna_hit_cols if c in ROSETTA_INERT_DROP)
+    dna_hit_cols = [c for c in dna_hit_cols if c not in ROSETTA_INERT_DROP]
+
+    # (b) DATA-DRIVEN PREVALENCE PRUNE: corpus-adaptively drop any remaining density
+    #     column that is <1% non-zero in this sample (catches the rest of the
+    #     near-dead arch_*/state_* markers this corpus doesn't exercise). This is
+    #     what stops the denylist from silently absorbing every new all-zero
+    #     detector the scan engine ships.
+    PREVALENCE_MIN = 0.01
+    prevalence = {c: float((df[c].fillna(0) != 0).mean()) for c in dna_hit_cols}
+    pruned_dead = [c for c in dna_hit_cols if prevalence[c] < PREVALENCE_MIN]
+    dna_hit_cols = [c for c in dna_hit_cols if prevalence[c] >= PREVALENCE_MIN]
+    print(f"🧹 Rosetta governance: dropped {n_inert_dropped} inert + "
+          f"{len(pruned_dead)} low-prevalence (<{PREVALENCE_MIN:.0%}) columns; "
+          f"{len(dna_hit_cols)} DNA features survive.")
+
+    # (d) LOG-CAP (winsorize) features with a genuine heavy right tail that survives
+    #     the log transform and drags a cluster centroid past the health threshold.
+    #     def_encapsulation is rosetta-robust (96% cross-language) -- NOT bias -- but
+    #     a small sub-population of accessor/property functions is so encapsulation-
+    #     dense it pulled a centroid to ~5 IQR. Clipping the raw density at a high
+    #     percentile keeps the archetype while stopping a handful of extremes from
+    #     dominating the Euclidean distance. Cap point is data-driven per run.
+    CAP_FEATURES = {'def_encapsulation'}
+    CAP_PERCENTILE = 99.0
+
     log_density_hit_cols = []
+    cap_values = {}  # exported in the brain so inference (updater/engine) clips identically
     safe_denom = df['loc'].replace(0, 1)
 
     for col in dna_hit_cols:
         raw_density_name = f"raw_density_{col}"
-        df[raw_density_name] = (df[col].fillna(0) / safe_denom) * 100.0
-        
+        raw_density = (df[col].fillna(0) / safe_denom) * 100.0
+
+        if col in CAP_FEATURES:
+            cap = float(np.percentile(raw_density, CAP_PERCENTILE))
+            cap_values[col] = cap
+            n_capped = int((raw_density > cap).sum())
+            raw_density = raw_density.clip(upper=cap)
+            print(f"   ✂️  Log-cap: winsorized '{col}' at p{CAP_PERCENTILE:g} "
+                  f"(density {cap:.2f}, {n_capped:,} functions clipped).")
+
+        df[raw_density_name] = raw_density
         log_density_name = f"log_density_{col}"
         df[log_density_name] = np.log1p(df[raw_density_name])
         log_density_hit_cols.append(log_density_name)
@@ -173,6 +260,44 @@ def run_dna_clustering(target_language=None, force_k=None, accuracy='standard'):
     
     cluster_features = telemetry_features + log_density_hit_cols
 
+    # (c) DOWNWEIGHT (not drop): features rosetta shows track LANGUAGE more than
+    #     architecture -- low cross-language in-band %, or the `unplanted_inputs`
+    #     set that fires only on mandatory language idiom (e.g. JS `const` ->
+    #     immutability_locks). Halving their post-scaling pull stops the global
+    #     k-means from re-encoding language while still letting them break ties.
+    #     Debt/human-intent markers (cluster_files.py drops these outright) are
+    #     softened here too. keyword_density/token_mass are ungated length/vocab.
+    ROSETTA_BIASED_WEIGHTS = {
+        # language-biased / mandatory-idiom hit densities  (raw name -> weight)
+        'arch_api': 0.5, 'arch_ipc': 0.5, 'state_memory_alloc': 0.5,
+        'arch_concurrency': 0.5, 'state_print_hits': 0.5, 'def_freeze_hits': 0.5,
+        'def_spec_exposure': 0.5, 'def_sync_locks': 0.5,
+        'state_planned_debt': 0.5, 'state_fragile_debt': 0.5, 'state_graveyard': 0.5,
+        'token_mass': 0.5,
+    }
+    TELEMETRY_WEIGHTS = {'keyword_density': 0.5, 'log_complexity': 0.75}
+
+    # Optional alternate taxonomy: encapsulation is a real, dominant signal (it
+    # defines ~22% of functions across 3 clusters), so at weight 1.0 it crowds out
+    # secondary semantic themes. Downweighting it lets I/O, concurrency, cleanup,
+    # etc. define their own clusters -- a breadth-first cut rather than a
+    # fidelity-first one. Not bias correction; a deliberate lens change.
+    if encapsulation_weight != 1.0:
+        ROSETTA_BIASED_WEIGHTS['def_encapsulation'] = encapsulation_weight
+        print(f"🔬 ALTERNATE LENS: def_encapsulation down-weighted to {encapsulation_weight:g}× "
+              f"to surface secondary archetypes.")
+
+    def _feature_weight(f):
+        if f in TELEMETRY_WEIGHTS:
+            return TELEMETRY_WEIGHTS[f]
+        if f.startswith('log_density_'):
+            return ROSETTA_BIASED_WEIGHTS.get(f[len('log_density_'):], 1.0)
+        return 1.0
+    feature_weights = np.array([_feature_weight(f) for f in cluster_features], dtype=np.float64)
+    n_down = int((feature_weights != 1.0).sum())
+    print(f"⚖️  Rosetta down-weighting {n_down} language-biased feature(s) "
+          f"(weights {sorted(set(feature_weights[feature_weights != 1.0].tolist()))}).")
+
     df = df.dropna(subset=cluster_features).copy()
     X_raw = df[cluster_features]
 
@@ -185,6 +310,11 @@ def run_dna_clustering(target_language=None, force_k=None, accuracy='standard'):
     # =========================================================================
     scaler = RobustScaler()
     X_scaled = scaler.fit_transform(X_raw)
+
+    # Apply the rosetta down-weights to the SCALED matrix so they scale each
+    # feature's contribution to the Euclidean distance k-means minimizes. Stored
+    # in the exported brain so inference reproduces the same geometry.
+    X_scaled = X_scaled * feature_weights
 
     # =========================================================================
     # 4.5 MATHEMATICAL DIAGNOSTICS (Elbow & Silhouette)
@@ -355,6 +485,9 @@ def run_dna_clustering(target_language=None, force_k=None, accuracy='standard'):
     py_string = "ML_INFERENCE_BRAIN = {\n"
     py_string += f"    'SCALER_MEDIANS': {medians},\n"
     py_string += f"    'SCALER_IQRS': {iqrs},\n"
+    py_string += f"    'FEATURE_NAMES': {cluster_features},\n"
+    py_string += f"    'FEATURE_WEIGHTS': {[round(w, 3) for w in feature_weights.tolist()]},\n"
+    py_string += f"    'CAP_VALUES': {cap_values},\n"
     py_string += f"    'ARCHETYPES_K{k_values[0]}': {{\n"
 
     for i, name in enumerate(professional_names):
@@ -387,6 +520,9 @@ if __name__ == "__main__":
     parser.add_argument('--language', type=str, default=None, help="Filter by specific language (e.g., python)")
     parser.add_argument('--clusters', type=int, default=None, help="Force a specific number of clusters")
     parser.add_argument('--accuracy', type=str, choices=['micro', 'low', 'standard', 'medium', 'high'], default='standard', help="Set the rigorousness of the math engine")
+    parser.add_argument('--encapsulation-weight', type=float, default=1.0,
+                         help="Down-weight def_encapsulation (e.g. 0.3) to surface secondary "
+                              "archetypes; outputs are tagged _encap<W> so they don't clobber the default.")
     
     args = parser.parse_args()
     
@@ -397,4 +533,5 @@ if __name__ == "__main__":
         print("\n🛡️  FORCED CLUSTER DETECTED: Automatically upgrading to HIGH accuracy for deterministic stability.")
         args.accuracy = 'high'
         
-    run_dna_clustering(target_language=args.language, force_k=args.clusters, accuracy=args.accuracy)
+    run_dna_clustering(target_language=args.language, force_k=args.clusters, accuracy=args.accuracy,
+                       encapsulation_weight=args.encapsulation_weight)

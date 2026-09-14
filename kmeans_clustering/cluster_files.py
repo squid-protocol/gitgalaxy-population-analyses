@@ -65,14 +65,18 @@ def run_dna_clustering(target_language=None, force_k=None, accuracy='medium'):
     # --- DYNAMIC QUERY FOR FILE CLUSTERING ---
     print("🌌 Running Global File-Level Clustering...\n")
     
-    # We only cluster files with enough logic to form an architectural pattern
+    # We only cluster files with enough logic to form an architectural pattern.
+    # Deterministic pseudo-random order keyed on the immutable id (multiplicative hash)
+    # instead of ORDER BY RANDOM(): reproducible runs, and each larger profile's sample
+    # is a strict superset of the smaller one.
     query = f"""
-        SELECT * FROM file_data 
-        WHERE coding_loc >= 10 
+        SELECT * FROM file_data
+        WHERE coding_loc >= 10
         AND language != 'plaintext'
         AND language != 'json'
         AND language != 'markdown'
-        ORDER BY RANDOM() LIMIT {prof['limit']}
+        ORDER BY (id * 2654435761) % 2147483647
+        LIMIT {prof['limit']}
     """
     output_csv = SCRIPT_DIR / "kmeans_file_clusters.csv"
     brain_output_path = SCRIPT_DIR / "ml_inference_brain_files.txt"
