@@ -33,6 +33,17 @@ def rank_via_ref(values, ref):
     # map values -> [0,1] percentile using the frozen reference quantiles
     return np.searchsorted(np.asarray(ref, float), np.asarray(values, float), side="right") / (len(ref) - 1)
 
+def z_params(X, km, names):
+    # per-cluster distance mean/std of members to their centroid, so inference can
+    # report a fit z-score: z = (distance - mean) / std (how textbook vs hybrid).
+    d = np.linalg.norm(X - km.cluster_centers_[km.labels_], axis=1)
+    out = {}
+    for c in range(km.n_clusters):
+        dc = d[km.labels_ == c]
+        out[names[c]] = {"mean": round(float(dc.mean()) if len(dc) else 0.0, 5),
+                         "std": round(float(max(dc.std(), 1e-6)) if len(dc) else 1.0, 5)}
+    return out
+
 # =====================================================================
 # FILE BRAIN  (Variant B: 14 stoich + curated structure, k=15)
 # =====================================================================
@@ -102,7 +113,8 @@ def freeze_file_brain():
              "aux_features":FILE_AUX, "aux_quantiles":aux_ref,
              "centroids":{names[c]: km.cluster_centers_[c].round(5).tolist() for c in range(15)},
              "noncode_languages":FILE_NONCODE, "min_coding_loc":FILE_MIN_LOC,
-             "noncode_bucket":"Data / Markup / Trivial"}
+             "noncode_bucket":"Data / Markup / Trivial",
+             "z_score_params":z_params(X, km, names)}
     json.dump(brain, open(SD/"data"/"file_archetype_brain.json","w"), indent=1)
     # self-validate: frozen-brain nearest-centroid vs KMeans label
     cen = np.array(list(brain["centroids"].values())); cn = list(brain["centroids"].keys())
@@ -167,7 +179,8 @@ def freeze_repo_brain():
            "scale_features":["log_file_count","log_total_loc"],"coupling_feature":"pagerank_gini",
            "aux_quantiles":aux_ref,"feature_order":["comp*w..","scale_rank..","non_code_fraction","coupling_rank"],
            "centroids":{names[c]:km.cluster_centers_[c].round(5).tolist() for c in range(7)},
-           "micro_bucket":"Micro Repo (<30 files)"}
+           "micro_bucket":"Micro Repo (<30 files)",
+           "z_score_params":z_params(X, km, names)}
     json.dump(brain, open(SD/"data"/"repo_archetype_brain.json","w"), indent=1)
     cen=np.array(list(brain["centroids"].values())); cn=list(brain["centroids"].keys())
     d=np.linalg.norm(X[:,None,:]-cen[None,:,:],axis=2); pred=d.argmin(1)
