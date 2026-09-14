@@ -1,0 +1,290 @@
+{
+  "n_repos": 368,
+  "k": 6,
+  "variants": [
+    {
+      "variant": "R-A",
+      "k": 6,
+      "dims": 18,
+      "silhouette": 0.1967,
+      "min_cluster": 32,
+      "max_pull": 0.94,
+      "clusters": [
+        {
+          "cluster": 2,
+          "n": 91,
+          "median_files": 4795,
+          "median_loc": 635362,
+          "pagerank_gini": 0.384,
+          "composition": "Declarative / Non-Code 23%, Data / Markup / Trivial 22%, Large Core Modules 14%",
+          "repos": [
+            "freebsd-src",
+            "linux",
+            "runtime",
+            "rust",
+            "illumos-gate",
+            "node",
+            "elasticsearch",
+            "swift",
+            "magento2",
+            "core",
+            "root",
+            "tensorflow"
+          ]
+        },
+        {
+          "cluster": 5,
+          "n": 81,
+          "median_files": 441,
+          "median_loc": 66607,
+          "pagerank_gini": 0.346,
+          "composition": "Declarative / Non-Code 20%, Data / Markup / Trivial 19%, Large Core Modules 16%",
+          "repos": [
+            "pixijs",
+            "Python",
+            "desktop",
+            "spock",
+            "fastapi",
+            "yii2",
+            "matplotlib",
+            "nvda",
+            "twisted",
+            "wgpu",
+            "excalidraw",
+            "tokio"
+          ]
+        },
+        {
+          "cluster": 1,
+          "n": 75,
+          "median_files": 81,
+          "median_loc": 11522,
+          "pagerank_gini": 0.3,
+          "composition": "Large Core Modules 21%, Data / Markup / Trivial 19%, Declarative / Non-Code 14%",
+          "repos": [
+            "CodeIgniter",
+            "monolog",
+            "os-tutorial",
+            "openpyxl",
+            "werkzeug",
+            "azure-identity",
+            "tornado",
+            "google-auth",
+            "Alamofire",
+            "docker-py",
+            "ripgrep",
+            "oauthlib"
+          ]
+        },
+        {
+          "cluster": 0,
+          "n": 51,
+          "median_files": 2035,
+          "median_loc": 207220,
+          "pagerank_gini": 0.287,
+          "composition": "Data / Markup / Trivial 53%, Declarative / Non-Code 16%, Large Core Modules 8%",
+          "repos": [
+            "kotlin",
+            "swc",
+            "TypeScript",
+            "material-ui",
+            "next.js",
+            "odoo",
+            "kubernetes",
+            "freeCodeCamp",
+            "jenkins",
+            "mediawiki",
+            "deno",
+            "esphome"
+          ]
+        },
+        {
+          "cluster": 3,
+          "n": 38,
+          "median_files": 122,
+          "median_loc": 5700,
+          "pagerank_gini": 0.192,
+          "composition": "Data / Markup / Trivial 63%, Declarative / Non-Code 10%, I/O & Config Routines 7%",
+          "repos": [
+            "content",
+            "type-challenges",
+            "javascript-algorithms",
+            "@node-red_nodes",
+            "cics-banking-sample-application-cbsa",
+            "rich",
+            "abap2xlsx",
+            "apex-recipes",
+            "poetry-core",
+            "jquery",
+            "alacritty",
+            "macports-base"
+          ]
+        },
+        {
+          "cluster": 4,
+          "n": 32,
+          "median_files": 184,
+          "median_loc": 24303,
+          "pagerank_gini": 0.265,
+          "composition": "Declarative / Non-Code 57%, Data / Markup / Trivial 16%, Large Core Modules 8%",
+          "repos": [
+            "typeorm",
+            "Carbon",
+            "lazygit",
+            "Chart.js",
+            "spamassassin",
+            "node-linux-x64",
+            "type-fest",
+            "ChrysaLisp",
+            "pyasn1-modules",
+            "CobolCraft",
+            "Dancer2",
+            "catalyst-runtime"
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "R-B",
+      "k": 6,
+      "dims": 21,
+      "silhouette": 0.2084,
+      "min_cluster": 32,
+      "max_pull": 0.95,
+      "clusters": [
+        {
+          "cluster": 2,
+          "n": 95,
+          "median_files": 2737,
+          "median_loc": 392208,
+          "pagerank_gini": 0.494,
+          "composition": "Declarative / Non-Code 24%, Data / Markup / Trivial 23%, Large Core Modules 14%",
+          "repos": [
+            "freebsd-src",
+            "linux",
+            "runtime",
+            "illumos-gate",
+            "node",
+            "elasticsearch",
+            "magento2",
+            "core",
+            "root",
+            "tensorflow",
+            "gradle",
+            "reactos"
+          ]
+        },
+        {
+          "cluster": 3,
+          "n": 89,
+          "median_files": 150,
+          "median_loc": 21301,
+          "pagerank_gini": 0.442,
+          "composition": "Large Core Modules 20%, Data / Markup / Trivial 19%, Declarative / Non-Code 19%",
+          "repos": [
+            "javascript-algorithms",
+            "typer",
+            "abap-cleaner",
+            "pyqtgraph",
+            "vue",
+            "retrofit",
+            "tigerbeetle",
+            "type-fest",
+            "sqlmap",
+            "pynacl",
+            "rich",
+            "Much-Assembly-Required"
+          ]
+        },
+        {
+          "cluster": 0,
+          "n": 62,
+          "median_files": 137,
+          "median_loc": 15396,
+          "pagerank_gini": 0.099,
+          "composition": "Declarative / Non-Code 31%, Data / Markup / Trivial 21%, Large Core Modules 12%",
+          "repos": [
+            "raspberrypi",
+            "spamassassin",
+            "zod",
+            "RaspberryPi",
+            "black",
+            "ChrysaLisp",
+            "mojo",
+            "db-tutorial",
+            "vapor",
+            "Cobol-Projects",
+            "pyasn1-modules",
+            "Apollo-11"
+          ]
+        },
+        {
+          "cluster": 1,
+          "n": 49,
+          "median_files": 2886,
+          "median_loc": 207220,
+          "pagerank_gini": 0.251,
+          "composition": "Data / Markup / Trivial 55%, Declarative / Non-Code 16%, Large Core Modules 6%",
+          "repos": [
+            "kotlin",
+            "swc",
+            "TypeScript",
+            "material-ui",
+            "swift",
+            "next.js",
+            "odoo",
+            "kubernetes",
+            "discourse",
+            "freeCodeCamp",
+            "content",
+            "jenkins"
+          ]
+        },
+        {
+          "cluster": 5,
+          "n": 41,
+          "median_files": 1983,
+          "median_loc": 309640,
+          "pagerank_gini": 0.15,
+          "composition": "Declarative / Non-Code 21%, Data / Markup / Trivial 17%, Large Core Modules 16%",
+          "repos": [
+            "rust",
+            "canvas-lms",
+            "roslyn",
+            "go",
+            "vscode",
+            "openclaw-typescript",
+            "PowerToys",
+            "perl5",
+            "spm12",
+            "racket",
+            "vyre",
+            "wrf-fortran"
+          ]
+        },
+        {
+          "cluster": 4,
+          "n": 32,
+          "median_files": 67,
+          "median_loc": 5512,
+          "pagerank_gini": 0.155,
+          "composition": "Data / Markup / Trivial 63%, Declarative / Non-Code 8%, Large Core Modules 7%",
+          "repos": [
+            "type-challenges",
+            "@node-red_nodes",
+            "abap2xlsx",
+            "apex-recipes",
+            "poetry-core",
+            "jquery",
+            "alacritty",
+            "macports-base",
+            "coverage",
+            "AFNetworking",
+            "temp",
+            "cics-genapp"
+          ]
+        }
+      ]
+    }
+  ]
+}
