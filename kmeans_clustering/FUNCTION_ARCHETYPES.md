@@ -65,8 +65,33 @@ genuine cross-language finding, not an artifact.
   rebuilds the 38-D vector in `FEATURE_NAMES` order, applies `FEATURE_WEIGHTS`, scales, and assigns
   each function its nearest-centroid archetype (`function_data.func_archetype`) plus per-cluster
   distances (`func_cluster_*`).
-- **At scan time (engine):** the same model is intended to load into gitgalaxy's
-  `analysis_lens.GENERAL_FUNCTION_INFERENCE_MODEL`; `signal_processor.py` must build the identical
-  38-feature vector (same prune/order/weights/cap) so its centroids align. Changing this
-  regenerates every function's `func_archetype`, so it requires a golden-master regeneration and a
-  rosetta re-baseline.
+- **At scan time (engine) — SHIPPED:** this model loads into gitgalaxy's
+  `analysis_lens.GENERAL_FUNCTION_INFERENCE_MODEL` (gitgalaxy #3016); `signal_processor.py` builds the
+  identical 38-feature vector from each function's `hit_vector` (same prune/order/weights/cap) and
+  assigns `func_archetype` per function. The narrative reports surface it too (gitgalaxy #3021):
+  every named function in the LLM brief is tagged inline, e.g. `parse(...) (Compute Cores)`, with a
+  short definitions legend, and the audit JSON carries a per-file "Function Archetype Mix" + a
+  repo-wide "Function Archetype Distribution".
+
+## The rest of the tower (files & repos)
+
+The function archetypes are the bottom of a three-level compositional tower, all shipped into the
+engine as **new fields** alongside the engine's existing DNA-based `file_archetype`:
+
+- **File composition archetypes** (`experiments/2.7.0/file-archetype-clustering/`): a file = its
+  function-archetype **stoichiometry** + curated
+  structure (size, encapsulation, dependency-graph role), rank-transformed against the corpus.
+  15 archetypes (Parameter-Forwarder Files, Defensive-Guard Files, Large Core Modules,
+  Declarative/Non-Code, …). Engine field `composition_file_archetype` (gitgalaxy #3023).
+- **Repo composition archetypes** (`experiments/2.7.0/repo-archetype-clustering/`): a repo = its
+  file-archetype composition + scale + dependency coupling (`pagerank_gini`, the hub-vs-flat axis).
+  7 archetypes (Hub-Coupled Monorepo, Flat Modular Platform, Typed Library, Mainframe/COBOL, …).
+  Engine field `repo_composition_archetype` (gitgalaxy #3023).
+- **Fit z-scores** (gitgalaxy #3026): every composition archetype carries a
+  `z = (distance − cluster mean) / std` — how *textbook* (z≈0) vs *hybrid/atypical* (high z) a file
+  or repo is for its assigned archetype. Persisted to the scan DB (`file_data.composition_file_z`,
+  `repo_data.repo_composition_z`) and shown in the reports, e.g. `Large Core Modules (z +0.61)`.
+
+Frozen "brains" for single-scan inference (`freeze_archetype_brains.py` → `data/*_archetype_brain.json`)
+carry the centroids, feature order/weights, rank-transform reference quantiles, and per-cluster
+`z_score_params`, so the engine reproduces the population-relative ranks deterministically.
