@@ -1,0 +1,24 @@
+# gitgalaxy-population-analyses — offline analysis dependencies.
+# Nothing here is on a CI path; these are the libraries the clustering /
+# archetype / ridgeline / threat-model scripts import. Pinned to the versions
+# verified working against the v2.4.7 and v2.7.0 master DBs (2026-09-14).
+#
+#   python3 -m venv .venv
+#   .venv/bin/pip install -r requirements.txt
+#
+# (sqlite3, argparse, json, gzip, etc. are stdlib — not listed.)
+
+# Core clustering / stats engine (cluster_functions.py, cluster_files.py,
+# cluster_repos.py, cluster_controller.py, master_db_updater.py)
+scikit-learn==1.8.0
+pandas==3.0.1
+numpy==2.4.3
+scipy==1.17.1
+
+# Plotting (archetype_analysis_suite.py, plot_ridgelines.py, graph_* / analysis suites)
+matplotlib==3.10.8
+seaborn==0.13.2
+plotly==6.6.0
+
+# Threat model (xgboost_threat_model/train_threat_model.py) — uncomment if training:
+# xgboost

@@ -25,7 +25,7 @@ SCRIPT_DIR = Path(__file__).parent.resolve()
 DB_PATH = SCRIPT_DIR / "data" / "gitgalaxy_master.db"
 
 # ML Artifact Paths
-BRAIN_PATH_FUNCTIONS = SCRIPT_DIR / "kmeans_clustering" / "ml_inference_brain_functions.txt"
+BRAIN_PATH_FUNCTIONS = SCRIPT_DIR / "kmeans_clustering" / "ml_inference_brain_functions_labeled.txt"
 MODEL_PATH_THREAT = SCRIPT_DIR / "xgboost_threat_model" / "gitgalaxy_malware_xgb_multiclass.json"
 
 # --- HELPER FUNCTIONS ---
@@ -207,7 +207,11 @@ def run_function_cluster_engine():
         sys.exit(1)
         
     archetypes_dict = brain[arch_key]
-    arch_names = list(archetypes_dict.keys())
+    # Emit the plain canonical archetype name (e.g. "Parameter Forwarders"), matching
+    # the engine's signal_processor.py, rather than the prefixed centroid key
+    # ("4: Parameter Forwarders"). cluster_names is aligned index-for-index with the
+    # centroid dict's value order.
+    arch_names = brain.get('cluster_names', list(archetypes_dict.keys()))
     num_clusters = len(archetypes_dict)
     
     print("\n" + "="*80)
@@ -252,22 +256,27 @@ def run_function_cluster_engine():
     """
     
     total_processed = 0
-    medians = np.array(brain['SCALER_MEDIANS'])
-    iqrs = np.array(brain['SCALER_IQRS'])
+    medians = np.array(brain['SCALER_MEDIANS'], dtype=np.float64)
+    iqrs = np.array(brain['SCALER_IQRS'], dtype=np.float64)
     safe_iqrs = np.where(iqrs == 0, 1.0, iqrs)
-    centroids = np.array(list(archetypes_dict.values()))
+    centroids = np.array(list(archetypes_dict.values()), dtype=np.float64)
 
-    excluded_cols = {
-        'id', 'file_id', 'func_name', 'complexity', 'loc', 'args', 
-        'usage_status', 'keyword_density', 'func_archetype', 'func_z_score',
-        'def_ownership', 'language', 'repo_name',
-        'struct_camel_case', 'struct_snake_case', 'struct_pascal_case', 'struct_upper_case',
-        'struct_short_vars', 'struct_long_vars', 'struct_tabs', 'struct_spaces', 'def_doc'
-    }
+    # Consume the EXACT feature contract the brain was trained with instead of
+    # re-deriving a denylist here (which drifted from cluster_functions.py and
+    # crashed on TEXT columns like docstring/calls_out_to). FEATURE_NAMES fixes
+    # the order; FEATURE_WEIGHTS + CAP_VALUES reproduce the training geometry
+    # (rosetta down-weights + the def_encapsulation winsorize cap).
+    feature_names = brain['FEATURE_NAMES']
+    feature_weights = np.array(brain.get('FEATURE_WEIGHTS', [1.0] * len(feature_names)), dtype=np.float64)
+    cap_values = brain.get('CAP_VALUES', {})
+    density_src = {f[len('log_density_'):]: f for f in feature_names if f.startswith('log_density_')}
+    if not (len(feature_names) == len(medians) == centroids.shape[1]):
+        print(f"❌ Brain contract mismatch: {len(feature_names)} names / {len(medians)} medians / {centroids.shape[1]} centroid dims.")
+        sys.exit(1)
 
     for chunk_df in pd.read_sql_query(query, conn, chunksize=chunk_size):
         chunk_start = time.time()
-        
+
         for col in ['complexity', 'loc', 'args', 'keyword_density']:
             if col in chunk_df.columns:
                 chunk_df[col] = chunk_df[col].fillna(0.0)
@@ -277,41 +286,28 @@ def run_function_cluster_engine():
         chunk_df['log_args'] = np.log1p(chunk_df['args'])
         chunk_df['func_internal_density'] = chunk_df['complexity'] / chunk_df['loc'].replace(0, 1)
 
-        dna_hit_cols = [
-            c for c in chunk_df.columns 
-            if c not in excluded_cols 
-            and not c.startswith('log_') 
-            and c != 'func_internal_density'
-            and not c.startswith('total_')
-            and not c.endswith('_total')
-            and not c.startswith('summary_')
-            and not c.startswith('func_cluster_')
-            and not c.startswith('threat_')       # <--- NEW: Mirror the 62-dimension filter
-            and not c.startswith('sec_')          # <--- NEW: Mirror the 62-dimension filter
-        ]
-        
-        log_density_hit_cols = []
         safe_denom = chunk_df['loc'].replace(0, 1)
-        
-        for col in dna_hit_cols:
-            raw_density = (chunk_df[col].fillna(0) / safe_denom) * 100.0
-            log_name = f"log_density_{col}"
-            chunk_df[log_name] = np.log1p(raw_density)
-            log_density_hit_cols.append(log_name)
+        for src_col, feat_name in density_src.items():
+            base = pd.to_numeric(chunk_df[src_col], errors='coerce').fillna(0.0) if src_col in chunk_df.columns else 0.0
+            raw_density = (base / safe_denom) * 100.0
+            if src_col in cap_values:
+                raw_density = raw_density.clip(upper=cap_values[src_col])
+            chunk_df[feat_name] = np.log1p(raw_density)
 
-        telemetry_features = ['log_loc', 'log_complexity', 'log_args', 'keyword_density', 'func_internal_density']
-        cluster_features = telemetry_features + log_density_hit_cols
+        # Assemble strictly in the trained order; any feature absent from this DB -> 0.0
+        for f in feature_names:
+            if f not in chunk_df.columns:
+                chunk_df[f] = 0.0
+        X_raw = chunk_df[feature_names].fillna(0.0).to_numpy(dtype=np.float64)
 
-        X_raw = chunk_df[cluster_features].fillna(0.0).to_numpy()
-        
-        # --- INFERENCE MATH ---
-        X_scaled = (X_raw - medians) / safe_iqrs
+        # --- INFERENCE MATH (scale -> weight -> nearest centroid) ---
+        X_scaled = ((X_raw - medians) / safe_iqrs) * feature_weights
         distances = np.linalg.norm(X_scaled[:, np.newaxis, :] - centroids, axis=2)
         min_indices = np.argmin(distances, axis=1)
-        
+
         chunk_df['func_z_score'] = distances[np.arange(len(chunk_df)), min_indices]
         chunk_df['func_archetype'] = [arch_names[i] for i in min_indices]
-        
+
         for i in range(num_clusters):
             chunk_df[f'func_cluster_{i}'] = distances[:, i]
 
