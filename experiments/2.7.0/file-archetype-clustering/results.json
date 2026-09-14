@@ -1,0 +1,490 @@
+{
+  "sample": 120000,
+  "k": 15,
+  "stoich_weight": 2.5,
+  "variants": [
+    {
+      "variant": "A",
+      "k": 15,
+      "dims": 15,
+      "stoich_weight": 2.5,
+      "silhouette": 0.4871,
+      "min_cluster_pct": 2.32,
+      "max_feature_pull": 2.3,
+      "fingerprints": [
+        {
+          "cluster": 0,
+          "size": 38996,
+          "pct": 32.5,
+          "top_archetypes": "(none/non-code)",
+          "pct_no_functions": 99.1,
+          "top_features": "log_coding_loc:+0.38",
+          "languages": "c 21%, javascript 14%, typescript 13%",
+          "examples": "efa_admin_defs.h, let_single_optimization.ts, namespaceImportTypeQuery.ts"
+        },
+        {
+          "cluster": 1,
+          "size": 4705,
+          "pct": 3.9,
+          "top_archetypes": "State Mutators 75%, Interface Declarations 4%, Parameter Forwarders 4%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.40",
+          "languages": "csharp 21%, javascript 19%, rust 19%",
+          "examples": "output.js, ModuleMetadataSpec.java, extcmethod.pyx"
+        },
+        {
+          "cluster": 2,
+          "size": 6587,
+          "pct": 5.5,
+          "top_archetypes": "Generic / Templated Code 79%, Many-Argument Workhorses 3%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.49",
+          "languages": "python 27%, typescript 22%, rust 17%",
+          "examples": "unit.rs, InternalExternalEventService.java, unused-adt-impls-trait.rs"
+        },
+        {
+          "cluster": 3,
+          "size": 5073,
+          "pct": 4.2,
+          "top_archetypes": "I/O & Config Routines 92%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.46",
+          "languages": "makefile 15%, cpp 14%, ruby 12%",
+          "examples": "buffer_view.cc, Makefile, gtest-test-part.h"
+        },
+        {
+          "cluster": 4,
+          "size": 4989,
+          "pct": 4.2,
+          "top_archetypes": "Interface Declarations 84%, I/O & Config Routines 3%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.35",
+          "languages": "javascript 20%, php 18%, kotlin 18%",
+          "examples": "ERC165Checker.test.js, ValueSynchronizerTest.php, EmbeddedLinkXmlPreservesAdditionalAssemblyWithOverriddenMethod.cs"
+        },
+        {
+          "cluster": 5,
+          "size": 4529,
+          "pct": 3.8,
+          "top_archetypes": "Callbacks & Closures 81%, Interface Declarations 3%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.47",
+          "languages": "typescript 34%, javascript 34%, go 15%",
+          "examples": "rand_test.go, fake_role.go, response.js"
+        },
+        {
+          "cluster": 6,
+          "size": 6646,
+          "pct": 5.5,
+          "top_archetypes": "Defensive Guards 72%, Parameter Forwarders 5%, Compute Cores 4%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.51",
+          "languages": "javascript 17%, typescript 16%, python 9%",
+          "examples": "fish.zig, typing.py, record_layout.zig"
+        },
+        {
+          "cluster": 7,
+          "size": 4137,
+          "pct": 3.4,
+          "top_archetypes": "Compute Cores 89%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.54",
+          "languages": "c 30%, typescript 15%, cpp 11%",
+          "examples": "Capabilities.cpp, kvm-remote.sh, global-setup.ts"
+        },
+        {
+          "cluster": 8,
+          "size": 5122,
+          "pct": 4.3,
+          "top_archetypes": "Many-Argument Workhorses 78%, Compute Cores 7%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.69",
+          "languages": "c 37%, cpp 12%, python 11%",
+          "examples": "e_padlock-x86.pl, LowLevelSpinWaiter.cs, AzureAiStudioChatCompletionRequestTaskSettings.java"
+        },
+        {
+          "cluster": 9,
+          "size": 3545,
+          "pct": 3.0,
+          "top_archetypes": "Tests & Verification 86%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.60",
+          "languages": "csharp 22%, java 17%, rust 17%",
+          "examples": "LoadAndDuplicateToVector128.cs, DirectInstantiatorTest.groovy, serial_envelope.rs"
+        },
+        {
+          "cluster": 10,
+          "size": 2781,
+          "pct": 2.3,
+          "top_archetypes": "Encapsulated Accessors 70%, Compute Cores 7%, Many-Argument Workhorses 6%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.63",
+          "languages": "c 64%, python 9%, php 7%",
+          "examples": "download.kt, mphalport.h, udbg_16550.c"
+        },
+        {
+          "cluster": 11,
+          "size": 4536,
+          "pct": 3.8,
+          "top_archetypes": "Annotated Framework Methods 69%, State Mutators 6%, Generic / Templated Code 5%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.46",
+          "languages": "java 58%, rust 12%, csharp 9%",
+          "examples": "gen_GpuRenderPipelineDescriptor.rs, constructorCheck.kt, SubstringFunctionProcessor.java"
+        },
+        {
+          "cluster": 12,
+          "size": 8272,
+          "pct": 6.9,
+          "top_archetypes": "Parameter Forwarders 75%, Compute Cores 5%, Interface Declarations 4%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.45",
+          "languages": "cpp 18%, python 14%, c 13%",
+          "examples": "ReturnChar.py, Tuple.ts, kmalloc.cpp"
+        },
+        {
+          "cluster": 13,
+          "size": 3917,
+          "pct": 3.3,
+          "top_archetypes": "C Struct Operations 65%, Encapsulated Accessors 11%, Compute Cores 9%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.77",
+          "languages": "c 95%, kotlin 3%, swift 1%",
+          "examples": "rf.c, pci_hda.c, az6027.c"
+        },
+        {
+          "cluster": 14,
+          "size": 16165,
+          "pct": 13.5,
+          "top_archetypes": "Compute Cores 18%, Parameter Forwarders 13%, Type Conversions 12%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.75",
+          "languages": "cpp 21%, c 17%, typescript 11%",
+          "examples": "thread_linux.cc, gists.js, ChangesListQueryTest.php"
+        }
+      ]
+    },
+    {
+      "variant": "B",
+      "k": 15,
+      "dims": 23,
+      "stoich_weight": 2.5,
+      "silhouette": 0.3346,
+      "min_cluster_pct": 2.21,
+      "max_feature_pull": 2.3,
+      "fingerprints": [
+        {
+          "cluster": 0,
+          "size": 4600,
+          "pct": 3.8,
+          "top_archetypes": "Callbacks & Closures 81%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_pagerank:+0.62, log_blast_radius:+0.62, log_function_count:+0.56, encapsulation_ratio:+0.52",
+          "languages": "typescript 36%, javascript 33%, go 14%",
+          "examples": "Tuple.ts, rand_test.go, fake_role.go"
+        },
+        {
+          "cluster": 1,
+          "size": 38725,
+          "pct": 32.3,
+          "top_archetypes": "(none/non-code)",
+          "pct_no_functions": 98.4,
+          "top_features": "encapsulation_ratio:+0.54, log_pagerank:+0.50, log_blast_radius:+0.50, doc_ratio:+0.49, log_class_count:+0.42",
+          "languages": "c 21%, javascript 14%, typescript 13%",
+          "examples": "efa_admin_defs.h, let_single_optimization.ts, namespaceImportTypeQuery.ts"
+        },
+        {
+          "cluster": 2,
+          "size": 2654,
+          "pct": 2.2,
+          "top_archetypes": "Encapsulated Accessors 71%, Compute Cores 7%, Many-Argument Workhorses 5%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_function_count:+0.67, log_coding_loc:+0.63, log_import_count:+0.60, log_class_count:+0.56",
+          "languages": "c 66%, python 8%, php 6%",
+          "examples": "download.kt, mphalport.h, udbg_16550.c"
+        },
+        {
+          "cluster": 3,
+          "size": 6037,
+          "pct": 5.0,
+          "top_archetypes": "Generic / Templated Code 82%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_function_count:+0.62, log_import_count:+0.61, log_class_count:+0.61, encapsulation_ratio:+0.55",
+          "languages": "python 28%, typescript 21%, rust 16%",
+          "examples": "unit.rs, InternalExternalEventService.java, unused-adt-impls-trait.rs"
+        },
+        {
+          "cluster": 4,
+          "size": 4444,
+          "pct": 3.7,
+          "top_archetypes": "Annotated Framework Methods 70%, State Mutators 6%, Generic / Templated Code 5%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_class_count:+0.67, log_function_count:+0.65, log_import_count:+0.62, doc_ratio:+0.56",
+          "languages": "java 58%, rust 12%, csharp 9%",
+          "examples": "gen_GpuRenderPipelineDescriptor.rs, constructorCheck.kt, SubstringFunctionProcessor.java"
+        },
+        {
+          "cluster": 5,
+          "size": 4693,
+          "pct": 3.9,
+          "top_archetypes": "Compute Cores 85%",
+          "pct_no_functions": 0.0,
+          "top_features": "control_flow_ratio:+0.80, log_coding_loc:+0.55, doc_ratio:+0.53, log_pagerank:+0.52",
+          "languages": "c 30%, typescript 14%, cpp 13%",
+          "examples": "Capabilities.cpp, kvm-remote.sh, global-setup.ts"
+        },
+        {
+          "cluster": 6,
+          "size": 7278,
+          "pct": 6.1,
+          "top_archetypes": "Parameter Forwarders 79%, Compute Cores 5%, I/O & Config Routines 3%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_function_count:+0.60, log_pagerank:+0.55, log_blast_radius:+0.55, doc_ratio:+0.55",
+          "languages": "cpp 18%, python 14%, c 13%",
+          "examples": "ReturnChar.py, kmalloc.cpp, destructuring-with-typecast-as-default-value.flow.js"
+        },
+        {
+          "cluster": 7,
+          "size": 3537,
+          "pct": 2.9,
+          "top_archetypes": "Tests & Verification 86%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_function_count:+0.65, log_import_count:+0.62, log_coding_loc:+0.60, log_class_count:+0.58",
+          "languages": "csharp 22%, java 17%, rust 17%",
+          "examples": "LoadAndDuplicateToVector128.cs, DirectInstantiatorTest.groovy, serial_envelope.rs"
+        },
+        {
+          "cluster": 8,
+          "size": 5060,
+          "pct": 4.2,
+          "top_archetypes": "I/O & Config Routines 92%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_function_count:+0.54, doc_ratio:+0.52, encapsulation_ratio:+0.52, log_pagerank:+0.48",
+          "languages": "makefile 15%, cpp 14%, ruby 12%",
+          "examples": "buffer_view.cc, Makefile, gtest-test-part.h"
+        },
+        {
+          "cluster": 9,
+          "size": 16937,
+          "pct": 14.1,
+          "top_archetypes": "Compute Cores 16%, Parameter Forwarders 14%, Many-Argument Workhorses 11%",
+          "pct_no_functions": 3.3,
+          "top_features": "log_function_count:+0.81, log_coding_loc:+0.77, log_import_count:+0.74, control_flow_ratio:+0.71, log_class_count:+0.63",
+          "languages": "cpp 21%, c 14%, typescript 11%",
+          "examples": "thread_linux.cc, gists.js, ChangesListQueryTest.php"
+        },
+        {
+          "cluster": 10,
+          "size": 5683,
+          "pct": 4.7,
+          "top_archetypes": "Interface Declarations 80%, Parameter Forwarders 6%, I/O & Config Routines 3%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_class_count:+0.57, log_function_count:+0.56, encapsulation_ratio:+0.54, doc_ratio:+0.53",
+          "languages": "javascript 19%, kotlin 19%, php 18%",
+          "examples": "ERC165Checker.test.js, ValueSynchronizerTest.php, EmbeddedLinkXmlPreservesAdditionalAssemblyWithOverriddenMethod.cs"
+        },
+        {
+          "cluster": 11,
+          "size": 5281,
+          "pct": 4.4,
+          "top_archetypes": "Many-Argument Workhorses 77%, Compute Cores 7%, Parameter Forwarders 4%",
+          "pct_no_functions": 0.0,
+          "top_features": "control_flow_ratio:+0.73, log_coding_loc:+0.68, doc_ratio:+0.58, log_import_count:+0.57",
+          "languages": "c 37%, cpp 12%, python 11%",
+          "examples": "e_padlock-x86.pl, LowLevelSpinWaiter.cs, AzureAiStudioChatCompletionRequestTaskSettings.java"
+        },
+        {
+          "cluster": 12,
+          "size": 4111,
+          "pct": 3.4,
+          "top_archetypes": "C Struct Operations 62%, Encapsulated Accessors 11%, Compute Cores 10%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.79, log_function_count:+0.77, log_import_count:+0.75, control_flow_ratio:+0.67",
+          "languages": "c 96%, kotlin 2%, swift 1%",
+          "examples": "rf.c, pci_hda.c, az6027.c"
+        },
+        {
+          "cluster": 13,
+          "size": 4675,
+          "pct": 3.9,
+          "top_archetypes": "State Mutators 75%, Interface Declarations 4%, Parameter Forwarders 4%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_class_count:+0.57, log_function_count:+0.56, log_pagerank:+0.53, log_blast_radius:+0.53",
+          "languages": "csharp 21%, javascript 20%, rust 18%",
+          "examples": "output.js, ModuleMetadataSpec.java, extcmethod.pyx"
+        },
+        {
+          "cluster": 14,
+          "size": 6285,
+          "pct": 5.2,
+          "top_archetypes": "Defensive Guards 74%, Parameter Forwarders 5%, Compute Cores 3%",
+          "pct_no_functions": 0.0,
+          "top_features": "control_flow_ratio:+0.70, log_pagerank:+0.57, log_blast_radius:+0.57, log_function_count:+0.56",
+          "languages": "javascript 17%, typescript 17%, python 9%",
+          "examples": "fish.zig, typing.py, ft_datatype.m"
+        }
+      ]
+    },
+    {
+      "variant": "C",
+      "k": 15,
+      "dims": 27,
+      "stoich_weight": 2.5,
+      "silhouette": 0.3271,
+      "min_cluster_pct": 2.2,
+      "max_feature_pull": 2.3,
+      "fingerprints": [
+        {
+          "cluster": 0,
+          "size": 4115,
+          "pct": 3.4,
+          "top_archetypes": "C Struct Operations 62%, Encapsulated Accessors 11%, Compute Cores 10%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.78, log_function_count:+0.77, log_import_count:+0.75, control_flow_ratio:+0.67",
+          "languages": "c 96%, kotlin 2%, swift 1%",
+          "examples": "rf.c, pci_hda.c, az6027.c"
+        },
+        {
+          "cluster": 1,
+          "size": 6103,
+          "pct": 5.1,
+          "top_archetypes": "Generic / Templated Code 82%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_function_count:+0.62, log_import_count:+0.61, log_class_count:+0.61, encapsulation_ratio:+0.55",
+          "languages": "python 28%, typescript 21%, rust 16%",
+          "examples": "unit.rs, InternalExternalEventService.java, unused-adt-impls-trait.rs"
+        },
+        {
+          "cluster": 2,
+          "size": 38754,
+          "pct": 32.3,
+          "top_archetypes": "(none/non-code)",
+          "pct_no_functions": 98.3,
+          "top_features": "encapsulation_ratio:+0.54, log_pagerank:+0.50, log_blast_radius:+0.50, doc_ratio:+0.49, log_class_count:+0.42",
+          "languages": "c 21%, javascript 14%, typescript 13%",
+          "examples": "efa_admin_defs.h, let_single_optimization.ts, namespaceImportTypeQuery.ts"
+        },
+        {
+          "cluster": 3,
+          "size": 6300,
+          "pct": 5.2,
+          "top_archetypes": "Defensive Guards 74%, Parameter Forwarders 5%, Compute Cores 3%",
+          "pct_no_functions": 0.0,
+          "top_features": "control_flow_ratio:+0.70, log_pagerank:+0.57, log_blast_radius:+0.57, log_function_count:+0.56",
+          "languages": "javascript 17%, typescript 17%, python 9%",
+          "examples": "fish.zig, typing.py, ft_datatype.m"
+        },
+        {
+          "cluster": 4,
+          "size": 17004,
+          "pct": 14.2,
+          "top_archetypes": "Compute Cores 16%, Parameter Forwarders 14%, Many-Argument Workhorses 11%",
+          "pct_no_functions": 3.3,
+          "top_features": "log_function_count:+0.81, log_coding_loc:+0.77, log_import_count:+0.74, control_flow_ratio:+0.71, log_class_count:+0.62",
+          "languages": "cpp 21%, c 15%, typescript 11%",
+          "examples": "thread_linux.cc, gists.js, ChangesListQueryTest.php"
+        },
+        {
+          "cluster": 5,
+          "size": 2645,
+          "pct": 2.2,
+          "top_archetypes": "Encapsulated Accessors 71%, Compute Cores 7%, Many-Argument Workhorses 5%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_function_count:+0.67, log_coding_loc:+0.63, log_import_count:+0.60, log_class_count:+0.56",
+          "languages": "c 66%, python 8%, php 6%",
+          "examples": "download.kt, mphalport.h, udbg_16550.c"
+        },
+        {
+          "cluster": 6,
+          "size": 5137,
+          "pct": 4.3,
+          "top_archetypes": "Interface Declarations 83%, I/O & Config Routines 3%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_class_count:+0.57, log_function_count:+0.56, encapsulation_ratio:+0.54, doc_ratio:+0.52",
+          "languages": "javascript 20%, kotlin 19%, php 17%",
+          "examples": "ERC165Checker.test.js, ValueSynchronizerTest.php, EmbeddedLinkXmlPreservesAdditionalAssemblyWithOverriddenMethod.cs"
+        },
+        {
+          "cluster": 7,
+          "size": 4458,
+          "pct": 3.7,
+          "top_archetypes": "Annotated Framework Methods 70%, State Mutators 6%, Generic / Templated Code 5%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_class_count:+0.67, log_function_count:+0.66, log_import_count:+0.62, doc_ratio:+0.56",
+          "languages": "java 58%, rust 12%, csharp 9%",
+          "examples": "gen_GpuRenderPipelineDescriptor.rs, constructorCheck.kt, SubstringFunctionProcessor.java"
+        },
+        {
+          "cluster": 8,
+          "size": 7815,
+          "pct": 6.5,
+          "top_archetypes": "Parameter Forwarders 77%, Compute Cores 5%, Interface Declarations 4%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_function_count:+0.60, doc_ratio:+0.55, log_pagerank:+0.54, log_blast_radius:+0.54",
+          "languages": "cpp 17%, python 14%, c 12%",
+          "examples": "ReturnChar.py, kmalloc.cpp, destructuring-with-typecast-as-default-value.flow.js"
+        },
+        {
+          "cluster": 9,
+          "size": 4680,
+          "pct": 3.9,
+          "top_archetypes": "State Mutators 75%, Interface Declarations 4%, Parameter Forwarders 4%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_class_count:+0.57, log_function_count:+0.57, log_pagerank:+0.53, log_blast_radius:+0.53",
+          "languages": "csharp 21%, javascript 20%, rust 18%",
+          "examples": "output.js, ModuleMetadataSpec.java, extcmethod.pyx"
+        },
+        {
+          "cluster": 10,
+          "size": 4642,
+          "pct": 3.9,
+          "top_archetypes": "Callbacks & Closures 81%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_pagerank:+0.62, log_blast_radius:+0.62, log_function_count:+0.56, encapsulation_ratio:+0.52",
+          "languages": "typescript 36%, javascript 33%, go 14%",
+          "examples": "Tuple.ts, rand_test.go, fake_role.go"
+        },
+        {
+          "cluster": 11,
+          "size": 4505,
+          "pct": 3.8,
+          "top_archetypes": "Compute Cores 86%",
+          "pct_no_functions": 0.0,
+          "top_features": "control_flow_ratio:+0.80, log_coding_loc:+0.54, doc_ratio:+0.53, log_pagerank:+0.52",
+          "languages": "c 30%, typescript 14%, cpp 12%",
+          "examples": "Capabilities.cpp, kvm-remote.sh, global-setup.ts"
+        },
+        {
+          "cluster": 12,
+          "size": 3543,
+          "pct": 3.0,
+          "top_archetypes": "Tests & Verification 86%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_function_count:+0.65, log_import_count:+0.62, log_coding_loc:+0.60, log_class_count:+0.58",
+          "languages": "csharp 22%, java 17%, rust 17%",
+          "examples": "LoadAndDuplicateToVector128.cs, DirectInstantiatorTest.groovy, serial_envelope.rs"
+        },
+        {
+          "cluster": 13,
+          "size": 5243,
+          "pct": 4.4,
+          "top_archetypes": "Many-Argument Workhorses 78%, Compute Cores 7%, Parameter Forwarders 4%",
+          "pct_no_functions": 0.0,
+          "top_features": "control_flow_ratio:+0.74, log_coding_loc:+0.68, doc_ratio:+0.58, log_import_count:+0.57",
+          "languages": "c 38%, cpp 12%, python 11%",
+          "examples": "e_padlock-x86.pl, LowLevelSpinWaiter.cs, AzureAiStudioChatCompletionRequestTaskSettings.java"
+        },
+        {
+          "cluster": 14,
+          "size": 5056,
+          "pct": 4.2,
+          "top_archetypes": "I/O & Config Routines 92%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_function_count:+0.54, doc_ratio:+0.52, encapsulation_ratio:+0.52, log_pagerank:+0.48",
+          "languages": "makefile 15%, cpp 13%, ruby 12%",
+          "examples": "buffer_view.cc, Makefile, gtest-test-part.h"
+        }
+      ]
+    }
+  ]
+}

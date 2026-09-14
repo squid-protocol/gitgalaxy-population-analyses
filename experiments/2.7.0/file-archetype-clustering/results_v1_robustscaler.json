@@ -1,0 +1,280 @@
+{
+  "sample": 120000,
+  "k": 8,
+  "stoich_weight": 2.5,
+  "variants": [
+    {
+      "variant": "A",
+      "k": 8,
+      "dims": 15,
+      "stoich_weight": 2.5,
+      "silhouette": 0.2982,
+      "min_cluster_pct": 4.58,
+      "max_feature_pull": 2.2,
+      "fingerprints": [
+        {
+          "cluster": 0,
+          "size": 48028,
+          "pct": 40.0,
+          "top_archetypes": "State Mutators 7%, Callbacks & Closures 7%, Annotated Framework Methods 5%",
+          "pct_no_functions": 67.3,
+          "top_features": "log_coding_loc:-0.34",
+          "languages": "javascript 15%, c 14%, typescript 13%",
+          "examples": "efa_admin_defs.h, let_single_optimization.ts, namespaceImportTypeQuery.ts"
+        },
+        {
+          "cluster": 1,
+          "size": 8189,
+          "pct": 6.8,
+          "top_archetypes": "Parameter Forwarders 75%, Compute Cores 5%, I/O & Config Routines 3%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:-0.07",
+          "languages": "cpp 18%, python 13%, c 13%",
+          "examples": "ReturnChar.py, Tuple.ts, kmalloc.cpp"
+        },
+        {
+          "cluster": 2,
+          "size": 33152,
+          "pct": 27.6,
+          "top_archetypes": "Compute Cores 21%, C Struct Operations 7%, Many-Argument Workhorses 7%",
+          "pct_no_functions": 19.1,
+          "top_features": "log_coding_loc:+0.81",
+          "languages": "c 33%, cpp 12%, typescript 10%",
+          "examples": "unit.rs, gen_GpuRenderPipelineDescriptor.rs, ChangesListQueryTest.php"
+        },
+        {
+          "cluster": 3,
+          "size": 5580,
+          "pct": 4.7,
+          "top_archetypes": "I/O & Config Routines 88%",
+          "pct_no_functions": 0.0,
+          "top_features": "",
+          "languages": "cpp 15%, makefile 13%, ruby 12%",
+          "examples": "buffer_view.cc, output.js, Makefile"
+        },
+        {
+          "cluster": 4,
+          "size": 6211,
+          "pct": 5.2,
+          "top_archetypes": "Interface Declarations 77%, Parameter Forwarders 5%, State Mutators 3%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:-0.31",
+          "languages": "javascript 19%, kotlin 18%, php 17%",
+          "examples": "ERC165Checker.test.js, ValueSynchronizerTest.php, EmbeddedLinkXmlPreservesAdditionalAssemblyWithOverriddenMethod.cs"
+        },
+        {
+          "cluster": 5,
+          "size": 5497,
+          "pct": 4.6,
+          "top_archetypes": "Many-Argument Workhorses 76%, Compute Cores 6%, Parameter Forwarders 4%",
+          "pct_no_functions": 0.0,
+          "top_features": "log_coding_loc:+0.49",
+          "languages": "c 36%, cpp 12%, python 11%",
+          "examples": "e_padlock-x86.pl, LowLevelSpinWaiter.cs, AzureAiStudioChatCompletionRequestTaskSettings.java"
+        },
+        {
+          "cluster": 6,
+          "size": 6812,
+          "pct": 5.7,
+          "top_archetypes": "Defensive Guards 71%, Parameter Forwarders 5%, Compute Cores 3%",
+          "pct_no_functions": 0.0,
+          "top_features": "",
+          "languages": "javascript 16%, typescript 16%, python 9%",
+          "examples": "fish.zig, typing.py, ft_datatype.m"
+        },
+        {
+          "cluster": 7,
+          "size": 6531,
+          "pct": 5.4,
+          "top_archetypes": "Generic / Templated Code 80%",
+          "pct_no_functions": 0.0,
+          "top_features": "",
+          "languages": "python 26%, typescript 22%, rust 17%",
+          "examples": "InternalExternalEventService.java, unused-adt-impls-trait.rs, lifetime-update.rs"
+        }
+      ]
+    },
+    {
+      "variant": "B",
+      "k": 8,
+      "dims": 23,
+      "stoich_weight": 2.5,
+      "silhouette": 0.8835,
+      "min_cluster_pct": 0.0,
+      "max_feature_pull": 3495.83,
+      "fingerprints": [
+        {
+          "cluster": 0,
+          "size": 116858,
+          "pct": 97.4,
+          "top_archetypes": "Parameter Forwarders 8%, Compute Cores 7%, Many-Argument Workhorses 6%",
+          "pct_no_functions": 32.3,
+          "top_features": "log_pagerank:+0.94, log_blast_radius:+0.76, doc_ratio:+0.48, control_flow_ratio:+0.25, log_class_count:-0.21",
+          "languages": "c 18%, typescript 12%, javascript 11%",
+          "examples": "ReturnChar.py, efa_admin_defs.h, let_single_optimization.ts"
+        },
+        {
+          "cluster": 1,
+          "size": 30,
+          "pct": 0.0,
+          "top_archetypes": "Parameter Forwarders 17%, Defensive Guards 16%, I/O & Config Routines 13%",
+          "pct_no_functions": 16.7,
+          "top_features": "log_pagerank:+1305.39, log_blast_radius:+61.02, control_flow_ratio:+0.43",
+          "languages": "python 30%, javascript 23%, typescript 10%",
+          "examples": "setup.py, randnum.py, server.js"
+        },
+        {
+          "cluster": 2,
+          "size": 5,
+          "pct": 0.0,
+          "top_archetypes": "Defensive Guards 29%, I/O & Config Routines 20%, Interface Declarations 11%",
+          "pct_no_functions": 20.0,
+          "top_features": "log_pagerank:+3495.83, log_blast_radius:+75.04, log_class_count:-0.80, control_flow_ratio:+0.54",
+          "languages": "javascript 80%, cobol 20%",
+          "examples": "pki_config.example.js, index.js, CLEAN01.cbl"
+        },
+        {
+          "cluster": 3,
+          "size": 479,
+          "pct": 0.4,
+          "top_archetypes": "Generic / Templated Code 13%, Parameter Forwarders 11%, Defensive Guards 10%",
+          "pct_no_functions": 29.9,
+          "top_features": "log_pagerank:+161.97, log_blast_radius:+33.75, doc_ratio:+0.70, control_flow_ratio:+0.42",
+          "languages": "python 30%, typescript 14%, c 10%",
+          "examples": "ReadableStream.d.cts, before_all_tasks.t, mp.h"
+        },
+        {
+          "cluster": 4,
+          "size": 15,
+          "pct": 0.0,
+          "top_archetypes": "Defensive Guards 14%, Generic / Templated Code 14%, I/O & Config Routines 13%",
+          "pct_no_functions": 20.0,
+          "top_features": "log_pagerank:+2233.46, log_blast_radius:+68.42, control_flow_ratio:+0.60",
+          "languages": "python 27%, typescript 20%, javascript 20%",
+          "examples": "index.d.ts, yaml.py, BUILD_TKBIG5.jcl"
+        },
+        {
+          "cluster": 5,
+          "size": 2423,
+          "pct": 2.0,
+          "top_archetypes": "Parameter Forwarders 11%, Generic / Templated Code 8%, Defensive Guards 8%",
+          "pct_no_functions": 32.2,
+          "top_features": "log_pagerank:+44.00, log_blast_radius:+18.80, doc_ratio:+0.60, control_flow_ratio:+0.39",
+          "languages": "python 22%, c 12%, typescript 9%",
+          "examples": "unit.rs, m_cheat.h, GIMBAL_LOCK_AVOIDANCE.agc"
+        },
+        {
+          "cluster": 6,
+          "size": 60,
+          "pct": 0.1,
+          "top_archetypes": "Parameter Forwarders 14%, Generic / Templated Code 13%, I/O & Config Routines 11%",
+          "pct_no_functions": 25.0,
+          "top_features": "log_pagerank:+773.83, log_blast_radius:+53.95, doc_ratio:+0.70, control_flow_ratio:+0.63",
+          "languages": "python 40%, cobol 13%, typescript 10%",
+          "examples": "more.py, doomtype.h, __init__.py"
+        },
+        {
+          "cluster": 7,
+          "size": 130,
+          "pct": 0.1,
+          "top_archetypes": "Parameter Forwarders 14%, Defensive Guards 13%, Generic / Templated Code 11%",
+          "pct_no_functions": 18.5,
+          "top_features": "log_pagerank:+384.25, log_blast_radius:+44.73, doc_ratio:+0.63, control_flow_ratio:+0.61, log_function_count:+0.47",
+          "languages": "python 39%, typescript 14%, zig 9%",
+          "examples": "test_demo_versions.py, Version.hs, ast-node-types.ts"
+        }
+      ]
+    },
+    {
+      "variant": "C",
+      "k": 8,
+      "dims": 27,
+      "stoich_weight": 2.5,
+      "silhouette": 0.8816,
+      "min_cluster_pct": 0.0,
+      "max_feature_pull": 3495.83,
+      "fingerprints": [
+        {
+          "cluster": 0,
+          "size": 116850,
+          "pct": 97.4,
+          "top_archetypes": "Parameter Forwarders 8%, Compute Cores 7%, Many-Argument Workhorses 6%",
+          "pct_no_functions": 32.3,
+          "top_features": "log_pagerank:+0.94, log_blast_radius:+0.76, doc_ratio:+0.48, control_flow_ratio:+0.25, log_class_count:-0.21",
+          "languages": "c 18%, typescript 12%, javascript 11%",
+          "examples": "ReturnChar.py, efa_admin_defs.h, let_single_optimization.ts"
+        },
+        {
+          "cluster": 1,
+          "size": 15,
+          "pct": 0.0,
+          "top_archetypes": "Defensive Guards 14%, Generic / Templated Code 14%, I/O & Config Routines 13%",
+          "pct_no_functions": 20.0,
+          "top_features": "log_pagerank:+2233.46, log_blast_radius:+68.42, control_flow_ratio:+0.60, log_density_arch_io:+0.44",
+          "languages": "python 27%, typescript 20%, javascript 20%",
+          "examples": "index.d.ts, yaml.py, BUILD_TKBIG5.jcl"
+        },
+        {
+          "cluster": 2,
+          "size": 60,
+          "pct": 0.1,
+          "top_archetypes": "Parameter Forwarders 14%, Generic / Templated Code 13%, I/O & Config Routines 11%",
+          "pct_no_functions": 25.0,
+          "top_features": "log_pagerank:+773.83, log_blast_radius:+53.95, doc_ratio:+0.70, control_flow_ratio:+0.63",
+          "languages": "python 40%, cobol 13%, typescript 10%",
+          "examples": "more.py, doomtype.h, __init__.py"
+        },
+        {
+          "cluster": 3,
+          "size": 481,
+          "pct": 0.4,
+          "top_archetypes": "Generic / Templated Code 13%, Parameter Forwarders 11%, Defensive Guards 10%",
+          "pct_no_functions": 30.1,
+          "top_features": "log_pagerank:+161.73, log_blast_radius:+33.73, doc_ratio:+0.69, control_flow_ratio:+0.42",
+          "languages": "python 30%, typescript 14%, c 10%",
+          "examples": "ReadableStream.d.cts, before_all_tasks.t, mp.h"
+        },
+        {
+          "cluster": 4,
+          "size": 5,
+          "pct": 0.0,
+          "top_archetypes": "Defensive Guards 29%, I/O & Config Routines 20%, Interface Declarations 11%",
+          "pct_no_functions": 20.0,
+          "top_features": "log_pagerank:+3495.83, log_blast_radius:+75.04, log_class_count:-0.80, control_flow_ratio:+0.54",
+          "languages": "javascript 80%, cobol 20%",
+          "examples": "pki_config.example.js, index.js, CLEAN01.cbl"
+        },
+        {
+          "cluster": 5,
+          "size": 130,
+          "pct": 0.1,
+          "top_archetypes": "Parameter Forwarders 14%, Defensive Guards 13%, Generic / Templated Code 11%",
+          "pct_no_functions": 18.5,
+          "top_features": "log_pagerank:+384.25, log_blast_radius:+44.73, doc_ratio:+0.63, control_flow_ratio:+0.61, log_function_count:+0.47",
+          "languages": "python 39%, typescript 14%, zig 9%",
+          "examples": "test_demo_versions.py, Version.hs, ast-node-types.ts"
+        },
+        {
+          "cluster": 6,
+          "size": 30,
+          "pct": 0.0,
+          "top_archetypes": "Parameter Forwarders 17%, Defensive Guards 16%, I/O & Config Routines 13%",
+          "pct_no_functions": 16.7,
+          "top_features": "log_pagerank:+1305.39, log_blast_radius:+61.02, control_flow_ratio:+0.43",
+          "languages": "python 30%, javascript 23%, typescript 10%",
+          "examples": "setup.py, randnum.py, server.js"
+        },
+        {
+          "cluster": 7,
+          "size": 2429,
+          "pct": 2.0,
+          "top_archetypes": "Parameter Forwarders 11%, Generic / Templated Code 8%, Defensive Guards 8%",
+          "pct_no_functions": 32.1,
+          "top_features": "log_pagerank:+43.87, log_blast_radius:+18.78, doc_ratio:+0.59, control_flow_ratio:+0.39",
+          "languages": "python 22%, c 12%, typescript 9%",
+          "examples": "unit.rs, m_cheat.h, GIMBAL_LOCK_AVOIDANCE.agc"
+        }
+      ]
+    }
+  ]
+}

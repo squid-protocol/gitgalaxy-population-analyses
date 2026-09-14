@@ -350,12 +350,15 @@ def rollup_function_clusters():
         print("❌ Error: Could not find ARCHETYPES_Kxx in the loaded Brain.")
         sys.exit(1)
         
-    arch_names = list(brain[arch_key].keys())
+    # Use the plain cluster_names (matching what function_data.func_archetype now
+    # stores); the ARCHETYPES dict keys are prefixed ("0: Interface Declarations")
+    # and would map to nothing, dropping every function from the roll-up.
+    arch_names = brain.get('cluster_names', list(brain[arch_key].keys()))
     num_clusters = len(arch_names)
-    
+
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    
+
     # 1. Dynamically inject the single Vector column into file_data
     cursor.execute("PRAGMA table_info(file_data)")
     existing_columns = [row[1] for row in cursor.fetchall()]
