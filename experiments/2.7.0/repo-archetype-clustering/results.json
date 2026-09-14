@@ -1,0 +1,323 @@
+{
+  "n_repos": 368,
+  "k": 7,
+  "variants": [
+    {
+      "variant": "R-A",
+      "k": 7,
+      "dims": 17,
+      "silhouette": 0.1661,
+      "min_cluster": 6,
+      "max_pull": 1.19,
+      "clusters": [
+        {
+          "cluster": 0,
+          "n": 106,
+          "median_files": 6271,
+          "median_loc": 578587,
+          "pagerank_gini": 0.361,
+          "composition": "Large Core Modules 22%, Callbacks & Closures 12%, Parameter Forwarders 11%",
+          "repos": [
+            "kotlin",
+            "freebsd-src",
+            "linux",
+            "swc",
+            "TypeScript",
+            "runtime",
+            "rust",
+            "illumos-gate",
+            "node",
+            "material-ui",
+            "elasticsearch",
+            "swift"
+          ]
+        },
+        {
+          "cluster": 4,
+          "n": 86,
+          "median_files": 778,
+          "median_loc": 122887,
+          "pagerank_gini": 0.351,
+          "composition": "Large Core Modules 32%, Parameter Forwarders 12%, Many-Argument Workhorses 10%",
+          "repos": [
+            "opencv",
+            "pypy",
+            "spm12",
+            "vyre",
+            "fieldtrip",
+            "rapidfuzz",
+            "rdkit",
+            "livecode",
+            "bevy",
+            "wasmtime",
+            "substrate",
+            "jellyfin"
+          ]
+        },
+        {
+          "cluster": 2,
+          "n": 67,
+          "median_files": 104,
+          "median_loc": 16696,
+          "pagerank_gini": 0.298,
+          "composition": "Large Core Modules 40%, Defensive Guards 13%, Parameter Forwarders 11%",
+          "repos": [
+            "jedi",
+            "vapor",
+            "pyasn1-modules",
+            "alacritty",
+            "protobuf",
+            "CodeIgniter",
+            "monolog",
+            "pyparsing",
+            "openpyxl",
+            "normal_esp32_doom",
+            "normal_doomgeneric",
+            "loony_ascii_doom"
+          ]
+        },
+        {
+          "cluster": 1,
+          "n": 46,
+          "median_files": 190,
+          "median_loc": 14075,
+          "pagerank_gini": 0.185,
+          "composition": "Parameter Forwarders 20%, Large Core Modules 17%, I/O & Config Routines 12%",
+          "repos": [
+            "content",
+            "type-challenges",
+            "react-flow",
+            "javascript-algorithms",
+            "raspberrypi",
+            "spamassassin",
+            "cics-banking-sample-application-cbsa",
+            "node-linux-x64",
+            "type-fest",
+            "sqlmap",
+            "zod",
+            "abap2xlsx"
+          ]
+        },
+        {
+          "cluster": 3,
+          "n": 41,
+          "median_files": 119,
+          "median_loc": 18797,
+          "pagerank_gini": 0.406,
+          "composition": "Generic / Templated Code 45%, Large Core Modules 21%, Parameter Forwarders 9%",
+          "repos": [
+            "mypy",
+            "python-simplebench",
+            "textual",
+            "pip",
+            "typer",
+            "rich",
+            "poetry-core",
+            "black",
+            "cryptography",
+            "fp-ts",
+            "pydantic",
+            "serde"
+          ]
+        },
+        {
+          "cluster": 5,
+          "n": 16,
+          "median_files": 164,
+          "median_loc": 9796,
+          "pagerank_gini": 0.092,
+          "composition": "I/O & Config Routines 80%, Parameter Forwarders 7%, Large Core Modules 6%",
+          "repos": [
+            "abapGit",
+            "RaspberryPi",
+            "Cobol-Projects",
+            "macports-base",
+            "Apollo-11",
+            "cpm65",
+            "gnucobol",
+            "aws-mainframe-modernization-carddemo",
+            "cics-genapp",
+            "temp",
+            "cobol-programming-course",
+            "x86-bare-metal-examples"
+          ]
+        },
+        {
+          "cluster": 6,
+          "n": 6,
+          "median_files": 58,
+          "median_loc": 3704,
+          "pagerank_gini": 0.113,
+          "composition": "Defensive Guards 73%, State Mutators 13%, Large Core Modules 6%",
+          "repos": [
+            "@node-red_nodes",
+            "zig-book",
+            "browserstack-node-sdk",
+            "@node-red_editor-client",
+            "pn",
+            "@nx_node"
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "R-B",
+      "k": 7,
+      "dims": 18,
+      "silhouette": 0.1612,
+      "min_cluster": 7,
+      "max_pull": 1.16,
+      "clusters": [
+        {
+          "cluster": 1,
+          "n": 84,
+          "median_files": 2031,
+          "median_loc": 258069,
+          "pagerank_gini": 0.196,
+          "composition": "Large Core Modules 22%, Callbacks & Closures 10%, Parameter Forwarders 9%",
+          "repos": [
+            "kotlin",
+            "swc",
+            "TypeScript",
+            "rust",
+            "swift",
+            "next.js",
+            "canvas-lms",
+            "kubernetes",
+            "discourse",
+            "freeCodeCamp",
+            "roslyn",
+            "jenkins"
+          ]
+        },
+        {
+          "cluster": 2,
+          "n": 79,
+          "median_files": 114,
+          "median_loc": 10832,
+          "pagerank_gini": 0.141,
+          "composition": "Large Core Modules 28%, Parameter Forwarders 15%, I/O & Config Routines 9%",
+          "repos": [
+            "type-challenges",
+            "javascript-algorithms",
+            "raspberrypi",
+            "spamassassin",
+            "abap2xlsx",
+            "apex-recipes",
+            "exiftool",
+            "cobol-check",
+            "black",
+            "ChrysaLisp",
+            "mojo",
+            "db-tutorial"
+          ]
+        },
+        {
+          "cluster": 6,
+          "n": 78,
+          "median_files": 4181,
+          "median_loc": 491744,
+          "pagerank_gini": 0.499,
+          "composition": "Large Core Modules 26%, Parameter Forwarders 13%, Defensive Guards 9%",
+          "repos": [
+            "freebsd-src",
+            "linux",
+            "runtime",
+            "illumos-gate",
+            "node",
+            "material-ui",
+            "elasticsearch",
+            "magento2",
+            "odoo",
+            "core",
+            "root",
+            "tensorflow"
+          ]
+        },
+        {
+          "cluster": 3,
+          "n": 66,
+          "median_files": 232,
+          "median_loc": 47256,
+          "pagerank_gini": 0.455,
+          "composition": "Large Core Modules 38%, Parameter Forwarders 14%, Defensive Guards 10%",
+          "repos": [
+            "platform_dalvik",
+            "nvda",
+            "microzig",
+            "Excalibur",
+            "igv.js",
+            "okhttp",
+            "normal_rp2040_doom",
+            "openzeppelin-contracts",
+            "kivy",
+            "keystone",
+            "ngl",
+            "abap-cleaner"
+          ]
+        },
+        {
+          "cluster": 0,
+          "n": 37,
+          "median_files": 123,
+          "median_loc": 18797,
+          "pagerank_gini": 0.457,
+          "composition": "Generic / Templated Code 46%, Large Core Modules 21%, Defensive Guards 9%",
+          "repos": [
+            "mypy",
+            "python-simplebench",
+            "textual",
+            "pip",
+            "typer",
+            "type-fest",
+            "rich",
+            "poetry-core",
+            "cryptography",
+            "fp-ts",
+            "pydantic",
+            "coverage"
+          ]
+        },
+        {
+          "cluster": 4,
+          "n": 17,
+          "median_files": 201,
+          "median_loc": 9796,
+          "pagerank_gini": 0.095,
+          "composition": "I/O & Config Routines 78%, Parameter Forwarders 7%, Large Core Modules 7%",
+          "repos": [
+            "abapGit",
+            "cics-banking-sample-application-cbsa",
+            "RaspberryPi",
+            "Cobol-Projects",
+            "macports-base",
+            "Apollo-11",
+            "cpm65",
+            "gnucobol",
+            "aws-mainframe-modernization-carddemo",
+            "cics-genapp",
+            "temp",
+            "cobol-programming-course"
+          ]
+        },
+        {
+          "cluster": 5,
+          "n": 7,
+          "median_files": 59,
+          "median_loc": 3898,
+          "pagerank_gini": 0.098,
+          "composition": "Defensive Guards 69%, State Mutators 12%, Large Core Modules 10%",
+          "repos": [
+            "content",
+            "@node-red_nodes",
+            "zig-book",
+            "browserstack-node-sdk",
+            "@node-red_editor-client",
+            "pn",
+            "@nx_node"
+          ]
+        }
+      ]
+    }
+  ]
+}

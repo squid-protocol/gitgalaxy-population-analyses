@@ -1,0 +1,453 @@
+{
+  "n_repos": 368,
+  "k": 10,
+  "variants": [
+    {
+      "variant": "R-A",
+      "k": 10,
+      "dims": 17,
+      "silhouette": 0.1685,
+      "min_cluster": 5,
+      "max_pull": 1.21,
+      "clusters": [
+        {
+          "cluster": 6,
+          "n": 66,
+          "median_files": 668,
+          "median_loc": 92639,
+          "pagerank_gini": 0.384,
+          "composition": "Large Core Modules 32%, Parameter Forwarders 15%, Compute Cores 10%",
+          "repos": [
+            "cython",
+            "AppFlowy",
+            "angr",
+            "pandoc",
+            "cakephp",
+            "pixijs",
+            "pygments",
+            "Python",
+            "desktop",
+            "platform_dalvik",
+            "scikit-learn",
+            "fastapi"
+          ]
+        },
+        {
+          "cluster": 1,
+          "n": 63,
+          "median_files": 5656,
+          "median_loc": 860399,
+          "pagerank_gini": 0.394,
+          "composition": "Large Core Modules 28%, Parameter Forwarders 13%, Many-Argument Workhorses 10%",
+          "repos": [
+            "kotlin",
+            "freebsd-src",
+            "linux",
+            "illumos-gate",
+            "node",
+            "swift",
+            "magento2",
+            "odoo",
+            "root",
+            "tensorflow",
+            "discourse",
+            "reactos"
+          ]
+        },
+        {
+          "cluster": 5,
+          "n": 62,
+          "median_files": 100,
+          "median_loc": 16895,
+          "pagerank_gini": 0.288,
+          "composition": "Large Core Modules 41%, Defensive Guards 12%, Parameter Forwarders 10%",
+          "repos": [
+            "Much-Assembly-Required",
+            "vapor",
+            "pyasn1-modules",
+            "alacritty",
+            "port_csharp_manageddoom",
+            "CodeIgniter",
+            "monolog",
+            "openpyxl",
+            "normal_doomgeneric",
+            "loony_ascii_doom",
+            "vscode_cobol",
+            "google-cloud-storage"
+          ]
+        },
+        {
+          "cluster": 2,
+          "n": 41,
+          "median_files": 119,
+          "median_loc": 18797,
+          "pagerank_gini": 0.406,
+          "composition": "Generic / Templated Code 45%, Large Core Modules 21%, Parameter Forwarders 9%",
+          "repos": [
+            "mypy",
+            "python-simplebench",
+            "textual",
+            "pip",
+            "typer",
+            "rich",
+            "poetry-core",
+            "black",
+            "cryptography",
+            "fp-ts",
+            "pydantic",
+            "serde"
+          ]
+        },
+        {
+          "cluster": 0,
+          "n": 39,
+          "median_files": 3151,
+          "median_loc": 217706,
+          "pagerank_gini": 0.325,
+          "composition": "Callbacks & Closures 26%, Large Core Modules 17%, Defensive Guards 12%",
+          "repos": [
+            "swc",
+            "TypeScript",
+            "material-ui",
+            "next.js",
+            "canvas-lms",
+            "kubernetes",
+            "freeCodeCamp",
+            "grafana",
+            "gutenberg",
+            "Rocket.Chat",
+            "prettier",
+            "react"
+          ]
+        },
+        {
+          "cluster": 4,
+          "n": 32,
+          "median_files": 166,
+          "median_loc": 13185,
+          "pagerank_gini": 0.167,
+          "composition": "Large Core Modules 18%, Defensive Guards 12%, Parameter Forwarders 10%",
+          "repos": [
+            "content",
+            "type-challenges",
+            "javascript-algorithms",
+            "type-fest",
+            "zod",
+            "abap2xlsx",
+            "apex-recipes",
+            "cobol-check",
+            "ChrysaLisp",
+            "db-tutorial",
+            "CobolCraft",
+            "Dancer2"
+          ]
+        },
+        {
+          "cluster": 8,
+          "n": 30,
+          "median_files": 2049,
+          "median_loc": 427990,
+          "pagerank_gini": 0.27,
+          "composition": "Large Core Modules 24%, Generic / Templated Code 15%, Tests & Verification 15%",
+          "repos": [
+            "runtime",
+            "rust",
+            "elasticsearch",
+            "core",
+            "gradle",
+            "sentry",
+            "roslyn",
+            "jenkins",
+            "spring-boot",
+            "kafka",
+            "fineract",
+            "vyre"
+          ]
+        },
+        {
+          "cluster": 3,
+          "n": 17,
+          "median_files": 201,
+          "median_loc": 9796,
+          "pagerank_gini": 0.095,
+          "composition": "I/O & Config Routines 78%, Parameter Forwarders 7%, Large Core Modules 7%",
+          "repos": [
+            "abapGit",
+            "cics-banking-sample-application-cbsa",
+            "RaspberryPi",
+            "Cobol-Projects",
+            "macports-base",
+            "Apollo-11",
+            "cpm65",
+            "gnucobol",
+            "aws-mainframe-modernization-carddemo",
+            "cics-genapp",
+            "temp",
+            "cobol-programming-course"
+          ]
+        },
+        {
+          "cluster": 7,
+          "n": 13,
+          "median_files": 96,
+          "median_loc": 6981,
+          "pagerank_gini": 0.202,
+          "composition": "Parameter Forwarders 47%, I/O & Config Routines 15%, Large Core Modules 15%",
+          "repos": [
+            "raspberrypi",
+            "sqlmap",
+            "os-tutorial",
+            "pyarmor",
+            "ack3",
+            "oauthlib",
+            "zig-okredis",
+            "HelloSilicon",
+            "pyasn1",
+            "requests",
+            "defusedxml",
+            "asm"
+          ]
+        },
+        {
+          "cluster": 9,
+          "n": 5,
+          "median_files": 59,
+          "median_loc": 3511,
+          "pagerank_gini": 0.136,
+          "composition": "Defensive Guards 81%, Large Core Modules 8%",
+          "repos": [
+            "@node-red_nodes",
+            "zig-book",
+            "browserstack-node-sdk",
+            "pn",
+            "@nx_node"
+          ]
+        }
+      ]
+    },
+    {
+      "variant": "R-B",
+      "k": 10,
+      "dims": 20,
+      "silhouette": 0.1619,
+      "min_cluster": 6,
+      "max_pull": 1.22,
+      "clusters": [
+        {
+          "cluster": 2,
+          "n": 58,
+          "median_files": 7060,
+          "median_loc": 768732,
+          "pagerank_gini": 0.514,
+          "composition": "Large Core Modules 26%, Parameter Forwarders 13%, Many-Argument Workhorses 8%",
+          "repos": [
+            "freebsd-src",
+            "linux",
+            "runtime",
+            "illumos-gate",
+            "node",
+            "elasticsearch",
+            "magento2",
+            "core",
+            "root",
+            "tensorflow",
+            "gradle",
+            "reactos"
+          ]
+        },
+        {
+          "cluster": 5,
+          "n": 58,
+          "median_files": 499,
+          "median_loc": 71260,
+          "pagerank_gini": 0.464,
+          "composition": "Large Core Modules 31%, Parameter Forwarders 13%, Compute Cores 9%",
+          "repos": [
+            "pandoc",
+            "puppeteer",
+            "desktop",
+            "spock",
+            "platform_dalvik",
+            "ghostty",
+            "curl",
+            "yii2",
+            "matplotlib",
+            "nvda",
+            "twisted",
+            "excalidraw"
+          ]
+        },
+        {
+          "cluster": 0,
+          "n": 56,
+          "median_files": 3821,
+          "median_loc": 298882,
+          "pagerank_gini": 0.259,
+          "composition": "Large Core Modules 21%, Callbacks & Closures 15%, Parameter Forwarders 13%",
+          "repos": [
+            "kotlin",
+            "swc",
+            "TypeScript",
+            "material-ui",
+            "swift",
+            "next.js",
+            "odoo",
+            "canvas-lms",
+            "kubernetes",
+            "discourse",
+            "freeCodeCamp",
+            "content"
+          ]
+        },
+        {
+          "cluster": 1,
+          "n": 44,
+          "median_files": 93,
+          "median_loc": 14796,
+          "pagerank_gini": 0.378,
+          "composition": "Large Core Modules 38%, Defensive Guards 15%, Parameter Forwarders 11%",
+          "repos": [
+            "pyparsing",
+            "pyarmor",
+            "micropython-ulab",
+            "bootstrap",
+            "google-cloud-storage",
+            "cyber",
+            "reveal.js",
+            "AFNetworking",
+            "docker-py",
+            "oauthlib",
+            "capy",
+            "DOOM"
+          ]
+        },
+        {
+          "cluster": 7,
+          "n": 37,
+          "median_files": 123,
+          "median_loc": 16499,
+          "pagerank_gini": 0.456,
+          "composition": "Generic / Templated Code 45%, Large Core Modules 20%, Parameter Forwarders 8%",
+          "repos": [
+            "mypy",
+            "python-simplebench",
+            "textual",
+            "pip",
+            "typer",
+            "rich",
+            "poetry-core",
+            "cryptography",
+            "fp-ts",
+            "pydantic",
+            "coverage",
+            "pytest"
+          ]
+        },
+        {
+          "cluster": 9,
+          "n": 37,
+          "median_files": 135,
+          "median_loc": 21939,
+          "pagerank_gini": 0.061,
+          "composition": "Large Core Modules 36%, Generic / Templated Code 10%, Parameter Forwarders 9%",
+          "repos": [
+            "spamassassin",
+            "zod",
+            "actix-web",
+            "apex-recipes",
+            "exiftool",
+            "black",
+            "ChrysaLisp",
+            "mojo",
+            "db-tutorial",
+            "vapor",
+            "pyasn1-modules",
+            "alacritty"
+          ]
+        },
+        {
+          "cluster": 6,
+          "n": 33,
+          "median_files": 1799,
+          "median_loc": 301974,
+          "pagerank_gini": 0.126,
+          "composition": "Large Core Modules 26%, Many-Argument Workhorses 14%, Generic / Templated Code 10%",
+          "repos": [
+            "rust",
+            "roslyn",
+            "vscode",
+            "openclaw-typescript",
+            "PowerToys",
+            "spm12",
+            "racket",
+            "vyre",
+            "wrf-fortran",
+            "fieldtrip",
+            "bevy",
+            "wasmtime"
+          ]
+        },
+        {
+          "cluster": 4,
+          "n": 24,
+          "median_files": 90,
+          "median_loc": 6836,
+          "pagerank_gini": 0.103,
+          "composition": "Parameter Forwarders 29%, I/O & Config Routines 19%, Large Core Modules 14%",
+          "repos": [
+            "type-challenges",
+            "raspberrypi",
+            "cics-banking-sample-application-cbsa",
+            "abap2xlsx",
+            "Dancer2",
+            "os-tutorial",
+            "catalyst-runtime",
+            "express",
+            "ack3",
+            "sqitch",
+            "Rex",
+            "x86-bare-metal-examples"
+          ]
+        },
+        {
+          "cluster": 3,
+          "n": 15,
+          "median_files": 201,
+          "median_loc": 9796,
+          "pagerank_gini": 0.098,
+          "composition": "I/O & Config Routines 81%, Large Core Modules 6%, Parameter Forwarders 5%",
+          "repos": [
+            "abapGit",
+            "RaspberryPi",
+            "Cobol-Projects",
+            "macports-base",
+            "Apollo-11",
+            "cpm65",
+            "gnucobol",
+            "aws-mainframe-modernization-carddemo",
+            "cics-genapp",
+            "temp",
+            "cobol-programming-course",
+            "CICS-Cobol"
+          ]
+        },
+        {
+          "cluster": 8,
+          "n": 6,
+          "median_files": 58,
+          "median_loc": 3704,
+          "pagerank_gini": 0.113,
+          "composition": "Defensive Guards 73%, State Mutators 13%, Large Core Modules 6%",
+          "repos": [
+            "@node-red_nodes",
+            "zig-book",
+            "browserstack-node-sdk",
+            "@node-red_editor-client",
+            "pn",
+            "@nx_node"
+          ]
+        }
+      ]
+    }
+  ]
+}
