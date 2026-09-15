@@ -163,10 +163,49 @@ def run_dna_clustering(target_language=None, force_k=None, accuracy='medium'):
             df[log_name] = np.log1p(df[col].fillna(0.0))
             log_precalc_cols.append(log_name)
 
+    # #ENGINE-PARITY: a log-density feature is only usable by the engine if the
+    # engine can reconstruct it at scan time from a real signal. The authoritative
+    # signal->column bridge is record_keeper.py's SHORT_KEY_MAP (kept in sync here;
+    # offline tool, so a copy rather than an import of the engine package). Its
+    # INVERSE (column -> signal_key) is DNA_SOURCES. Filtering raw_hit_cols to
+    # columns that map to a real signal (via the bridge or identity) does the
+    # feature governance for free: category-prefixed signal columns (arch_io,
+    # struct_branch, state_flux, ...) are kept and bridged, while non-DNA columns
+    # the old denylist missed (ai_threat_score, betweenness_score, appsec_god_mode,
+    # graph metrics, ...) map to nothing and are dropped.
+    SHORT_KEY_MAP = {  # signal_key -> recorded db column (mirror of record_keeper.SHORT_KEY_MAP)
+        "branch": "struct_branch", "structural_boundaries": "struct_linear", "args": "struct_args",
+        "func_start": "struct_func_start", "class_start": "struct_class_start", "closures": "struct_closures",
+        "comprehensions": "struct_comprehensions", "macros": "struct_macros", "decorators": "struct_decorators",
+        "generics": "struct_generics", "core_var_decl": "struct_var_decl", "indent_tabs": "struct_tabs",
+        "indent_spaces": "struct_spaces", "design_camel_case": "struct_camel_case",
+        "design_snake_case": "struct_snake_case", "design_pascal_case": "struct_pascal_case",
+        "design_upper_case": "struct_upper_case", "design_short_vars": "struct_short_vars",
+        "design_long_vars": "struct_long_vars", "state_mutation": "state_flux",
+        "high_risk_execution": "state_danger", "dead_code": "state_graveyard",
+        "safety_bypasses": "state_safety_neg", "unreferenced_by_name": "state_unreferenced",
+        "duplicate_logic": "state_slop_duplicates", "planned_debt": "state_planned_debt",
+        "fragile_debt": "state_fragile_debt", "panics_and_aborts": "state_bailout_hits",
+        "thread_sleeps": "state_halt_hits", "reflection_metaprogramming": "state_heat_triggers",
+        "pointers": "state_pointers", "memory_alloc": "state_memory_alloc", "explicit_casts": "state_cast_hits",
+        "debug_prints": "state_print_hits", "io": "arch_io", "api": "arch_api", "concurrency": "arch_concurrency",
+        "import": "arch_import", "ui_framework": "arch_ui_framework", "globals": "arch_globals",
+        "ipc_rpc_bridges": "arch_ipc", "ssr_boundaries": "arch_ssr_boundaries", "events": "arch_events",
+        "scientific": "arch_scientific", "dependency_injection": "arch_dependency_injection",
+        "hardware_bridge": "arch_hardware", "cryptography": "arch_crypto",
+        "serialization_parsing": "arch_serialization", "regex_execution": "arch_regex",
+        "time_date_logic": "arch_time", "feature_flags": "arch_feature_flags", "inline_asm": "arch_inline_asm",
+        "safety": "def_safety", "immutability_locks": "def_freeze_hits", "cleanup": "def_cleanup",
+        "sync_locks": "def_sync_locks", "test": "def_test", "test_skip": "def_test_skip", "doc": "def_doc",
+        "listeners": "def_listeners", "encapsulation": "def_encapsulation", "auth_middleware": "def_auth",
+        "telemetry": "def_telemetry", "ownership": "def_ownership", "spec_exposure": "def_spec_exposure",
+    }
+    COL2SIG = {col: sig for sig, col in SHORT_KEY_MAP.items()}
+
     # Find the standard hit columns AND raw counts (like function_count, class_count, popularity)
     raw_hit_cols = [
-        c for c in df.select_dtypes(include=[np.number]).columns 
-        if c not in excluded_cols 
+        c for c in df.select_dtypes(include=[np.number]).columns
+        if c not in excluded_cols
         and not c.startswith('log_')
         and not c.startswith('total_')
         and not c.endswith('_total')
@@ -175,20 +214,23 @@ def run_dna_clustering(target_language=None, force_k=None, accuracy='medium'):
         and not c.startswith('func_cluster_')
         and not c.startswith('threat_')       # <--- NEW: Exclude threat vectors
         and not c.startswith('sec_')          # <--- NEW: Exclude sec_graveyard, etc.
-        and c not in rollup_cols 
+        and c not in rollup_cols
         and c not in pre_calculated_metrics # Protect the VIP metrics from division
+        and (c in COL2SIG or c in SHORT_KEY_MAP)  # #ENGINE-PARITY: keep only real signals
     ]
-    
+
     log_density_hit_cols = []
+    dna_sources = {}  # log_density_<col> feature -> engine signal_key (for engine-side reconstruction)
     safe_denom = df['coding_loc'].replace(0, 1)
 
     for col in raw_hit_cols:
         raw_density_name = f"raw_density_{col}"
         df[raw_density_name] = (df[col].fillna(0) / safe_denom) * 100.0
-        
+
         log_density_name = f"log_density_{col}"
         df[log_density_name] = np.log1p(df[raw_density_name])
         log_density_hit_cols.append(log_density_name)
+        dna_sources[log_density_name] = COL2SIG.get(col, col)  # bridge, or identity if already a signal key
 
     # =========================================================================
     # 3. THE MULTI-MODAL MACRO FEATURE VECTOR
@@ -205,7 +247,10 @@ def run_dna_clustering(target_language=None, force_k=None, accuracy='medium'):
     cluster_features = telemetry_features + composition_features + log_density_hit_cols
 
     df = df.dropna(subset=cluster_features).copy()
-    X_raw = df[cluster_features]
+    # A raw ratio/log can overflow to +/-inf on degenerate inputs (e.g. a huge
+    # count over ~0 LOC); RobustScaler then raises "Input X contains infinity".
+    # Replace non-finite with 0.0 so scaling/k-means are well-defined.
+    X_raw = df[cluster_features].replace([np.inf, -np.inf], np.nan).fillna(0.0)
 
     print(f"🧠 Preparing Unsupervised ML on {len(df):,} files across {len(cluster_features)} dimensions...")
     math_start_time = time.time()
@@ -326,9 +371,25 @@ def run_dna_clustering(target_language=None, force_k=None, accuracy='medium'):
     medians = [round(x, 3) for x in scaler.center_.tolist()]
     iqrs = [round(x, 3) for x in scaler.scale_.tolist()]
 
+    # #ENGINE-PARITY: emit the self-describing contract (mirrors cluster_functions.py /
+    # GENERAL_FUNCTION_INFERENCE_MODEL) so the engine builds its file vector in
+    # FEATURE_NAMES order and cannot drift. Files carry no rosetta down-weights or
+    # winsor caps today, so FEATURE_WEIGHTS is all-ones and CAP_VALUES is empty --
+    # both kept in the schema so adding them later needs no engine change.
+    #   FEATURE_NAMES : exact ordered feature list (telemetry + composition + log_density)
+    #   DNA_SOURCES   : log_density_<col> -> engine signal_key (only the density block;
+    #                   telemetry/composition features are computed by the engine by name)
+    #   cluster_names : parallel to the ARCHETYPES centroid order
+    file_feature_weights = [1.0] * len(cluster_features)
+    file_cap_values = {}
     py_string = "ML_INFERENCE_BRAIN = {\n"
+    py_string += f"    'FEATURE_NAMES': {cluster_features},\n"
+    py_string += f"    'FEATURE_WEIGHTS': {file_feature_weights},\n"
+    py_string += f"    'CAP_VALUES': {file_cap_values},\n"
+    py_string += f"    'DNA_SOURCES': {dna_sources},\n"
     py_string += f"    'SCALER_MEDIANS': {medians},\n"
     py_string += f"    'SCALER_IQRS': {iqrs},\n"
+    py_string += f"    'cluster_names': {professional_names},\n"
     py_string += f"    'ARCHETYPES_K{k_values[0]}': {{\n"
 
     for i, name in enumerate(professional_names):
