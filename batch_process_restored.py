@@ -125,7 +125,7 @@ def compress_artifacts(repo_output_dir):
                     print(f"   ⚠️ Failed to compress {file_path.name}: {e}")
 
 def run_batch_scan(target_path=None, output_path=None, halt_on_error=False, compress=True):
-    project_root = Path("/srv/storage_16tb/projects/gitgalaxy/v6")
+    project_root = Path(os.environ.get("GITGALAXY_ENGINE_ROOT", "/srv/storage_16tb/projects/gitgalaxy/v6"))
     data_dir = Path(target_path) if target_path else Path("/srv/storage_16tb/projects/gitgalaxy/data") 
     output_dir = Path(output_path) if output_path else Path("/srv/storage_16tb/projects/gitgalaxy-raw-output/v2.4.6")
 
