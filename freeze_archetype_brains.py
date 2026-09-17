@@ -15,7 +15,7 @@ match the KMeans labels (the frozen quantile mapping is a faithful stand-in for 
 """
 import os
 os.environ["OMP_NUM_THREADS"] = "1"
-import sqlite3, json
+import sqlite3, json, hashlib, subprocess, datetime
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -24,6 +24,76 @@ from sklearn.cluster import KMeans
 SD = Path(__file__).resolve().parent
 DB = SD / "data" / "gitgalaxy_master.db"
 NQ = 101  # reference quantiles (0..100th percentile)
+
+# Bump when the freeze logic or a brain's feature space changes shape. This is
+# the human-readable trainer identity baked into every brain's provenance block;
+# the machine-checkable identity is feature_contract_sha (see _contract_sha).
+TRAINER_VERSION = "2026.09.1"
+
+
+# =====================================================================
+# PROVENANCE + FEATURE-CONTRACT PARITY  (#3124 / #3125)
+# Every frozen brain carries a `provenance` block recording exactly what
+# produced it (corpus, commits, counts, language mix, k) plus a
+# `feature_contract_sha` over the ORDERED feature contract. The engine
+# (gitgalaxy/metrics/archetype_parity.py) recomputes the same sha from the
+# loaded brain with a byte-identical algorithm and warns on mismatch, so a
+# refrozen brain whose feature space drifted from the engine is caught before
+# it silently reinterprets every classification. Keep the canonicalization
+# (sort_keys + compact separators, list order preserved) identical on both
+# sides -- it is the whole contract.
+# =====================================================================
+def _contract_sha(contract: dict) -> str:
+    blob = json.dumps(contract, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
+
+
+def _git_head(repo: Path | str | None) -> str:
+    if not repo:
+        return "unknown"
+    try:
+        out = subprocess.run(
+            ["git", "-C", str(repo), "rev-parse", "--short", "HEAD"],
+            capture_output=True, text=True, timeout=10,
+        )
+        return out.stdout.strip() or "unknown"
+    except Exception:
+        return "unknown"
+
+
+def _sha256_file(path: Path, chunk: int = 8 << 20) -> str:
+    try:
+        h = hashlib.sha256()
+        with open(path, "rb") as fh:
+            for block in iter(lambda: fh.read(chunk), b""):
+                h.update(block)
+        return h.hexdigest()[:12]
+    except Exception:
+        return "unknown"
+
+
+def _engine_commit() -> str:
+    # Explicit override wins (e.g. CI that knows the engine ref it trained
+    # against); otherwise derive from the pinned engine checkout if present.
+    return os.environ.get("GITGALAXY_ENGINE_COMMIT") or _git_head(
+        os.environ.get("GITGALAXY_ENGINE_ROOT")
+    )
+
+
+def _build_provenance(level: str, contract: dict, count: int, language_mix: dict, k: int) -> dict:
+    return {
+        "corpus": os.path.basename(os.path.realpath(DB)),
+        "corpus_sha256": _sha256_file(Path(os.path.realpath(DB))),
+        "trainer_commit": _git_head(SD),
+        "trainer_version": TRAINER_VERSION,
+        "engine_commit": _engine_commit(),
+        "trained_at": datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(),
+        "record_count": int(count),
+        "language_mix": language_mix,
+        "k": int(k),
+        "feature_contract": {"level": level, **contract},
+        "feature_contract_sha": _contract_sha({"level": level, **contract}),
+    }
 
 # ---- shared ----
 def quantile_ref(series):
@@ -115,6 +185,14 @@ def freeze_file_brain():
              "noncode_languages":FILE_NONCODE, "min_coding_loc":FILE_MIN_LOC,
              "noncode_bucket":"Data / Markup / Trivial",
              "z_score_params":z_params(X, km, names)}
+    brain["provenance"] = _build_provenance(
+        "file",
+        {"k": 15, "stoich_weight": FILE_STOICH_WEIGHT, "stoich_archetypes": FILE_STOICH,
+         "aux_features": FILE_AUX, "noncode_languages": FILE_NONCODE, "min_coding_loc": FILE_MIN_LOC},
+        count=len(df),
+        language_mix={str(k): int(v) for k, v in df["language"].value_counts().items()},
+        k=15,
+    )
     json.dump(brain, open(SD/"data"/"file_archetype_brain.json","w"), indent=1)
     # self-validate: frozen-brain nearest-centroid vs KMeans label
     cen = np.array(list(brain["centroids"].values())); cn = list(brain["centroids"].keys())
@@ -146,7 +224,7 @@ def repo_name_cluster(sub, archs):
 
 def freeze_repo_brain():
     con=sqlite3.connect(DB)
-    df=pd.read_sql_query("SELECT repo_name, file_archetype, coding_loc, pagerank_score FROM file_data", con); con.close()
+    df=pd.read_sql_query("SELECT repo_name, file_archetype, language, coding_loc, pagerank_score FROM file_data", con); con.close()
     for c in ["coding_loc","pagerank_score"]: df[c]=pd.to_numeric(df[c],errors="coerce").fillna(0.0)
     archs=sorted(a for a in df["file_archetype"].dropna().unique() if a not in REPO_NONCODE)
     rows=[]
@@ -181,6 +259,16 @@ def freeze_repo_brain():
            "centroids":{names[c]:km.cluster_centers_[c].round(5).tolist() for c in range(7)},
            "micro_bucket":"Micro Repo (<30 files)",
            "z_score_params":z_params(X, km, names)}
+    brain["provenance"] = _build_provenance(
+        "repo",
+        {"k": 7, "comp_weight": REPO_COMP_WEIGHT, "comp_archetypes": archs,
+         "scale_features": ["log_file_count", "log_total_loc"], "coupling_feature": "pagerank_gini",
+         "feature_order": ["comp*w..", "scale_rank..", "non_code_fraction", "coupling_rank"],
+         "min_files": REPO_MIN_FILES},
+        count=len(r),
+        language_mix={str(k): int(v) for k, v in df["language"].value_counts().items()},
+        k=7,
+    )
     json.dump(brain, open(SD/"data"/"repo_archetype_brain.json","w"), indent=1)
     cen=np.array(list(brain["centroids"].values())); cn=list(brain["centroids"].keys())
     d=np.linalg.norm(X[:,None,:]-cen[None,:,:],axis=2); pred=d.argmin(1)
