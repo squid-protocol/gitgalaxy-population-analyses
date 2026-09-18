@@ -125,7 +125,62 @@ def compress_artifacts(repo_output_dir):
                 except Exception as e:
                     print(f"   ⚠️ Failed to compress {file_path.name}: {e}")
 
-def run_batch_scan(target_path=None, output_path=None, halt_on_error=False, compress=True, timing=True):
+def _mem_available_bytes():
+    try:
+        with open("/proc/meminfo") as f:
+            for line in f:
+                if line.startswith("MemAvailable:"):
+                    return int(line.split()[1]) * 1024
+    except OSError:
+        pass
+    return 8 << 30  # conservative fallback
+
+
+def prewarm_repo(folder):
+    """Fault the repo's bytes into the page cache with ONE sequential pass
+    before the 16-worker pool goes to work.
+
+    Why: the corpus lives on a spinning disk, and the v2.9.0 fleet telemetry
+    showed cold mega-repos paying ~one full seek PER FILE under concurrent
+    random reads (illumos-gate: 37k files -> 11.43 ms/file -> 425 cumulative
+    worker-seconds blocked in 2_Disk_IO, exceeding its Optical Detector CPU).
+    Sequential streaming turns those seeks into ~200MB/s reads; the workers
+    then hit RAM. Byte-identical to an unwarmed scan by construction -- only
+    page-cache state changes.
+
+    Capped at 70% of MemAvailable so a corpus bigger than RAM doesn't evict
+    its own head (LRU) while warming its tail.
+    """
+    cap = int(_mem_available_bytes() * 0.7)
+    read = 0
+    t0 = time.perf_counter()
+    buf = bytearray(1 << 20)
+    capped = False
+    for root, _dirs, files in os.walk(folder):
+        for name in files:
+            if read >= cap:
+                capped = True
+                break
+            try:
+                with open(os.path.join(root, name), "rb", buffering=0) as f:
+                    while True:
+                        n = f.readinto(buf)
+                        if not n:
+                            break
+                        read += n
+                        if read >= cap:
+                            capped = True
+                            break
+            except OSError:
+                continue
+        if capped:
+            break
+    dt = time.perf_counter() - t0
+    note = " (capped at 70% MemAvailable)" if capped else ""
+    print(f"   ♨️  PRE-WARM: {read / (1 << 20):,.0f} MB in {dt:.1f}s{note}")
+
+
+def run_batch_scan(target_path=None, output_path=None, halt_on_error=False, compress=True, timing=True, prewarm=True):
     project_root = Path("/srv/storage_16tb/projects/gitgalaxy/v6")
     data_dir = Path(target_path) if target_path else Path("/srv/storage_16tb/projects/gitgalaxy/data") 
     output_dir = Path(output_path) if output_path else Path("/srv/storage_16tb/projects/gitgalaxy-raw-output/v2.4.6")
@@ -201,6 +256,8 @@ def run_batch_scan(target_path=None, output_path=None, halt_on_error=False, comp
             continue
             
         print("\n" + "="*60)
+        if prewarm:
+            prewarm_repo(folder)
         print(f"[{index}/{total_folders}] 🚀 IGNITING GALAXYOSCOPE FOR: {folder.name}")
         print(f"               Target Path: {folder.absolute()}")
         print(f"               Output Path: {repo_output_dir.absolute()}")
@@ -393,6 +450,7 @@ if __name__ == "__main__":
     parser.add_argument("--halt-on-error", action="store_true", help="Halt batch scan immediately if a repo scan fails")
     parser.add_argument("--no-compress", action="store_true", help="Disable automatic gzip compression of large artifacts")
     parser.add_argument("--no-timing", action="store_true", help="Disable fleet timing telemetry (--file-speed/--splicing-speed charts + per-repo scanlog sidecar)")
+    parser.add_argument("--no-prewarm", action="store_true", help="Disable the sequential page-cache pre-warm before each scan (HDD seek-storm mitigation)")
     args = parser.parse_args()
 
     run_batch_scan(
@@ -400,5 +458,6 @@ if __name__ == "__main__":
         output_path=args.output,
         halt_on_error=args.halt_on_error,
         compress=not args.no_compress,
-        timing=not args.no_timing
+        timing=not args.no_timing,
+        prewarm=not args.no_prewarm
     )
