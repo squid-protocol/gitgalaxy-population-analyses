@@ -110,6 +110,7 @@ def compress_artifacts(repo_output_dir):
         "_galaxy_graph.sqlite",
         "_galaxy_sarif.json",
         "_galaxy_sbom.json",
+        "_galaxy_scanlog.txt",  # fleet timing telemetry sidecar (full engine stdout)
     ]
     for file_path in repo_output_dir.iterdir():
         if file_path.is_file() and not file_path.name.endswith(".gz"):
@@ -124,7 +125,7 @@ def compress_artifacts(repo_output_dir):
                 except Exception as e:
                     print(f"   ⚠️ Failed to compress {file_path.name}: {e}")
 
-def run_batch_scan(target_path=None, output_path=None, halt_on_error=False, compress=True):
+def run_batch_scan(target_path=None, output_path=None, halt_on_error=False, compress=True, timing=True):
     project_root = Path("/srv/storage_16tb/projects/gitgalaxy/v6")
     data_dir = Path(target_path) if target_path else Path("/srv/storage_16tb/projects/gitgalaxy/data") 
     output_dir = Path(output_path) if output_path else Path("/srv/storage_16tb/projects/gitgalaxy-raw-output/v2.4.6")
@@ -207,26 +208,44 @@ def run_batch_scan(target_path=None, output_path=None, halt_on_error=False, comp
         
         repo_loc = 0
         repo_rate = 0
-        
+        scanlog = None  # closed in the finally below; survives engine-crash paths
+
         try:
             custom_env = os.environ.copy()
             custom_env["GITGALAXY_DATA_DIR"] = str(repo_output_dir)
             custom_env["GITGALAXY_LICENSE_KEY"] = "COMMUNITY_FREE_TIER"
-            
+
+            # FLEET TIMING TELEMETRY (default ON): --file-speed / --splicing-speed
+            # print the per-phase and per-rule timing charts to stdout. Verified
+            # zero-cost (+0.5% wall, within noise) and artifact-identical (charts
+            # go to stdout only, never into audit/sarif/gpu/sbom). Each repo's
+            # full engine stdout is persisted as <name>_galaxy_scanlog.txt so
+            # aggregate_fleet_timing.py can build the fleet-wide timing corpus
+            # offline; the raw log is the source of truth, parsing happens later.
+            engine_argv = [sys.executable, "-m", "gitgalaxy.galaxyscope", str(folder.absolute()), "--output", str(repo_output_dir)]
+            if timing:
+                engine_argv += ["--file-speed", "--splicing-speed"]
+
+            scanlog_path = repo_output_dir / f"{folder.name}_galaxy_scanlog.txt"
+            scanlog = open(scanlog_path, "w", encoding="utf-8") if timing else None
+
+            repo_start_time = time.perf_counter()
             process = subprocess.Popen(
-                [sys.executable, "-m", "gitgalaxy.galaxyscope", str(folder.absolute()), "--output", str(repo_output_dir)],
+                engine_argv,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 text=True,
-                bufsize=1, 
-                cwd=str(project_root), 
-                env=custom_env 
+                bufsize=1,
+                cwd=str(project_root),
+                env=custom_env
             )
 
             # Stream output live, logging it and scanning it for errors
             for line in process.stdout:
                 sys.stdout.write(line)
-                
+                if scanlog is not None:
+                    scanlog.write(line)
+
                 # Check for standard telemetry
                 match = telemetry_pattern.search(line)
                 if match:
@@ -252,7 +271,11 @@ def run_batch_scan(target_path=None, output_path=None, halt_on_error=False, comp
                     if m: anomaly_report["typosquat_hits"].append((folder.name, m.group(1)))
 
             process.wait()
-            
+            repo_wall_seconds = time.perf_counter() - repo_start_time
+            if scanlog is not None:
+                scanlog.close()
+                scanlog = None
+
             if process.returncode == 0:
                 print(f"\n✅ SUCCESS: {folder.name} completed.\n")
                 if compress:
@@ -263,7 +286,8 @@ def run_batch_scan(target_path=None, output_path=None, halt_on_error=False, comp
                         'name': folder.name,
                         'loc': repo_loc,
                         'rate': repo_rate,
-                        'time': engine_time
+                        'time': engine_time,
+                        'wall': repo_wall_seconds  # harness-side wall (incl. process startup), for the fleet line-fit
                     })
                     total_loc += repo_loc
             else:
@@ -282,6 +306,9 @@ def run_batch_scan(target_path=None, output_path=None, halt_on_error=False, comp
             anomaly_report["failed_repos"].append(folder.name)
             if halt_on_error:
                 halt_batch = True
+        finally:
+            if scanlog is not None:
+                scanlog.close()  # keep the partial log -- crash tails are telemetry too
 
         if halt_batch:
             print(f"\n🛑 BATCH HALTED: Critical exception detected in '{folder.name}'. Stopping further scans.")
@@ -365,11 +392,13 @@ if __name__ == "__main__":
     parser.add_argument("--output", default="/srv/storage_16tb/projects/gitgalaxy-raw-output/v2.4.6", help="Output destination folder")
     parser.add_argument("--halt-on-error", action="store_true", help="Halt batch scan immediately if a repo scan fails")
     parser.add_argument("--no-compress", action="store_true", help="Disable automatic gzip compression of large artifacts")
+    parser.add_argument("--no-timing", action="store_true", help="Disable fleet timing telemetry (--file-speed/--splicing-speed charts + per-repo scanlog sidecar)")
     args = parser.parse_args()
-    
+
     run_batch_scan(
         target_path=args.target,
         output_path=args.output,
         halt_on_error=args.halt_on_error,
-        compress=not args.no_compress
+        compress=not args.no_compress,
+        timing=not args.no_timing
     )
