@@ -13,6 +13,8 @@ from pathlib import Path
 
 from . import __version__
 from . import browser as BR
+from . import crosscheck as CC
+from . import subsystems as SS
 from . import subway as SW
 from .compare import COMPONENTS, IncomparableError, compare_cohort, explain
 from .fingerprint import Fingerprint, build, safe_name
@@ -113,6 +115,9 @@ def cmd_compare(a: argparse.Namespace) -> int:
             prof = {n: float(cohort.composite[r, i]) for i, n in enumerate(cohort.names)}
         declared = read_declared_lineage(Path(a.declared_lineage)) if a.declared_lineage else None
         extra.append(SW.render_section(maps, pos, tax, a.subway_reference, prof, declared))
+        extra.append(_subsystem_section(fps, maps, out, declared))
+        if a.crosscheck:
+            extra.append(_crosscheck_section(fps, maps, out, a))
     browser_html = ""
     if descent is not None and not a.no_browser:
         data = BR.payload({fp.name: fp.functions for fp in fps}, descent, a.browser_min_shared)
@@ -120,6 +125,26 @@ def cmd_compare(a: argparse.Namespace) -> int:
     write_cohort(out, fps, cohort, descent, lineage_eval, tp, extra, browser_html)
     print(f"compared {len(fps)} repositories -> {out / 'report.html'}")
     return 0
+
+
+def _subsystem_section(fps: list[Fingerprint], maps: list[SW.SubwayMap], out: Path,
+                       declared: dict[str, list[str]] | None) -> str:
+    """Per-subsystem fingerprints on the subway maps' assignment: subsystems.csv + a report section."""
+    ref = load_reference(fps[0].data["spec"]["lens"])
+    prof = SS.profile({fp.name: fp.functions for fp in fps}, maps, ref)
+    SS.write_csv(out / "subsystems.csv", prof)
+    order = [m.repo for m in SW.lineage_order(maps, declared)]
+    return SS.render_section(prof, order)
+
+
+def _crosscheck_section(fps: list[Fingerprint], maps: list[SW.SubwayMap], out: Path, a: argparse.Namespace) -> str:
+    """Score the twins against an independent source-text verdict: crosscheck.csv/json + a report section."""
+    ref = next(fp.functions for fp in fps if fp.name == maps[0].repo)
+    positive = tuple(x.strip() for x in a.crosscheck_positive.split(",") if x.strip())
+    cc = CC.crosscheck(ref, maps, CC.read_verdicts(Path(a.crosscheck)), positive, a.twin_min_loc)
+    CC.write_csv(out / "crosscheck.csv", cc)
+    (out / "crosscheck.json").write_text(json.dumps(cc.to_dict(), indent=1) + "\n")
+    return CC.render_section(cc, Path(a.crosscheck).name)
 
 
 def cmd_subway(a: argparse.Namespace) -> int:
@@ -144,7 +169,10 @@ def cmd_subway(a: argparse.Namespace) -> int:
     meta = f"{len(maps)} repositories on {html.escape(a.reference)}'s layout · {html.escape(tax.name)}"
     declared = read_declared_lineage(Path(a.declared_lineage)) if a.declared_lineage else None
     section = SW.render_section(maps, pos, tax, a.reference, prof, declared)
-    (out / "subway.html").write_text(page("Subway maps", meta, [section]))
+    sections = [section, _subsystem_section(fps, maps, out, declared)]
+    if a.crosscheck:
+        sections.append(_crosscheck_section(fps, maps, out, a))
+    (out / "subway.html").write_text(page("Subway maps", meta, sections))
     print(f"wrote {out / 'subway.html'}")
     return 0
 
@@ -232,6 +260,12 @@ def main(argv: list[str] | None = None) -> int:
         p.add_argument("--min-loc", type=int, default=3,
                        help="ignore functions shorter than this in fingerprints (default 3, as the engine trainer)")
 
+    def crosscheck_opts(p: argparse.ArgumentParser) -> None:
+        p.add_argument("--crosscheck", help="CSV of source-text verdicts per reference function and port "
+                       "(variant,file,func,cls; e.g. lineage.py's survival_functions.csv) to score the twins against")
+        p.add_argument("--crosscheck-positive", default="exact,near",
+                       help="verdict classes that count as surviving (default exact,near)")
+
     def twin_opts(p: argparse.ArgumentParser) -> None:
         p.add_argument("--twin-min-loc", type=int, default=6, help="smallest function considered for twins (default 6)")
         p.add_argument("--ratio", type=float, default=0.8, help="distinctiveness ratio test (default 0.8)")
@@ -256,6 +290,7 @@ def main(argv: list[str] | None = None) -> int:
                    help="twin browser: include pairs sharing at least this much structure (default 0.02)")
     p.add_argument("--subway-reference", help="also draw subway maps on this repository's layout")
     p.add_argument("--taxonomy", help="subsystem taxonomy JSON for subway maps (default: top-level directories)")
+    crosscheck_opts(p)
     p.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) // 2))
     common(p)
     twin_opts(p)
@@ -266,6 +301,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--reference", required=True, help="repository whose subsystems and layout every map uses")
     p.add_argument("--taxonomy", help="subsystem taxonomy JSON (default: the reference's top-level directories)")
     p.add_argument("--declared-lineage", help="CSV name,parent: order the maps along the declared lineage")
+    crosscheck_opts(p)
     p.add_argument("-o", "--out", required=True)
     common(p)
     twin_opts(p)

@@ -202,7 +202,37 @@ reference function of the same normalized name (also without a module prefix suc
 Survival needs measurements to survive. Wiring and calls kept need only names and
 calls. That is why the maps follow translations that the descent tree cannot.
 
-## 8. Twin browser
+## 8. Per-subsystem fingerprints (`subsystems`)
+
+On the subway maps' assignment, each (repository, subsystem) cell compares the
+repository's functions in that subsystem with the reference's in the same subsystem:
+the LOC-weighted centres (Euclidean / √37), the archetype mixes (Jensen–Shannon), and
+the whole distributions (mean over the 37 features of the 1-Wasserstein distance between
+the two sets of coordinates). The composite divides each by its median over all cells
+and averages them. A cell needs 10 functions on both sides; smaller ones are left empty.
+**Drift** lists the three features whose mean moved most, in population IQRs (the lens
+weight divided out; features weighted 0 in the lens are not reported).
+
+The **by-language table** takes only repositories that kept the reference's wiring
+(calls kept ≥ 30%), so the algorithm is known to be the same. For each language it
+gives the median composite and the drift that recurs most. **Calibration candidates**
+are cells of such repositories in another language than the reference, in the cohort's
+most distant quarter. Either the port changed that subsystem or the engine measures
+that language differently there; the drift says which signal to check.
+
+## 9. Cross-check against source text (`crosscheck`)
+
+`--crosscheck CSV` takes an independent verdict per reference function and port
+(columns `variant`, `file`, `func`, `cls`; `lineage.py`'s `survival_functions.csv`).
+Functions are joined to the reference's table on file path and name. Ground truth: the
+class is in `--crosscheck-positive` (default `exact,near`, i.e. normalized bodies with
+token similarity ≥ 0.9). Prediction: the function has a twin in the port in either
+direction. Only reference functions of at least `--twin-min-loc` lines are scored. The
+output gives precision, recall and both survival rates per port, per subsystem (the
+verdict's own subsystem column) and pooled; the Spearman correlation of the two survival
+rates across ports; and the verdict class of every function the scanner called a twin.
+
+## 10. Twin browser
 
 For each pair whose shared structure is at least `--browser-min-shared` (default 2%),
 the report embeds the twins of the direction that defines that share (at most the
@@ -213,7 +243,7 @@ clones. Clicking a descent heatmap cell opens that pair, and `report.html#pair=A
 links to one directly. `--no-browser` leaves the
 section out.
 
-## 9. Limits
+## 11. Limits
 
 - The scanner sees what the engine measures. Two functions with the same measurements
   but different code are indistinguishable. That is why twins need reciprocity,
@@ -221,6 +251,14 @@ section out.
 - Translations into another language rewrite every measurement, so the descent tree
   cannot follow them. The profile tree under the `portable` lens can, as design
   similarity only.
+- The decoy-estimated false-twin rate is optimistic. Shuffled decoys under-represent
+  how often unrelated real functions converge on one shape. Measured against source
+  text on DOOM, the realized share of twins between unrelated functions was 3.4% at
+  `--fdr 0.01`, 12.7% at 0.05 and 17.1% at 0.10.
+- In pairs that share little code, the +1 correction leaves too few candidates to
+  certify any threshold, so only exact clones of at least twice the minimum size are
+  accepted there. Recall is lowest exactly where the evidence is thinnest (DOOM:
+  prboom-plus and doom-ios recall 9% and 7% at 1%, about 50% at 5%).
 - The profile distance is cohort-relative. Compare numbers from the same cohort only.
 - The reference frame is the engine's population model. Re-extract it after the
   engine retrains, and rebuild fingerprints. The spec hash prevents mixing frames.

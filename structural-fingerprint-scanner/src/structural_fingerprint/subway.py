@@ -124,6 +124,8 @@ class SubwayMap:
     wiring_similarity: float = float("nan")
     edges_kept: float = float("nan")
     graph: dict[str, float] = field(default_factory=dict)  # mapping-free shape of the function call graph
+    labels: np.ndarray | None = None  # subsystem index per function of the repository's table (-1: not on the map)
+    ref_twinned: np.ndarray | None = None  # per reference function: has a twin here (either direction)
     shape_distance: float = float("nan")  # distance of ``graph`` from the reference's, cohort-standardized
 
     @property
@@ -355,6 +357,14 @@ def _edges_kept(ref: FunctionTable, port: FunctionTable, ref_to_port: TwinResult
     return kept / total if total else float("nan")
 
 
+def twinned(n_ref: int, ref_to_port: TwinResult, port_to_ref: TwinResult) -> np.ndarray:
+    """Per reference function: linked to a twin in the port in either direction."""
+    has = np.zeros(n_ref, dtype=bool)
+    has[ref_to_port.q_index] = True
+    has[port_to_ref.t_index] = True
+    return has
+
+
 def _survival(ref_labels: np.ndarray, ref: FunctionTable, ref_to_port: TwinResult, port_to_ref: TwinResult,
               s: int, min_loc: int) -> np.ndarray:
     """Per subsystem, the share of the reference's eligible functions linked to a twin in
@@ -362,9 +372,7 @@ def _survival(ref_labels: np.ndarray, ref: FunctionTable, ref_to_port: TwinResul
     than once (two copies, or a generated build beside its sources) fails the
     reference-side distinctiveness test while its own copies still find the reference."""
     eligible = (ref.loc >= min_loc) & (ref_labels >= 0)
-    has = np.zeros(len(ref), dtype=bool)
-    has[ref_to_port.q_index] = True
-    has[port_to_ref.t_index] = True
+    has = twinned(len(ref), ref_to_port, port_to_ref)
     out = np.full(s, np.nan)
     for k in range(s):
         m = eligible & (ref_labels == k)
@@ -389,6 +397,7 @@ def build_maps(tables: list[FunctionTable], reference: str, tax: Taxonomy | None
                         survival=np.where(np.bincount(ref_labels[ref_labels >= 0], minlength=s) > 0, 1.0, np.nan))
     ref_map.wiring_similarity, ref_map.edges_kept = 1.0, 1.0
     ref_map.graph = _code_graph_stats(ref)
+    ref_map.labels = ref_labels
     maps = [ref_map]
     for t in tables:
         if t.repo == reference:
@@ -401,6 +410,8 @@ def build_maps(tables: list[FunctionTable], reference: str, tax: Taxonomy | None
         m.wiring_similarity = _cosine(m.share, ref_map.share)
         m.edges_kept = _edges_kept(ref, t, from_ref)
         m.graph = _code_graph_stats(t)
+        m.labels = labels
+        m.ref_twinned = twinned(len(ref), from_ref, to_ref)
         maps.append(m)
     _set_shape_distances(maps)
     return maps, tax, layout(ref_map)
@@ -514,10 +525,16 @@ def scatter_svg(points: list[tuple[str, float, float]], xlabel: str, ylabel: str
         out.append(f'<text x="{sx(t):.1f}" y="{h - pad_b + 16}" text-anchor="middle">{t:.2f}</text>')
     out.append(f'<text x="{(pad_l + w - pad_r) / 2:.0f}" y="{h - 4}" text-anchor="middle">{html.escape(xlabel)}</text>')
     out.append(f'<text transform="translate(12,{(h - pad_b) / 2:.0f}) rotate(-90)" text-anchor="middle">{html.escape(ylabel)}</text>')
-    for n, x, y in pts:
+    placed: list[tuple[float, float, float]] = []  # label boxes already drawn: (x, y, width)
+    for n, x, y in sorted(pts, key=lambda p: -(p[1] + p[2])):
         tip = html.escape(f"{n}: {xlabel} {x:.2f}, {ylabel} {y:.2f}")
-        out.append(f'<circle class="dot" cx="{sx(x):.1f}" cy="{sy(y):.1f}" r="5" data-tip="{tip}"/>'
-                   f'<text class="dl" x="{sx(x) + 7:.1f}" y="{sy(y) + 3:.1f}">{html.escape(n)}</text>')
+        cx, cy = sx(x), sy(y)
+        out.append(f'<circle class="dot" cx="{cx:.1f}" cy="{cy:.1f}" r="5" data-tip="{tip}"/>')
+        lw = 6 * len(n)
+        # Label only where it does not collide with an earlier label; every dot keeps its tooltip.
+        if all(abs(cy - py) > 11 or cx + 7 > px + pw or cx + 7 + lw < px for px, py, pw in placed):
+            placed.append((cx + 7, cy, lw))
+            out.append(f'<text class="dl" x="{cx + 7:.1f}" y="{cy + 3:.1f}">{html.escape(n)}</text>')
     out.append("</svg>")
     return "".join(out)
 

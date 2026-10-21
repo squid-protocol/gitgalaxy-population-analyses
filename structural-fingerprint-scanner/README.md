@@ -23,6 +23,13 @@ builds on it:
   subsystem survives. They follow wiring, which survives translation into another
   language even when every measurement changes. A mapping-free graph-shape check
   confirms the maps aren't an artefact of the subsystem assignment;
+- **per-subsystem fingerprints**: each subsystem compared with the reference's same
+  subsystem ("this renderer is designed like the original; this sound code isn't"),
+  with the features that drifted, a by-language table and engine-calibration
+  candidates;
+- a **cross-check** that scores the twins function by function against an independent
+  source-text verdict (such as the DOOM study's `lineage.py`): precision, recall, and
+  what the twins really are;
 - a **twin browser** in the report: pick a pair or click a descent cell and see
   every twin behind the number, by folder, with search and filters;
 - reports in Markdown, HTML (heatmaps with trees), CSV, JSON and Newick.
@@ -57,6 +64,8 @@ sfs twins fingerprints/A.sfp.json fingerprints/B.sfp.json -o twins/
 
 # Subway maps on a reference's layout (subsystems from a taxonomy, or top-level directories)
 sfs subway fingerprints/ -o subway/ --reference A --taxonomy subsystems.json [--declared-lineage lineage.csv]
+# Score the twins against a source-text verdict (variant,file,func,cls CSV)
+sfs subway fingerprints/ -o subway/ --reference A --taxonomy subsystems.json --crosscheck survival_functions.csv
 # ...or as a section of the compare report
 sfs compare fingerprints/ -o report/ --subway-reference A --taxonomy subsystems.json
 
@@ -82,6 +91,8 @@ checks both trees against what the projects say about their own ancestry.
 | `matrices/*.csv` | square matrices behind each figure |
 | `trees/profile.nwk`, `trees/descent.nwk` | Newick trees |
 | `subway.json`, `subway.csv` | with `--subway-reference`: stations, lines, survival per subsystem, wiring scores |
+| `subsystems.csv` | with `--subway-reference`: per repository and subsystem, distances to the reference's subsystem and the drift |
+| `crosscheck.csv`, `crosscheck.json` | with `--crosscheck`: precision and recall of the twins against the source-text verdict, per port and subsystem |
 | `fingerprints/` | the fingerprints used |
 
 ## How to read the numbers
@@ -91,6 +102,10 @@ checks both trees against what the projects say about their own ancestry.
 - **Survival A→B**: share of A's functions (≥6 lines) with a twin in B.
 - **Shared structure**: the larger direction's Wilson 95% lower bound on survival.
   Below 2% there is no detectable descent.
+- **`--fdr`**: the target–decoy estimate understates the realized false-twin rate.
+  Against source text on DOOM, nominal 1% (the default) gave 3.4% twins of unrelated
+  functions, 92% exact-or-near precision and 61% recall; nominal 5% gave 12.7%, 76% and
+  71%. Keep 1% when each twin must be right; use 5% for port-level survival rankings.
 - **Name agreement**: names are not used to match, so when two codebases name their
   functions alike, the share of twins whose names agree is an independent estimate of
   the twin search's precision.
