@@ -174,6 +174,50 @@ Classic was converted to C++, which changes the measurements), doom-ios (its hea
 labelled Objective-C, gitgalaxy#5876), and prboom-plus, where the pair shares too little
 code to certify a threshold at 1% (recall 9% at 1%, 48% at 5%).
 
+### Drift over time
+
+`sfs timeline` fingerprinted four ports once a year through their full git history
+(81 snapshots, each scanned once and cached by commit; re-scoring the cached series
+takes under two minutes) against
+linuxdoom, with the subsystem taxonomy and two events taken from the histories
+(`timeline_events.csv`: Chocolate's `src/heretic` first appears on 2008-09-04; Crispy
+Doom's first own commit is 2014-03-04):
+
+```bash
+sfs timeline --repo chocolate-doom=history/chocolate-doom --repo crispy-doom=history/crispy-doom \
+    --repo prboom-plus=history/prboom-plus --repo woof=history/woof \
+    --reference report/fingerprints/linuxdoom.sfp.json --engine <gitgalaxy checkout> \
+    --python <engine venv>/bin/python --every 1y --taxonomy examples/doom/subsystems.json \
+    --events examples/doom/timeline_events.csv -o timeline
+```
+
+| port | first snapshot | linuxdoom survival then → now | calls kept then → now | size then → now |
+|---|---|---:|---:|---:|
+| chocolate-doom | 2005-07 | 85% → 57% | 95% → 76% | 710 → 5,149 functions |
+| crispy-doom | 2005-07 (shared) | 85% → 43% | 95% → 73% | 710 → 5,894 |
+| prboom-plus | 2001-02 | 17% → 13% | 62% → 60% | 1,153 → 2,439 |
+| woof | 2008-06 | 19% → 12% | 71% → 50% | 969 → 3,893 |
+
+- **Chocolate and Crispy share their history up to the fork** and coincide until 2013.
+  From 61% each in 2013, Chocolate lost 4 points of linuxdoom survival by 2026 and
+  Crispy 18, about four times as much, while keeping nearly the same wiring (73%
+  against 76% of calls): Crispy changes function bodies, not the call structure.
+- **Chocolate's biggest drop is its first year** (85% → 68%), long before Heretic,
+  Hexen and Strife arrive, as the port replaced linuxdoom's platform layer.
+- **Woof modernises fast after 2020.** It quadruples in size (1,000 → 3,900 functions),
+  its calls kept falls from 71% to 50%, and its design distance from linuxdoom nearly
+  doubles.
+- **prboom-plus barely moves** after its 2007–08 restructuring.
+
+Twins against the reference use **one threshold per repository**, calibrated over all
+its snapshots together. With per-snapshot thresholds, a port that shares about a
+hundred candidate twins with linuxdoom sits right at the edge of what the +1 correction
+can certify at 1%, and its survival flipped between 16% and 3% from one year to the
+next. The pooled thresholds came out at 0.046–0.056 for all four ports, close to what
+large pairs certify on their own. Survival counts a twin found in either direction:
+Chocolate carries Doom, Heretic, Hexen and Strife side by side after 2008, and the
+reference-side search alone showed a false collapse to 2%.
+
 ### Across languages (`--lens portable`)
 
 Profiles pair kocoa-doom with mochadoom (Kotlin port of a Java port), room4doom with

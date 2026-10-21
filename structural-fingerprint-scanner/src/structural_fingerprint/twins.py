@@ -140,7 +140,26 @@ def _fdr_threshold(target_d: np.ndarray, decoy_d: np.ndarray, fdr: float) -> tup
     return float(ts[k]), float(est[k])
 
 
-def find_twins(query: FunctionTable, target: FunctionTable, params: TwinParams | None = None) -> TwinResult:
+@dataclass
+class TwinSearch:
+    """Everything the twin search computes before a distance threshold is applied, so a
+    threshold can be chosen over several searches at once (``pooled_threshold``)."""
+
+    query: FunctionTable
+    target: FunctionTable
+    params: TwinParams
+    qm: np.ndarray  # eligible query rows
+    tm: np.ndarray  # eligible target rows
+    d1: np.ndarray  # nearest-target distance per eligible query row
+    i1: np.ndarray  # its target position in tm
+    t_pass: np.ndarray  # reciprocal and distinctive
+    e1: np.ndarray  # nearest-decoy distance
+    e_pass: np.ndarray
+    exact: np.ndarray  # exact-clone rows that bypass the threshold
+    exact_t: np.ndarray  # their target positions in tm
+
+
+def search(query: FunctionTable, target: FunctionTable, params: TwinParams | None = None) -> TwinSearch:
     p = params or TwinParams()
     qm = np.flatnonzero(query.loc >= p.min_loc)
     tm = np.flatnonzero(target.loc >= p.min_loc)
@@ -159,8 +178,6 @@ def find_twins(query: FunctionTable, target: FunctionTable, params: TwinParams |
 
     t_pass = reciprocal & _distinct(d1, d2, p.ratio) & np.isfinite(d1)
     e_pass = e_recip & _distinct(e1, e2, p.ratio) & np.isfinite(e1)
-    thr, est = _fdr_threshold(d1[t_pass], e1[e_pass], p.fdr)
-    accept = t_pass & (d1 <= thr)
 
     # Exact measurement clones: accepted when the exact tuple occurs once on each side.
     t_keys = target.key[tm]
@@ -173,25 +190,52 @@ def find_twins(query: FunctionTable, target: FunctionTable, params: TwinParams |
     # at least twice the minimum size bypass the calibrated threshold.
     exact = np.isin(q_keys, unique_keys) & (query.loc[qm] >= 2 * p.min_loc)
     exact_t = np.array([first_pos[int(k)] for k in q_keys[exact]], dtype=np.int64)
-    accept_idx = np.flatnonzero(accept)
-    tgt_local = i1.copy()
-    tgt_local[np.flatnonzero(exact)] = exact_t
-    all_idx = np.union1d(accept_idx, np.flatnonzero(exact))
+    return TwinSearch(query, target, p, qm, tm, d1, i1, t_pass, e1, e_pass, exact, exact_t)
 
-    q_index = qm[all_idx]
-    t_index = tm[tgt_local[all_idx]]
-    is_exact = exact[all_idx]
-    dist = np.where(is_exact, 0.0, d1[all_idx])
 
-    stats = _stats(query, target, qm, tm, q_index, t_index, is_exact)
+def pooled_threshold(searches: list[TwinSearch], fdr: float) -> tuple[float, float]:
+    """One target-decoy threshold over the candidates of several searches. A series of
+    related comparisons (one repository's snapshots against a reference) calibrated
+    together has the power that a single small pair lacks, and is measured with one
+    yardstick throughout."""
+    if not searches:
+        return 0.0, 0.0
+    t = np.concatenate([s.d1[s.t_pass] for s in searches])
+    e = np.concatenate([s.e1[s.e_pass] for s in searches])
+    return _fdr_threshold(t, e, fdr)
+
+
+def accept(s: TwinSearch, threshold: float | None = None) -> TwinResult:
+    """Apply a distance threshold (its own target-decoy threshold when ``None``)."""
+    p = s.params
+    if threshold is None:
+        thr, est = _fdr_threshold(s.d1[s.t_pass], s.e1[s.e_pass], p.fdr)
+    else:
+        thr, est = threshold, float("nan")
+    ok = s.t_pass & (s.d1 <= thr)
+    tgt_local = s.i1.copy()
+    tgt_local[np.flatnonzero(s.exact)] = s.exact_t
+    all_idx = np.union1d(np.flatnonzero(ok), np.flatnonzero(s.exact))
+
+    q_index = s.qm[all_idx]
+    t_index = s.tm[tgt_local[all_idx]]
+    is_exact = s.exact[all_idx]
+    dist = np.where(is_exact, 0.0, s.d1[all_idx])
+
+    stats = _stats(s.query, s.target, s.qm, s.tm, q_index, t_index, is_exact)
     stats.update({
-        "candidates_distinctive": int(t_pass.sum()),
-        "decoy_distinctive": int(e_pass.sum()),
-        "decoy_hits_at_threshold": int((e_pass & (e1 <= thr)).sum()),
+        "candidates_distinctive": int(s.t_pass.sum()),
+        "decoy_distinctive": int(s.e_pass.sum()),
+        "decoy_hits_at_threshold": int((s.e_pass & (s.e1 <= thr)).sum()),
     })
-    return TwinResult(query=query.repo, target=target.repo, params=p, eligible=len(qm), threshold=thr,
+    return TwinResult(query=s.query.repo, target=s.target.repo, params=p, eligible=len(s.qm), threshold=thr,
                       est_fdr=est, q_index=q_index, t_index=t_index, distance=dist, exact=is_exact,
                       decoy_hits=stats["decoy_hits_at_threshold"], stats=stats)
+
+
+def find_twins(query: FunctionTable, target: FunctionTable, params: TwinParams | None = None,
+               threshold: float | None = None) -> TwinResult:
+    return accept(search(query, target, params), threshold)
 
 
 def _stats(query: FunctionTable, target: FunctionTable, qm: np.ndarray, tm: np.ndarray,
