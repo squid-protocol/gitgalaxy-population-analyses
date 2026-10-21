@@ -1,8 +1,9 @@
 """Self-contained HTML report: heatmaps with dendrograms, archetype mix, tables.
 
-No external assets. Colour is one sequential blue ramp (light to dark for magnitude,
-stepped separately for dark mode so near-zero recedes into the surface); every cell
-has a hover tooltip and every figure has a table or CSV behind it.
+No external assets. Every figure is coloured as a 0-100 rating with GitGalaxy's
+Universal Risk Spectrum (the five stops gitgalaxy.io uses, one per 20 points), so the
+report reads like the website. Every cell has a hover tooltip, and every figure has a
+CSV behind it.
 """
 
 from __future__ import annotations
@@ -18,16 +19,17 @@ from .compare import Cohort
 from .fingerprint import Fingerprint
 from .lineage import DescentMatrix
 
-# Sequential blue ramp, steps 100..700 (validated reference palette).
-RAMP = ["#cde2fb", "#b7d3f6", "#9ec5f4", "#86b6ef", "#6da7ec", "#5598e7", "#3987e5",
-        "#2a78d6", "#256abf", "#1c5cab", "#184f95", "#104281", "#0d366b"]
+# GitGalaxy's Universal Risk Spectrum (site/config/colors.js UNIVERSAL_COLORS): every 0-100
+# rating on gitgalaxy.io is drawn with these five stops, one per 20 points.
+UNIVERSAL_COLORS = ["#0055ff", "#00ffff", "#ffff00", "#ff8800", "#ff0000"]
 CELL = 18
 
 
-def _bin(v: float, lo: float, hi: float) -> int:
-    if not np.isfinite(v) or hi <= lo:
+def _bin(score: float) -> int:
+    """The site's mapping: floor(score / 20), clamped to the five stops."""
+    if not np.isfinite(score):
         return 0
-    return int(np.clip(round((v - lo) / (hi - lo) * (len(RAMP) - 1)), 0, len(RAMP) - 1))
+    return int(min(4, max(0, score // 20)))
 
 
 def _order(dist: np.ndarray) -> tuple[list[int], dict]:
@@ -53,13 +55,11 @@ def _dendro_svg(dn: dict, n: int, width: int = 120) -> str:
             f'aria-hidden="true"><path d="{" ".join(paths)}"/></svg>')
 
 
-def _heatmap(names: list[str], m: np.ndarray, order: list[int], lo: float, hi: float, fmt, label: str,
-             invert: bool = False, sqrt: bool = False) -> str:
+def _heatmap(names: list[str], m: np.ndarray, order: list[int], score, fmt, label: str) -> str:
+    """``score`` maps a cell value to the 0-100 rating that picks its colour."""
     n = len(order)
     lab_w = 150
     w, h = lab_w + n * CELL + 90, n * CELL + lab_w  # right margin: rotated column labels run past the grid
-    if sqrt:
-        lo, hi = np.sqrt(max(lo, 0.0)), np.sqrt(max(hi, 0.0))
     out = [f'<svg class="heat" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="{label}">']
     for r, i in enumerate(order):
         y = r * CELL
@@ -71,11 +71,8 @@ def _heatmap(names: list[str], m: np.ndarray, order: list[int], lo: float, hi: f
                 out.append(f'<rect class="diag" x="{lab_w + c * CELL + 1}" y="{y + 1}" width="{CELL - 2}" '
                            f'height="{CELL - 2}" rx="2"/>')
                 continue
-            b = _bin(np.sqrt(max(v, 0.0)) if sqrt else v, lo, hi)
-            if invert:
-                b = len(RAMP) - 1 - b
             tip = html.escape(f"{names[i]} · {names[j]}: {fmt(v)}")
-            out.append(f'<rect class="c{b}" x="{lab_w + c * CELL + 1}" y="{y + 1}" width="{CELL - 2}" '
+            out.append(f'<rect class="c{_bin(score(v))}" x="{lab_w + c * CELL + 1}" y="{y + 1}" width="{CELL - 2}" '
                        f'height="{CELL - 2}" rx="2" data-tip="{tip}"/>')
     for c, j in enumerate(order):
         x = lab_w + c * CELL + CELL * 0.7
@@ -85,26 +82,23 @@ def _heatmap(names: list[str], m: np.ndarray, order: list[int], lo: float, hi: f
     return "".join(out)
 
 
-def _legend(lo: str, hi: str, invert: bool = False, note: str = "") -> str:
-    cells = "".join(f'<span class="c{(len(RAMP) - 1 - k) if invert else k}"></span>' for k in range(len(RAMP)))
-    extra = f"<em class=scale>{html.escape(note)}</em>" if note else ""
-    return (f'<div class="legend"><em>{html.escape(lo)}</em><span class="bar">{cells}</span>'
-            f"<em>{html.escape(hi)}</em>{extra}</div>")
+def _legend(unit: str) -> str:
+    """Five swatches, one per 20-point band of the 0-100 rating, as on the website."""
+    items = "".join(f'<span class="item"><span class="sw c{k}"></span>{20 * k}–{20 * (k + 1)}</span>'
+                    for k in range(len(UNIVERSAL_COLORS)))
+    return f'<div class="legend">{items}<em class=scale>{html.escape(unit)}</em></div>'
 
 
-def _figure(title: str, note: str, names, m, lo, hi, fmt, legend_lo, legend_hi, invert=False, dist=None,
-            sqrt=False) -> str:
+def _figure(title: str, note: str, names, m, score, fmt, unit: str, dist=None) -> str:
     order, dn = _order(dist if dist is not None else m)
-    heat = _heatmap(names, m, order, lo, hi, fmt, title, invert, sqrt)
-    return (f'<section><h2>{html.escape(title)}</h2><p class="note">{note}</p>'
-            f'{_legend(legend_lo, legend_hi, invert, "square-root scale" if sqrt else "")}'
+    heat = _heatmap(names, m, order, score, fmt, title)
+    return (f'<section><h2>{html.escape(title)}</h2><p class="note">{note}</p>{_legend(unit)}'
             f'<div class="fig">{_dendro_svg(dn, len(order))}{heat}</div></section>')
 
 
 def _archetype_strip(fps: list[Fingerprint], order: list[int]) -> str:
     arch = list(fps[0].data["archetypes"]["count_share"])
     m = np.array([[fp.data["archetypes"]["count_share"][a] for a in arch] for fp in fps])
-    hi = float(m.max()) or 1.0
     lab_w, n, k = 150, len(order), len(arch)
     w, h = lab_w + k * CELL + 160, n * CELL + 170
     out = [(f'<svg class="heat" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" '
@@ -116,7 +110,7 @@ def _archetype_strip(fps: list[Fingerprint], order: list[int]) -> str:
         for c, a in enumerate(arch):
             v = float(m[i, c])
             tip = html.escape(f"{fps[i].name} · {a}: {100 * v:.1f}% of functions")
-            out.append(f'<rect class="c{_bin(v, 0, hi)}" x="{lab_w + c * CELL + 1}" y="{y + 1}" '
+            out.append(f'<rect class="c{_bin(100 * v)}" x="{lab_w + c * CELL + 1}" y="{y + 1}" '
                        f'width="{CELL - 2}" height="{CELL - 2}" rx="2" data-tip="{tip}"/>')
     for c, a in enumerate(arch):
         x = lab_w + c * CELL + CELL * 0.7
@@ -124,7 +118,7 @@ def _archetype_strip(fps: list[Fingerprint], order: list[int]) -> str:
     out.append("</svg>")
     return ("<section><h2>Function archetype mix</h2><p class=\"note\">Share of each repository's functions in each "
             "of the engine's 14 function archetypes (rows in descent-tree order).</p>"
-            f"{_legend('0%', f'{100 * hi:.0f}%')}<div class=\"fig\">{''.join(out)}</div></section>")
+            f"{_legend('% of functions')}<div class=\"fig\">{''.join(out)}</div></section>")
 
 
 def _table(summary: dict) -> str:
@@ -177,7 +171,7 @@ h1{font-size:26px;margin:0 0 4px}h2{font-size:19px;margin:36px 0 6px}h3{font-siz
 .dendro path{fill:none;stroke:var(--text2);stroke-width:1.2}
 .heat text{fill:var(--text2);font-size:11px}.diag{fill:var(--diag)}
 .legend{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);margin:6px 0 10px}
-.legend em{font-style:normal}.legend .scale{margin-left:8px}.legend .bar{display:flex;gap:2px}.legend .bar span{width:14px;height:10px;border-radius:2px;display:block}
+.legend em{font-style:normal}.legend .scale{margin-left:4px}.legend .item{display:inline-flex;align-items:center;gap:4px}.legend .sw{width:14px;height:10px;border-radius:2px;display:block}
 table{border-collapse:collapse;font-size:13px;width:100%}th,td{padding:5px 8px;border-bottom:1px solid var(--rule);text-align:left;
 vertical-align:top}thead th{color:var(--text2);font-weight:600}.num{text-align:right;font-variant-numeric:tabular-nums}
 .tablewrap{overflow-x:auto}code{font-size:13px}
@@ -194,13 +188,8 @@ tip.style.left=Math.min(e.clientX+12,innerWidth-330)+'px';tip.style.top=(e.clien
 
 
 def _palette_css() -> str:
-    def rules(scope: str, ramp: list[str]) -> str:
-        return "".join(f"{scope}.c{k}{{fill:{c};background:{c}}}" for k, c in enumerate(ramp))
-
-    dark = list(reversed(RAMP))  # near-zero recedes into the dark surface
-    return (rules("", RAMP)
-            + "@media (prefers-color-scheme:dark){" + rules(':root:not([data-theme="light"]) ', dark) + "}"
-            + rules(':root[data-theme="dark"] ', dark))
+    # The website draws ratings with the same five stops in every theme.
+    return "".join(f".c{k}{{fill:{c};background:{c}}}" for k, c in enumerate(UNIVERSAL_COLORS))
 
 
 def render_html(summary: dict, fps: list[Fingerprint], cohort: Cohort, descent: DescentMatrix | None) -> str:
@@ -215,15 +204,16 @@ def render_html(summary: dict, fps: list[Fingerprint], cohort: Cohort, descent: 
         sections.append(_figure(
             "Descent: shared structure", "Share of functions with a calibrated structural twin in the other "
             "repository (the larger of the two directions). Twins are found without names; this tracks inherited code.",
-            names, descent.shared, 0.0, 1.0, lambda v: f"{100 * v:.1f}% shared", "0%", "100%",
-            dist=descent.distance, sqrt=True))
+            names, descent.shared, lambda v: 100 * v, lambda v: f"{100 * v:.1f}% shared", "% shared",
+            dist=descent.distance))
     if cohort.composite is not None:
         hi = float(np.max(cohort.composite))
         sections.append(_figure(
             "Profile: structural distance", "Fingerprint distance (archetype mix, signal densities, function "
             "geometry, centre, call-graph shape). 1.0 is a typical pair in this cohort.",
-            names, cohort.composite, 0.0, hi, lambda v: f"distance {v:.2f}", f"{hi:.1f} (far)", "0 (close)",
-            invert=True, dist=cohort.composite))
+            names, cohort.composite, lambda v: 100 * (1 - v / hi) if hi > 0 else 0.0,
+            lambda v: f"distance {v:.2f} · closeness {100 * (1 - v / hi) if hi > 0 else 0:.0f}",
+            f"closeness (100 = closest pair; farthest {hi:.1f} = 0)", dist=cohort.composite))
     sections.append(_archetype_strip(fps, order_desc))
     sections.append(_lineage(summary))
     sections.append(_table(summary))
