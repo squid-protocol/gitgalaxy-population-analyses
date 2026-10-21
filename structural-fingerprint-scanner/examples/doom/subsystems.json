@@ -1,0 +1,24 @@
+{
+ "name": "DOOM engine subsystems",
+ "description": "linuxdoom's module prefixes (r_ renderer, p_ playsim, ...) plus path keywords for ports that renamed their files. Rules are tried in order; the first match wins.",
+ "subsystems": ["renderer", "playsim", "game", "main", "menu/misc", "hud", "automap", "intermission", "finale",
+                "sound", "video", "wad", "zone", "system", "net", "other"],
+ "basename_prefix": [
+  ["am_", "automap"], ["hu_", "hud"], ["st_", "hud"], ["wi_", "intermission"], ["f_", "finale"],
+  ["d_net", "net"], ["i_net", "net"], ["d_", "main"], ["g_", "game"], ["i_", "system"], ["m_", "menu/misc"],
+  ["p_", "playsim"], ["r_", "renderer"], ["s_", "sound"], ["v_", "video"], ["w_", "wad"], ["z_", "zone"]
+ ],
+ "path_keyword": [
+  ["automap", "automap"], ["render", "renderer"], ["draw", "renderer"], ["bsp", "renderer"], ["texture", "renderer"],
+  ["sprite", "renderer"], ["hud", "hud"], ["status", "hud"], ["intermission", "intermission"], ["finale", "finale"],
+  ["net", "net"], ["menu", "menu/misc"], ["sound", "sound"], ["audio", "sound"], ["music", "sound"], ["sfx", "sound"],
+  ["wad", "wad"], ["lump", "wad"], ["video", "video"], ["screen", "video"], ["palette", "video"],
+  ["mobj", "playsim"], ["actor", "playsim"], ["thing", "playsim"], ["enemy", "playsim"], ["monster", "playsim"],
+  ["weapon", "playsim"], ["player", "playsim"], ["map", "playsim"], ["world", "playsim"], ["sector", "playsim"],
+  ["door", "playsim"], ["plat", "playsim"], ["physics", "playsim"], ["collision", "playsim"], ["play", "playsim"],
+  ["game", "game"], ["level", "game"], ["save", "game"], ["demo", "game"], ["input", "system"], ["system", "system"],
+  ["platform", "system"], ["window", "system"], ["sdl", "system"], ["main", "main"], ["zone", "zone"],
+  ["memory", "zone"], ["alloc", "zone"]
+ ],
+ "fallback": "other"
+}

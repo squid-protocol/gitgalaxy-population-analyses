@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import html
 import json
 import logging
 import os
@@ -11,6 +12,7 @@ import sys
 from pathlib import Path
 
 from . import __version__
+from . import subway as SW
 from .compare import COMPONENTS, IncomparableError, compare_cohort, explain
 from .fingerprint import Fingerprint, build, safe_name
 from .lineage import descent_matrix, evaluate_lineage, read_declared_lineage
@@ -98,8 +100,43 @@ def cmd_compare(a: argparse.Namespace) -> int:
         if cohort.composite is not None:
             lineage_eval["profile"] = evaluate_lineage(cohort.names, cohort.composite, declared)
     tp = None if a.no_twins else {"min_loc": params.min_loc, "ratio": params.ratio, "fdr": params.fdr}
-    write_cohort(out, fps, cohort, descent, lineage_eval, tp)
+    extra = []
+    if a.subway_reference:
+        maps, tax, pos = SW.build_maps([fp.functions for fp in fps], a.subway_reference,
+                                       SW.Taxonomy.load(Path(a.taxonomy)) if a.taxonomy else None, params)
+        SW.write_outputs(out, maps, tax, a.subway_reference)
+        prof = None
+        if cohort.composite is not None:
+            r = cohort.names.index(a.subway_reference)
+            prof = {n: float(cohort.composite[r, i]) for i, n in enumerate(cohort.names)}
+        extra.append(SW.render_section(maps, pos, tax, a.subway_reference, prof))
+    write_cohort(out, fps, cohort, descent, lineage_eval, tp, extra)
     print(f"compared {len(fps)} repositories -> {out / 'report.html'}")
+    return 0
+
+
+def cmd_subway(a: argparse.Namespace) -> int:
+    from .html import page
+
+    fps = _inputs(a.inputs, a.lens, a.min_loc)
+    missing = [fp.name for fp in fps if fp.functions is None]
+    if missing:
+        raise SystemExit(f"subway maps need function tables; missing for {missing}")
+    tax = SW.Taxonomy.load(Path(a.taxonomy)) if a.taxonomy else None
+    try:
+        maps, tax, pos = SW.build_maps([fp.functions for fp in fps], a.reference, tax, _twin_params(a))
+    except ValueError as e:
+        raise SystemExit(str(e)) from e
+    out = Path(a.out)
+    SW.write_outputs(out, maps, tax, a.reference)
+    prof = None
+    if len(fps) >= 3:
+        cohort = compare_cohort(fps)
+        r = cohort.names.index(a.reference)
+        prof = {n: float(cohort.composite[r, i]) for i, n in enumerate(cohort.names)}
+    meta = f"{len(maps)} repositories on {html.escape(a.reference)}'s layout · {html.escape(tax.name)}"
+    (out / "subway.html").write_text(page("Subway maps", meta, [SW.render_section(maps, pos, tax, a.reference, prof)]))
+    print(f"wrote {out / 'subway.html'}")
     return 0
 
 
@@ -205,10 +242,21 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--weights", help="component weights, e.g. archetypes=1,signals=1,geometry=1,centroid=1,callgraph=1")
     p.add_argument("--min-shared", type=float, default=0.02,
                    help="shared structure below this is no evidence of descent (default 0.02)")
+    p.add_argument("--subway-reference", help="also draw subway maps on this repository's layout")
+    p.add_argument("--taxonomy", help="subsystem taxonomy JSON for subway maps (default: top-level directories)")
     p.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) // 2))
     common(p)
     twin_opts(p)
     p.set_defaults(func=cmd_compare)
+
+    p = sub.add_parser("subway", help="subway maps: call graphs by subsystem on a reference's layout")
+    p.add_argument("inputs", nargs="+", help="scans, scan directories, fingerprints or fingerprint directories")
+    p.add_argument("--reference", required=True, help="repository whose subsystems and layout every map uses")
+    p.add_argument("--taxonomy", help="subsystem taxonomy JSON (default: the reference's top-level directories)")
+    p.add_argument("-o", "--out", required=True)
+    common(p)
+    twin_opts(p)
+    p.set_defaults(func=cmd_subway)
 
     p = sub.add_parser("twins", help="function-level structural twins of QUERY in TARGET")
     p.add_argument("query")

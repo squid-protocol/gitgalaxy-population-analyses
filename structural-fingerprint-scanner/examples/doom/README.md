@@ -87,6 +87,36 @@ it measures how alike designs are, not inheritance. It groups the vanilla-faithf
 ports, the large C++ engines (gzdoom, doom3-bfg, doomsday, eternity, odamex,
 edge-classic) and the small single-file raycasters.
 
+### Subway maps
+
+`sfs subway WORK/scans/<engine-sha> -o subway --reference linuxdoom --taxonomy examples/doom/subsystems.json`
+(14 s) draws every port's call graph over linuxdoom's 16 subsystems. Calls kept (the
+share of linuxdoom's 1,594 calls still made between the corresponding functions) and
+wiring similarity follow lineage where structure no longer does:
+
+| port | language | calls kept | wiring | shared structure with linuxdoom |
+|---|---|---:|---:|---:|
+| mood | C + COBOL | 99.9% | 0.99 | 36% |
+| puredoom | C (single header) | 93% | 0.97 | 26% |
+| sdl-doom, doom-ascii, doomgeneric | C | 84–85% | 0.98–0.99 | 51–54% |
+| doom3-bfg | C++ | 83% | 0.32 | 0% |
+| gore | Go | 77% | 0.86 | 0% |
+| chocolate-doom | C | 72% | 0.95 | 31% |
+| doom-scheme | Scheme | 49% | 0.95 | 0% |
+| dartdoom | Dart | 41% | 0.93 | 0.1% |
+| mochadoom | Java | 35% | 0.59 | 4% |
+| managed-doom | C# | 21% | 0.72 | 0% |
+
+(Shared structure is the Wilson lower bound used by the descent tree.)
+
+Two readings stand out. Translations (Go, Scheme, Dart, Java, C#) rewrite every
+measurement, so descent cannot see them, but they keep the call wiring: gore keeps 77%
+of linuxdoom's calls. And doom3-bfg, a separate engine, ships DOOM Classic converted to
+C++ (`doomclassic/doom/`). The conversion shifts the measurements enough to defeat twin
+matching, but 83% of the calls survive. Station colours show which subsystems survive
+structurally: in Chocolate and Crispy Doom, playsim and renderer stay warm while
+platform and system code cool.
+
 ### Across languages (`--lens portable`)
 
 Profiles pair kocoa-doom with mochadoom (Kotlin port of a Java port), room4doom with
