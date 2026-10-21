@@ -19,7 +19,10 @@ not in the corpus (Boom, MBF, ZDoom), the nearest ancestor that is in it is used
 python tests/tools/doom_speedrun/doom_speedrun.py fetch --work WORK
 python tests/tools/doom_speedrun/doom_speedrun.py scan  --work WORK
 # 2. compare
-sfs compare WORK/scans/<engine-sha> -o report --declared-lineage examples/doom/declared_lineage.csv
+python tests/tools/doom_speedrun/lineage.py --work WORK --sha <engine-sha>   # source-text verdicts (gitgalaxy)
+sfs compare WORK/scans/<engine-sha> -o report --declared-lineage examples/doom/declared_lineage.csv \
+    --subway-reference linuxdoom --taxonomy examples/doom/subsystems.json \
+    --crosscheck WORK/results/<engine-sha>/lineage/survival_functions.csv
 sfs compare WORK/scans/<engine-sha> -o report-portable --lens portable --no-twins
 ```
 
@@ -127,6 +130,49 @@ C++ (`doomclassic/doom/`). The conversion shifts the measurements enough to defe
 matching, but 83% of the calls survive. Station colours show which subsystems survive
 structurally: in Chocolate and Crispy Doom, playsim and renderer stay warm while
 platform and system code cool.
+
+### Subsystems across languages
+
+Comparing each port's subsystems with linuxdoom's same subsystems, over the ports that
+kept linuxdoom's wiring (calls kept ≥ 30%, so the algorithm is the same), gives this
+median subsystem distance (1.0 = a typical cell):
+
+| language | ports | median distance | drift that recurs most |
+|---|---:|---:|---|
+| C | 16 | 0.79 | def_encapsulation +, def_freeze_hits +, log_args + |
+| C++ | 3 | 0.85 | arch_api −, def_freeze_hits +, log_args + |
+| Scheme | 1 | 1.12 | struct_func_start −, struct_args −, arch_api − |
+| Java | 1 | 1.14 | struct_decorators +, log_loc −, state_pointers − |
+| Dart | 1 | 1.47 | def_encapsulation +, struct_linear −, log_args + |
+| Go | 1 | 1.62 | def_encapsulation +, struct_linear −, state_cast_hits + |
+
+Go and Dart drift mostly on encapsulation (gore +3.8 population IQRs) and linear
+structure (−1.9) although their wiring is linuxdoom's. That is a lead for engine
+calibration: whether Go receivers and Dart accessors are being counted as encapsulation
+where C has none. The report lists every such cell under "Calibration candidates". C
+ports themselves drift towards more arguments per function (+1.1 IQR in Chocolate and
+Crispy), which fits the study's finding that ports decompose the original.
+
+### Cross-check against source text
+
+`lineage.py` (gitgalaxy `tests/tools/doom_speedrun/`) reads the source and classifies
+each of linuxdoom's functions in each of 30 ports by normalized body: exact, near
+(token similarity ≥ 0.9), derived (≥ 0.6), name-only or gone. Scored against it, with
+"exact or near" as surviving, over 19,380 function × port pairs:
+
+| `--fdr` | precision | recall | twins of unrelated functions | port-level Spearman ρ |
+|---|---:|---:|---:|---:|
+| 0.01 (default) | 92% | 61% | 3.4% | 0.78 |
+| 0.05 | 76% | 71% | 12.7% | 0.91 |
+| 0.10 | 69% | 73% | 17.1% | 0.92 |
+
+At the default, 57% of the twins are exact source copies, 35% near and 5% derived. By
+subsystem, precision is 96% in playsim, 91% in the renderer and 98% in the zone
+allocator, and weakest in netcode and platform code, where functions are small and
+generic. Recall is lowest in three ports, each for a known reason: doom3-bfg (its DOOM
+Classic was converted to C++, which changes the measurements), doom-ios (its headers are
+labelled Objective-C, gitgalaxy#5876), and prboom-plus, where the pair shares too little
+code to certify a threshold at 1% (recall 9% at 1%, 48% at 5%).
 
 ### Across languages (`--lens portable`)
 
