@@ -18,6 +18,8 @@ import numpy as np
 from scipy.cluster.hierarchy import dendrogram, linkage
 from scipy.spatial.distance import squareform
 
+from .browser import CSS as BROWSER_CSS
+from .browser import JS as BROWSER_JS
 from .compare import Cohort
 from .fingerprint import Fingerprint
 from .lineage import DescentMatrix
@@ -97,7 +99,8 @@ def _dendro_svg(dn: dict, n: int, width: int = 120) -> str:
             f'aria-hidden="true"><path d="{" ".join(paths)}"/></svg>')
 
 
-def _heatmap(names: list[str], m: np.ndarray, order: list[int], scale: Scale, fmt, label: str) -> str:
+def _heatmap(names: list[str], m: np.ndarray, order: list[int], scale: Scale, fmt, label: str,
+             pairs: bool = False) -> str:
     n = len(order)
     lab_w = 150
     w, h = lab_w + n * CELL + 90, n * CELL + lab_w  # right margin: rotated column labels run past the grid
@@ -113,7 +116,8 @@ def _heatmap(names: list[str], m: np.ndarray, order: list[int], scale: Scale, fm
                            f'height="{CELL - 2}" rx="2"/>')
                 continue
             tip = html.escape(f"{names[i]} · {names[j]}: {fmt(v)}")
-            out.append(f'<rect fill="{_color(scale.score(v))}" x="{lab_w + c * CELL + 1}" y="{y + 1}" width="{CELL - 2}" '
+            pair = f' data-pair="{html.escape(names[i] + "|" + names[j])}"' if pairs else ""
+            out.append(f'<rect{pair} fill="{_color(scale.score(v))}" x="{lab_w + c * CELL + 1}" y="{y + 1}" width="{CELL - 2}" '
                        f'height="{CELL - 2}" rx="2" data-tip="{tip}"/>')
     for c, j in enumerate(order):
         x = lab_w + c * CELL + CELL * 0.7
@@ -130,9 +134,9 @@ def _legend(scale: Scale) -> str:
             f'<div class="ticks">{ticks}</div></div><em class=scale>{html.escape(scale.note)}</em></div>')
 
 
-def _figure(title: str, note: str, names, m, scale: Scale, fmt, dist=None) -> str:
+def _figure(title: str, note: str, names, m, scale: Scale, fmt, dist=None, pairs: bool = False) -> str:
     order, dn = _order(dist if dist is not None else m)
-    heat = _heatmap(names, m, order, scale, fmt, title)
+    heat = _heatmap(names, m, order, scale, fmt, title, pairs)
     return (f'<section><h2>{html.escape(title)}</h2><p class="note">{note}</p>{_legend(scale)}'
             f'<div class="fig">{_dendro_svg(dn, len(order))}{heat}</div></section>')
 
@@ -239,13 +243,13 @@ def page(title: str, meta: str, sections: list[str], footer: str = "", embedded:
     """A complete self-contained report page."""
     data = f"<script type=application/json id=summary>{embedded}</script>" if embedded else ""
     return ("<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content=\"width=device-width,"
-            f"initial-scale=1\"><title>{html.escape(title)}</title><style>{CSS}</style></head><body><main>"
+            f"initial-scale=1\"><title>{html.escape(title)}</title><style>{CSS}{BROWSER_CSS}</style></head><body><main>"
             f"<h1>{html.escape(title)}</h1><p class=meta>{meta}</p>" + "".join(sections) + footer
-            + f"</main><div id=tip role=tooltip></div><script>{JS}</script>{data}</body></html>")
+            + f"</main><div id=tip role=tooltip></div><script>{JS}{BROWSER_JS}</script>{data}</body></html>")
 
 
 def render_html(summary: dict, fps: list[Fingerprint], cohort: Cohort, descent: DescentMatrix | None,
-                extra_sections: list[str] | None = None) -> str:
+                extra_sections: list[str] | None = None, browser_html: str = "") -> str:
     names = cohort.names
     spec = summary["spec"]
     embedded = json.dumps(summary).replace("</", "<\\/")  # keep "</script>" out of the JSON
@@ -257,7 +261,9 @@ def render_html(summary: dict, fps: list[Fingerprint], cohort: Cohort, descent: 
             "Descent: shared structure", "Share of functions with a calibrated structural twin in the other "
             "repository (the larger of the two directions). Twins are found without names; this tracks inherited code.",
             names, descent.shared, sqrt_share_scale("% shared, square-root scale"),
-            lambda v: f"{100 * v:.1f}% shared", dist=descent.distance))
+            lambda v: f"{100 * v:.1f}% shared", dist=descent.distance, pairs=bool(browser_html)))
+        if browser_html:
+            sections.append(browser_html)
     if cohort.composite is not None:
         sections.append(_figure(
             "Profile: structural distance", "Fingerprint distance (archetype mix, signal densities, function "

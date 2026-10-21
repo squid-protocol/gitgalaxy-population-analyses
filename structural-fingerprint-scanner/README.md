@@ -21,7 +21,10 @@ builds on it:
 - **subway maps**: each repository's call graph collapsed to its subsystems and drawn
   on a reference's fixed layout, with stations coloured by how much of the reference's
   subsystem survives. They follow wiring, which survives translation into another
-  language even when every measurement changes;
+  language even when every measurement changes. A mapping-free graph-shape check
+  confirms the maps aren't an artefact of the subsystem assignment;
+- a **twin browser** in the report: pick a pair or click a descent cell and see
+  every twin behind the number, by folder, with search and filters;
 - reports in Markdown, HTML (heatmaps with trees), CSV, JSON and Newick.
 
 It reads scan output only. It never sees source code and needs nothing beyond NumPy
@@ -53,7 +56,7 @@ sfs compare fingerprints/ -o report-portable/ --lens portable --no-twins
 sfs twins fingerprints/A.sfp.json fingerprints/B.sfp.json -o twins/
 
 # Subway maps on a reference's layout (subsystems from a taxonomy, or top-level directories)
-sfs subway fingerprints/ -o subway/ --reference A --taxonomy subsystems.json
+sfs subway fingerprints/ -o subway/ --reference A --taxonomy subsystems.json [--declared-lineage lineage.csv]
 # ...or as a section of the compare report
 sfs compare fingerprints/ -o report/ --subway-reference A --taxonomy subsystems.json
 
@@ -72,7 +75,7 @@ checks both trees against what the projects say about their own ancestry.
 
 | path | content |
 |---|---|
-| `report.html` | descent and profile heatmaps with trees, archetype mix, lineage check, repository table |
+| `report.html` | descent and profile heatmaps with trees, the twin browser, archetype mix, lineage check, repository table (and subway maps with `--subway-reference`) |
 | `report.md` | the same in Markdown |
 | `summary.json` | everything, machine-readable, with the reference and lens provenance |
 | `pairs.csv` | one row per pair: every component distance, profile distance, survival both ways, shared structure, twin and clone counts, name agreement |

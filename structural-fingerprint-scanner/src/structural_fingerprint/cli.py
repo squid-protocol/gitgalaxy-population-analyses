@@ -12,6 +12,7 @@ import sys
 from pathlib import Path
 
 from . import __version__
+from . import browser as BR
 from . import subway as SW
 from .compare import COMPONENTS, IncomparableError, compare_cohort, explain
 from .fingerprint import Fingerprint, build, safe_name
@@ -89,7 +90,8 @@ def cmd_compare(a: argparse.Namespace) -> int:
         missing = [fp.name for fp in fps if fp.functions is None]
         if missing:
             raise SystemExit(f"twin search needs function tables; missing for {missing} (or pass --no-twins)")
-        descent = descent_matrix([fp.functions for fp in fps], params, workers=a.workers)
+        descent = descent_matrix([fp.functions for fp in fps], params, workers=a.workers,
+                                 keep_results=not a.no_browser)
     lineage_eval = None
     if a.declared_lineage:
         declared = read_declared_lineage(Path(a.declared_lineage))
@@ -109,8 +111,13 @@ def cmd_compare(a: argparse.Namespace) -> int:
         if cohort.composite is not None:
             r = cohort.names.index(a.subway_reference)
             prof = {n: float(cohort.composite[r, i]) for i, n in enumerate(cohort.names)}
-        extra.append(SW.render_section(maps, pos, tax, a.subway_reference, prof))
-    write_cohort(out, fps, cohort, descent, lineage_eval, tp, extra)
+        declared = read_declared_lineage(Path(a.declared_lineage)) if a.declared_lineage else None
+        extra.append(SW.render_section(maps, pos, tax, a.subway_reference, prof, declared))
+    browser_html = ""
+    if descent is not None and not a.no_browser:
+        data = BR.payload({fp.name: fp.functions for fp in fps}, descent, a.browser_min_shared)
+        browser_html = BR.section(data)
+    write_cohort(out, fps, cohort, descent, lineage_eval, tp, extra, browser_html)
     print(f"compared {len(fps)} repositories -> {out / 'report.html'}")
     return 0
 
@@ -135,7 +142,9 @@ def cmd_subway(a: argparse.Namespace) -> int:
         r = cohort.names.index(a.reference)
         prof = {n: float(cohort.composite[r, i]) for i, n in enumerate(cohort.names)}
     meta = f"{len(maps)} repositories on {html.escape(a.reference)}'s layout · {html.escape(tax.name)}"
-    (out / "subway.html").write_text(page("Subway maps", meta, [SW.render_section(maps, pos, tax, a.reference, prof)]))
+    declared = read_declared_lineage(Path(a.declared_lineage)) if a.declared_lineage else None
+    section = SW.render_section(maps, pos, tax, a.reference, prof, declared)
+    (out / "subway.html").write_text(page("Subway maps", meta, [section]))
     print(f"wrote {out / 'subway.html'}")
     return 0
 
@@ -242,6 +251,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--weights", help="component weights, e.g. archetypes=1,signals=1,geometry=1,centroid=1,callgraph=1")
     p.add_argument("--min-shared", type=float, default=0.02,
                    help="shared structure below this is no evidence of descent (default 0.02)")
+    p.add_argument("--no-browser", action="store_true", help="leave the twin browser out of report.html")
+    p.add_argument("--browser-min-shared", type=float, default=0.02,
+                   help="twin browser: include pairs sharing at least this much structure (default 0.02)")
     p.add_argument("--subway-reference", help="also draw subway maps on this repository's layout")
     p.add_argument("--taxonomy", help="subsystem taxonomy JSON for subway maps (default: top-level directories)")
     p.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) // 2))
@@ -253,6 +265,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("inputs", nargs="+", help="scans, scan directories, fingerprints or fingerprint directories")
     p.add_argument("--reference", required=True, help="repository whose subsystems and layout every map uses")
     p.add_argument("--taxonomy", help="subsystem taxonomy JSON (default: the reference's top-level directories)")
+    p.add_argument("--declared-lineage", help="CSV name,parent: order the maps along the declared lineage")
     p.add_argument("-o", "--out", required=True)
     common(p)
     twin_opts(p)
