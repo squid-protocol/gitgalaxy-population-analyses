@@ -177,6 +177,38 @@ def cmd_subway(a: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_timeline(a: argparse.Namespace) -> int:
+    from . import timeline as TL
+    from .html import page
+
+    repos = []
+    for spec in a.repo:
+        name, _, path = spec.partition("=") if "=" in spec else (Path(spec).name, "", spec)
+        repos.append((name, Path(path).expanduser()))
+    ref = Fingerprint.load(Path(a.reference))
+    if ref.functions is None:
+        raise SystemExit("the reference fingerprint needs its .sfp.npz function table")
+    tax = SW.Taxonomy.load(Path(a.taxonomy)) if a.taxonomy else None
+    scanner = TL.Scanner(engine=Path(a.engine).expanduser(), python=a.python)
+    out = Path(a.out)
+    try:
+        thresholds: dict = {}
+        rows = TL.run(repos, ref, out, scanner, a.every, a.since, a.until, _twin_params(a), tax, a.keep_scans,
+                      thresholds)
+    except (RuntimeError, ValueError) as e:
+        raise SystemExit(str(e)) from e
+    if not rows:
+        raise SystemExit("no snapshot could be scanned; see the scan logs (use --keep-scans)")
+    meta = {"every": a.every, "since": a.since, "until": a.until, "lens": ref.data["spec"]["lens"],
+            "engine": str(a.engine), "pooled_thresholds": thresholds}
+    TL.write_outputs(out, rows, ref.name, meta)
+    events = TL.read_events(Path(a.events)) if a.events else None
+    head = f"{len(repos)} repositories · {len(rows)} snapshots · every {html.escape(a.every)} · reference {html.escape(ref.name)}"
+    (out / "timeline.html").write_text(page("Drift over time", head, [TL.render_section(rows, ref.name, events)]))
+    print(f"wrote {out / 'timeline.html'} ({len(rows)} snapshots)")
+    return 0
+
+
 def cmd_twins(a: argparse.Namespace) -> int:
     fps = _inputs([a.query, a.target], a.lens, a.min_loc)
     q, t = fps
@@ -306,6 +338,22 @@ def main(argv: list[str] | None = None) -> int:
     common(p)
     twin_opts(p)
     p.set_defaults(func=cmd_subway)
+
+    p = sub.add_parser("timeline", help="fingerprint repositories through their git history against a reference")
+    p.add_argument("--repo", action="append", required=True,
+                   help="NAME=PATH of a git repository with its history (repeatable)")
+    p.add_argument("--reference", required=True, help="reference fingerprint (.sfp.json with its .sfp.npz)")
+    p.add_argument("--engine", required=True, help="path to a gitgalaxy checkout to scan with")
+    p.add_argument("--python", default=sys.executable, help="Python that can import the engine (default: this one)")
+    p.add_argument("--every", default="1y", help="snapshot step: Ny or Nm (default 1y)")
+    p.add_argument("--since", help="first snapshot date (YYYY-MM-DD; default: first commit)")
+    p.add_argument("--until", help="last snapshot date (default: the head)")
+    p.add_argument("--taxonomy", help="subsystem taxonomy JSON: adds calls kept / wiring per snapshot")
+    p.add_argument("--events", help="CSV date,label of events to mark on the charts")
+    p.add_argument("--keep-scans", action="store_true", help="keep each snapshot's scan output")
+    p.add_argument("-o", "--out", required=True, help="output directory (snapshot fingerprints are cached here)")
+    twin_opts(p)
+    p.set_defaults(func=cmd_timeline)
 
     p = sub.add_parser("twins", help="function-level structural twins of QUERY in TARGET")
     p.add_argument("query")

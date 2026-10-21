@@ -232,7 +232,43 @@ output gives precision, recall and both survival rates per port, per subsystem (
 verdict's own subsystem column) and pooled; the Spearman correlation of the two survival
 rates across ports; and the verdict class of every function the scanner called a twin.
 
-## 10. Twin browser
+## 10. Drift timelines (`timeline`)
+
+For each repository (a clone **with** its history; shallow clones are refused), the
+snapshots are the first-parent commits current at each step from the first commit (or
+`--since`) to `--until`, plus the head when no `--until` is given. A commit is used at
+most once in a row. Each snapshot is exported with `git archive` into a scratch
+directory named after the repository and scanned with the engine (`python -m
+gitgalaxy.galaxyscope`, through `tests/tools/box/heavy-run.sh` when the engine checkout
+has it), then fingerprinted in the reference's lens and `--min-loc`. Fingerprints are
+cached by commit SHA alone, so forks that share history (Crispy Doom's commits before
+2014 are Chocolate Doom's) scan each shared snapshot once. A snapshot whose scan fails
+is skipped and logged.
+
+Twins against the reference use **one threshold per repository and direction**, chosen
+by target–decoy competition (§5) over the pooled candidates of all its snapshots
+(`twins.pooled_threshold`; recorded in `timeline.json`). A series measured against one
+reference should share one yardstick. A port with a small overlap also needs the pooled
+power: with per-snapshot thresholds its survival flipped between certified and
+uncertified from year to year (DOOM: prboom-plus between 16% and 3%). Retention
+(snapshot against previous snapshot) keeps per-pair thresholds, since consecutive
+snapshots share most of their code.
+
+Per snapshot:
+
+- **reference survival**: the share of the reference's functions of at least
+  `--twin-min-loc` lines linked to a twin in the snapshot **in either direction** (§5).
+  Both directions count because a tree that carries a function more than once fails the
+  reference-side ratio test while each copy still finds the original. (Chocolate Doom
+  added Heretic, Hexen and Strife beside Doom in 2008; one direction alone shows a false
+  collapse to 2%.)
+- **survival in reference**, **shared structure** (Wilson lower bound, §5) and the
+  absolute component distances of §4 from the reference;
+- **retention**: the same both-direction share of the previous snapshot's functions,
+  which shows bursts of rewriting;
+- with `--taxonomy`, **calls kept** and **wiring** (§7) against the reference.
+
+## 11. Twin browser
 
 For each pair whose shared structure is at least `--browser-min-shared` (default 2%),
 the report embeds the twins of the direction that defines that share (at most the
@@ -243,7 +279,7 @@ clones. Clicking a descent heatmap cell opens that pair, and `report.html#pair=A
 links to one directly. `--no-browser` leaves the
 section out.
 
-## 11. Limits
+## 12. Limits
 
 - The scanner sees what the engine measures. Two functions with the same measurements
   but different code are indistinguishable. That is why twins need reciprocity,

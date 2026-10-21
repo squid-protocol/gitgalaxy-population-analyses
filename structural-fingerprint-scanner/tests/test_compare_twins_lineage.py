@@ -129,3 +129,17 @@ def test_evaluate_lineage_relations():
     assert ev["nearest_is_family"] == pytest.approx(3 / 4)
     ev2 = evaluate_lineage(names, d, declared, max_distance=0.9)
     assert "b" in ev2["undetectable"] and "x" not in {r["name"] for r in ev2["nearest_rows"]}
+
+
+def test_pooled_threshold_and_explicit_threshold(fps):
+    from structural_fingerprint.twins import accept, pooled_threshold, search
+
+    a = search(fps["fork"].functions, fps["base"].functions)
+    b = search(fps["other"].functions, fps["base"].functions)
+    t, _ = pooled_threshold([a, b], 0.01)
+    assert t > 0
+    assert pooled_threshold([], 0.01) == (0.0, 0.0)
+    # A threshold of 0 keeps only exact clones (and exact distance-0 reciprocal hits).
+    strict = accept(a, 0.0)
+    assert strict.threshold == 0.0 and strict.stats["twins"] <= accept(a).stats["twins"]
+    assert find_twins(fps["fork"].functions, fps["base"].functions, threshold=t).threshold == t

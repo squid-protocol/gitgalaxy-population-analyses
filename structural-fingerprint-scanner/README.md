@@ -30,6 +30,9 @@ builds on it:
 - a **cross-check** that scores the twins function by function against an independent
   source-text verdict (such as the DOOM study's `lineage.py`): precision, recall, and
   what the twins really are;
+- **drift timelines**: fingerprint repositories through their git history (yearly or
+  any step) and chart how much of a reference survives, how fast code turns over, and
+  how far the design drifts, with events marked;
 - a **twin browser** in the report: pick a pair or click a descent cell and see
   every twin behind the number, by folder, with search and filters;
 - reports in Markdown, HTML (heatmaps with trees), CSV, JSON and Newick.
@@ -68,6 +71,11 @@ sfs subway fingerprints/ -o subway/ --reference A --taxonomy subsystems.json [--
 sfs subway fingerprints/ -o subway/ --reference A --taxonomy subsystems.json --crosscheck survival_functions.csv
 # ...or as a section of the compare report
 sfs compare fingerprints/ -o report/ --subway-reference A --taxonomy subsystems.json
+
+# Drift through history: snapshots are scanned with the engine, fingerprinted and cached by commit
+sfs timeline --repo A=path/to/A --repo B=path/to/B --reference fingerprints/R.sfp.json \
+    --engine /path/to/gitgalaxy --python /path/to/engine-venv/bin/python --every 1y \
+    [--taxonomy subsystems.json] [--events events.csv] -o timeline/
 
 # What separates two repositories
 sfs explain fingerprints/A.sfp.json fingerprints/B.sfp.json
