@@ -157,7 +157,36 @@ For the descent tree, a repository whose largest shared structure is below
 `--min-shared` (default 2%) has no detectable descent in the cohort. It is listed as
 such and not scored. Rewrites into another language are the usual case.
 
-## 7. Limits
+## 7. Subway maps (`subway`)
+
+A taxonomy (JSON: ordered subsystems, basename-prefix rules, path-keyword rules, a
+fallback) assigns the reference's functions to subsystems by file path. Without a
+taxonomy, the reference's most populated top-level directories are the subsystems.
+Every other repository's code functions (build, data and docs files are left off) are
+placed by, in order: their structural twin in the reference (§5, name-blind), a
+reference function of the same normalized name (also without a module prefix such as
+`P_`), the path rules, the fallback.
+
+- **Stations** are subsystems, sized by function count. **Lines** are the distinct
+  resolved calls between two subsystems, as a share of the repository's
+  cross-subsystem calls (shares under 0.4% are not drawn).
+- The **layout** is a seeded Fruchterman–Reingold embedding of the reference's
+  subsystem call graph, then an overlap-removal pass. Every map uses it.
+- **Survival** of a station: the share of the reference's eligible functions in that
+  subsystem linked to a twin in either direction. Both directions count, because a
+  repository that carries a function twice fails the reference-side ratio test while
+  its copies still find the reference.
+- **Wiring similarity**: cosine of the subsystem call-share matrices (including calls
+  within a subsystem).
+- **Calls kept**: the share of the reference's function-level calls u → v whose
+  counterparts also call each other. A counterpart is the twin, else the functions of
+  the same normalized name (at most four candidates; a call counts if any candidate
+  pair is connected).
+
+Survival needs measurements to survive. Wiring and calls kept need only names and
+calls. That is why the maps follow translations that the descent tree cannot.
+
+## 8. Limits
 
 - The scanner sees what the engine measures. Two functions with the same measurements
   but different code are indistinguishable. That is why twins need reciprocity,

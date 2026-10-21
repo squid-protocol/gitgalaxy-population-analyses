@@ -50,6 +50,7 @@ class FunctionTable:
     archetype: np.ndarray  # int, index into reference archetype names
     key: np.ndarray  # uint64 exact-measurement digest
     vectors: np.ndarray  # (n, F) float32, lens space
+    edges: np.ndarray | None = None  # (e, 2) distinct resolved calls, caller -> callee, as row indices
 
     def __len__(self) -> int:
         return len(self.loc)
@@ -57,13 +58,15 @@ class FunctionTable:
     def save(self, path: Path) -> None:
         np.savez_compressed(path, repo=np.array(self.repo), name=self.name, path=self.path,
                             language=self.language, loc=self.loc, archetype=self.archetype, key=self.key,
-                            vectors=self.vectors)
+                            vectors=self.vectors,
+                            edges=self.edges if self.edges is not None else np.zeros((0, 2), dtype=np.int32))
 
     @classmethod
     def load(cls, path: Path) -> FunctionTable:
         with np.load(path, allow_pickle=False) as z:
             return cls(repo=str(z["repo"]), name=z["name"], path=z["path"], language=z["language"],
-                       loc=z["loc"], archetype=z["archetype"], key=z["key"], vectors=z["vectors"])
+                       loc=z["loc"], archetype=z["archetype"], key=z["key"], vectors=z["vectors"],
+                       edges=z["edges"] if "edges" in z.files else None)
 
 
 @dataclass
@@ -187,6 +190,7 @@ def build(scan: ScanData, ref: Reference, min_loc: int = 1) -> Fingerprint:
     remap[kept_idx] = np.arange(n)
     e = remap[scan.call_edges] if len(scan.call_edges) else np.zeros((0, 2), dtype=np.int64)
     e = e[(e >= 0).all(1)] if len(e) else e
+    e = np.unique(e, axis=0) if len(e) else e.reshape(0, 2)
 
     file_langs: Counter[str] = Counter()
     for lang, cl in zip(scan.file_language, scan.file_coding_loc, strict=True):
@@ -226,5 +230,6 @@ def build(scan: ScanData, ref: Reference, min_loc: int = 1) -> Fingerprint:
         archetype=arch_idx.astype(np.int16),
         key=F.structural_key(loc, scan.complexity[keep], scan.args[keep], scan.signals[keep]),
         vectors=vec.astype(np.float32),
+        edges=e.astype(np.int32),
     )
     return Fingerprint(name=scan.name, data=doc, functions=table)

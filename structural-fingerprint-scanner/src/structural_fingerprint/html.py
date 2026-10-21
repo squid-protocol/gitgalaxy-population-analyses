@@ -217,6 +217,12 @@ h1{font-size:26px;margin:0 0 4px}h2{font-size:19px;margin:36px 0 6px}h3{font-siz
 table{border-collapse:collapse;font-size:13px;width:100%}th,td{padding:5px 8px;border-bottom:1px solid var(--rule);text-align:left;
 vertical-align:top}thead th{color:var(--text2);font-weight:600}.num{text-align:right;font-variant-numeric:tabular-nums}
 .tablewrap{overflow-x:auto}code{font-size:13px}
+.subways{display:flex;flex-wrap:wrap;gap:10px 14px;margin:8px 0 18px}.panel{margin:0}
+.panel figcaption{font-size:12px;color:var(--text2);display:flex;flex-direction:column;line-height:1.35}
+.panel figcaption strong{color:var(--text);font-weight:600}.panel.ref{flex-basis:100%}
+.subway line{stroke:var(--text2);stroke-linecap:round;opacity:.55}.subway circle{stroke:var(--text);stroke-width:.6}
+.subway text{fill:var(--text);font-size:12px;paint-order:stroke;stroke:var(--surface);stroke-width:3px}.scatter .axis{stroke:var(--rule)}.scatter text{fill:var(--text2);font-size:11px}
+.scatter .dot{fill:#0055ff;stroke:var(--surface);stroke-width:1.5}.scatter .dl{font-size:10px}
 #tip{position:fixed;pointer-events:none;background:var(--text);color:var(--surface);padding:4px 8px;border-radius:4px;
 font-size:12px;display:none;z-index:9;max-width:320px}
 """
@@ -229,10 +235,19 @@ tip.style.left=Math.min(e.clientX+12,innerWidth-330)+'px';tip.style.top=(e.clien
 """
 
 
-def render_html(summary: dict, fps: list[Fingerprint], cohort: Cohort, descent: DescentMatrix | None) -> str:
+def page(title: str, meta: str, sections: list[str], footer: str = "", embedded: str = "") -> str:
+    """A complete self-contained report page."""
+    data = f"<script type=application/json id=summary>{embedded}</script>" if embedded else ""
+    return ("<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content=\"width=device-width,"
+            f"initial-scale=1\"><title>{html.escape(title)}</title><style>{CSS}</style></head><body><main>"
+            f"<h1>{html.escape(title)}</h1><p class=meta>{meta}</p>" + "".join(sections) + footer
+            + f"</main><div id=tip role=tooltip></div><script>{JS}</script>{data}</body></html>")
+
+
+def render_html(summary: dict, fps: list[Fingerprint], cohort: Cohort, descent: DescentMatrix | None,
+                extra_sections: list[str] | None = None) -> str:
     names = cohort.names
     spec = summary["spec"]
-    css = CSS
     embedded = json.dumps(summary).replace("</", "<\\/")  # keep "</script>" out of the JSON
     sections = []
     order_desc = list(range(len(names)))
@@ -250,6 +265,7 @@ def render_html(summary: dict, fps: list[Fingerprint], cohort: Cohort, descent: 
             names, cohort.composite,
             rank_scale(cohort.composite[np.triu_indices(len(names), 1)], "profile distance, by rank in this cohort"),
             lambda v: f"distance {v:.2f}", dist=cohort.composite))
+    sections.extend(extra_sections or [])
     sections.append(_archetype_strip(fps, order_desc))
     sections.append(_lineage(summary))
     sections.append(_table(summary))
@@ -257,12 +273,6 @@ def render_html(summary: dict, fps: list[Fingerprint], cohort: Cohort, descent: 
     prov = (f"Lens <code>{html.escape(spec['lens'])}</code> · spec <code>{spec['spec_hash']}</code> · reference model "
             f"GitGalaxy <code>{html.escape(ref.get('engine_commit', '')[:9])}</code> · "
             f"structural-fingerprint-scanner {summary['tool']['version']}")
-    return ("<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content=\"width=device-width,"
-            "initial-scale=1\"><title>Structural fingerprint report</title>"
-            f"<style>{css}</style></head><body><main><h1>Structural fingerprint report</h1>"
-            f"<p class=meta>{len(names)} repositories · {prov}</p>"
-            + "".join(sections)
-            + "<p class=note>Matrices behind every figure are in <code>matrices/</code>; "
-            "<code>summary.json</code> has everything machine-readable.</p>"
-            f"</main><div id=tip role=tooltip></div><script>{JS}</script>"
-            f"<script type=application/json id=summary>{embedded}</script></body></html>")
+    footer = ("<p class=note>Matrices behind every figure are in <code>matrices/</code>; "
+              "<code>summary.json</code> has everything machine-readable.</p>")
+    return page("Structural fingerprint report", f"{len(names)} repositories · {prov}", sections, footer, embedded)

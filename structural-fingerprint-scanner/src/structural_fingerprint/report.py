@@ -73,7 +73,7 @@ def build_summary(fps: list[Fingerprint], cohort: Cohort, descent: DescentMatrix
 
 
 def write_cohort(out: Path, fps: list[Fingerprint], cohort: Cohort, descent: DescentMatrix | None,
-                 lineage_eval: dict | None, twin_params: dict | None) -> dict:
+                 lineage_eval: dict | None, twin_params: dict | None, extra_sections: list[str] | None = None) -> dict:
     out.mkdir(parents=True, exist_ok=True)
     names = cohort.names
     summary = build_summary(fps, cohort, descent, lineage_eval)
@@ -122,7 +122,7 @@ def write_cohort(out: Path, fps: list[Fingerprint], cohort: Cohort, descent: Des
     (out / "report.md").write_text(markdown(summary, cohort, descent))
     from .html import render_html  # local import keeps the CLI start-up light
 
-    (out / "report.html").write_text(render_html(summary, fps, cohort, descent))
+    (out / "report.html").write_text(render_html(summary, fps, cohort, descent, extra_sections))
     return summary
 
 

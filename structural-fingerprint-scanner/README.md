@@ -18,6 +18,10 @@ builds on it:
   (target–decoy, 1% by default). Twins survive renaming, file moves and reformatting;
 - **descent**: how much of one codebase's structure survives in another, and a
   descent tree built from it;
+- **subway maps**: each repository's call graph collapsed to its subsystems and drawn
+  on a reference's fixed layout, with stations coloured by how much of the reference's
+  subsystem survives. They follow wiring, which survives translation into another
+  language even when every measurement changes;
 - reports in Markdown, HTML (heatmaps with trees), CSV, JSON and Newick.
 
 It reads scan output only. It never sees source code and needs nothing beyond NumPy
@@ -48,6 +52,11 @@ sfs compare fingerprints/ -o report-portable/ --lens portable --no-twins
 # Which functions of A survive in B, as CSV
 sfs twins fingerprints/A.sfp.json fingerprints/B.sfp.json -o twins/
 
+# Subway maps on a reference's layout (subsystems from a taxonomy, or top-level directories)
+sfs subway fingerprints/ -o subway/ --reference A --taxonomy subsystems.json
+# ...or as a section of the compare report
+sfs compare fingerprints/ -o report/ --subway-reference A --taxonomy subsystems.json
+
 # What separates two repositories
 sfs explain fingerprints/A.sfp.json fingerprints/B.sfp.json
 
@@ -69,6 +78,7 @@ checks both trees against what the projects say about their own ancestry.
 | `pairs.csv` | one row per pair: every component distance, profile distance, survival both ways, shared structure, twin and clone counts, name agreement |
 | `matrices/*.csv` | square matrices behind each figure |
 | `trees/profile.nwk`, `trees/descent.nwk` | Newick trees |
+| `subway.json`, `subway.csv` | with `--subway-reference`: stations, lines, survival per subsystem, wiring scores |
 | `fingerprints/` | the fingerprints used |
 
 ## How to read the numbers
