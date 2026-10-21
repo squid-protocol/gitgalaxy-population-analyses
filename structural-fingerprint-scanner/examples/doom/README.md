@@ -104,10 +104,21 @@ wiring similarity follow lineage where structure no longer does:
 | chocolate-doom | C | 72% | 0.95 | 31% |
 | doom-scheme | Scheme | 49% | 0.95 | 0% |
 | dartdoom | Dart | 41% | 0.93 | 0.1% |
-| mochadoom | Java | 35% | 0.59 | 4% |
-| managed-doom | C# | 21% | 0.72 | 0% |
+| mochadoom | Java | 35% | 0.81 | 4% |
+| managed-doom | C# | 21% | 0.73 | 0% |
 
 (Shared structure is the Wilson lower bound used by the descent tree.)
+
+**Is this an artefact of the subsystem mapping?** No. A mapping-free summary of each
+port's raw call graph (degree, components, clustering, reciprocity, hub concentration…)
+ranks the ports the same way: Spearman ρ = −0.77 between wiring similarity and
+graph-shape distance from linuxdoom (n = 42, p = 2×10⁻⁹). Per-port taxonomy overrides
+for the ports whose folders say what they are lower Mocha Doom's and Kocoa Doom's
+unmapped share from 35% and 33% to 10%, and raise their wiring similarity from 0.59 and
+0.52 to 0.81 and 0.75. The Java and Kotlin translations kept linuxdoom's wiring far
+better than file names alone could show. The remaining large "other" stations are new
+code: gzdoom's scripting VM, doom3-bfg's own engine, doomsday's libraries and
+room4doom's editor tools.
 
 Two readings stand out. Translations (Go, Scheme, Dart, Java, C#) rewrite every
 measurement, so descent cannot see them, but they keep the call wiring: gore keeps 77%

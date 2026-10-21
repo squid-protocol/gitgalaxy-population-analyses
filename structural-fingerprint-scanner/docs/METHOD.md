@@ -183,10 +183,37 @@ reference function of the same normalized name (also without a module prefix suc
   the same normalized name (at most four candidates; a call counts if any candidate
   pair is connected).
 
+- **Per-repository overrides** in the taxonomy (`"overrides": {repo: {path_keyword: …}}`)
+  are tried before the shared path rules, and only for that repository's path step.
+  They are for codebases whose folders say plainly what they are (`World/`, `Render/`,
+  a Java port's single-letter packages). The fallback station's share is reported
+  per repository. A large fallback is code the reference has no subsystem for, and is
+  a finding to explain.
+- **Graph shape** (mapping-free): on each repository's own call graph, mean degree,
+  largest weakly connected component share, average undirected clustering,
+  reciprocity, top-1% in-degree share, leaf and root shares, in-degree Gini and degree
+  assortativity. **Shape distance** from the reference is the RMS difference after
+  standardizing each field across the cohort. The **mapping check** is the Spearman
+  correlation between wiring similarity and shape distance. A clearly negative ρ means
+  a check that uses no subsystems or layout agrees on who stayed close.
+- With `--declared-lineage`, maps are ordered depth-first along the declared lineage
+  from the reference.
+
 Survival needs measurements to survive. Wiring and calls kept need only names and
 calls. That is why the maps follow translations that the descent tree cannot.
 
-## 8. Limits
+## 8. Twin browser
+
+For each pair whose shared structure is at least `--browser-min-shared` (default 2%),
+the report embeds the twins of the direction that defines that share (at most the
+6,000 closest per pair, with the cap stated on the page). The page shows each twin's
+function, file and size on both sides, its distance, whether it is an exact clone and
+whether the names agree. It can filter by text, folder, differing names or exact
+clones. Clicking a descent heatmap cell opens that pair, and `report.html#pair=A|B`
+links to one directly. `--no-browser` leaves the
+section out.
+
+## 9. Limits
 
 - The scanner sees what the engine measures. Two functions with the same measurements
   but different code are indistinguishable. That is why twins need reciprocity,

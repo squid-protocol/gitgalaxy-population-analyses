@@ -55,12 +55,18 @@ class Taxonomy:
     path_keyword: list[tuple[str, str]] = field(default_factory=list)
     fallback: str = "other"
     directory_depth: int = 0  # >0: subsystem = this many leading path components
+    # Per-repository path rules tried before the shared ones, for codebases whose layout
+    # says plainly what a folder is (``World/``, ``Render/``, single-letter Java packages).
+    overrides: dict[str, dict[str, list[tuple[str, str]]]] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         if self.fallback not in self.subsystems:
             self.subsystems.append(self.fallback)
         known = set(self.subsystems)
-        bad = {s for _, s in self.basename_prefix + self.path_keyword} - known
+        rules = self.basename_prefix + self.path_keyword
+        for o in self.overrides.values():
+            rules = rules + list(o.get("basename_prefix", [])) + list(o.get("path_keyword", []))
+        bad = {s for _, s in rules} - known
         if bad:
             raise ValueError(f"taxonomy rules name unknown subsystems: {sorted(bad)}")
         self.index = {s: i for i, s in enumerate(self.subsystems)}
@@ -71,7 +77,10 @@ class Taxonomy:
         return cls(name=d.get("name", Path(path).stem), subsystems=list(d["subsystems"]),
                    basename_prefix=[tuple(x) for x in d.get("basename_prefix", [])],
                    path_keyword=[tuple(x) for x in d.get("path_keyword", [])],
-                   fallback=d.get("fallback", "other"))
+                   fallback=d.get("fallback", "other"),
+                   overrides={repo: {k: [tuple(x) for x in v] for k, v in o.items()
+                                     if k in ("basename_prefix", "path_keyword")}
+                              for repo, o in d.get("overrides", {}).items()})
 
     @classmethod
     def from_directories(cls, reference: FunctionTable, top: int = 14) -> Taxonomy:
@@ -81,17 +90,21 @@ class Taxonomy:
         subs = [h for h, _ in heads.most_common(top) if h]
         return cls(name="top-level directories", subsystems=subs, directory_depth=1)
 
-    def classify(self, path: str) -> int:
+    def classify(self, path: str, repo: str | None = None) -> int:
+        """Subsystem index for a file path; ``repo``'s overrides, if any, are tried first."""
         if self.directory_depth:
             return self.index.get(_dir_head(path), self.index[self.fallback])
         base = path.rsplit("/", 1)[-1].lower()
-        for prefix, sub in self.basename_prefix:
-            if base.startswith(prefix):
-                return self.index[sub]
-        low = path.lower()
-        for kw, sub in self.path_keyword:
-            if kw in low:
-                return self.index[sub]
+        low = "/" + path.lower()
+        o = self.overrides.get(repo or "", {})
+        for prefixes, keywords in ((o.get("basename_prefix", []), o.get("path_keyword", [])),
+                                   (self.basename_prefix, self.path_keyword)):
+            for prefix, sub in prefixes:
+                if base.startswith(prefix):
+                    return self.index[sub]
+            for kw, sub in keywords:
+                if kw in low:
+                    return self.index[sub]
         return self.index[self.fallback]
 
 
@@ -110,6 +123,8 @@ class SubwayMap:
     survival: np.ndarray | None = None  # (S,) share of the reference's functions with a twin here
     wiring_similarity: float = float("nan")
     edges_kept: float = float("nan")
+    graph: dict[str, float] = field(default_factory=dict)  # mapping-free shape of the function call graph
+    shape_distance: float = float("nan")  # distance of ``graph`` from the reference's, cohort-standardized
 
     @property
     def share(self) -> np.ndarray:
@@ -123,6 +138,8 @@ class SubwayMap:
             "wiring_similarity": _f(self.wiring_similarity),
             "edges_kept": _f(self.edges_kept),
             "assigned_by": self.sources,
+            "graph": {k: _f(v) for k, v in self.graph.items()},
+            "shape_distance": _f(self.shape_distance),
             "stations": {s: {"functions": int(n), "survival": None if self.survival is None else _f(self.survival[i])}
                          for i, (s, n) in enumerate(zip(self.subsystems, self.sizes, strict=True))},
             "lines": [{"from": self.subsystems[a], "to": self.subsystems[b], "calls": int(self.calls[a, b])}
@@ -182,7 +199,7 @@ def assign(table: FunctionTable, tax: Taxonomy, ref: FunctionTable | None = None
             labels[i] = hit
             src["name"] += 1
         else:
-            labels[i] = tax.classify(str(table.path[i]))
+            labels[i] = tax.classify(str(table.path[i]), table.repo)
             src["path" if labels[i] != tax.index[tax.fallback] else "fallback"] += 1
     return labels, dict(src)
 
@@ -191,6 +208,117 @@ def _cosine(a: np.ndarray, b: np.ndarray) -> float:
     a, b = a.ravel(), b.ravel()
     d = np.linalg.norm(a) * np.linalg.norm(b)
     return float(a @ b / d) if d else float("nan")
+
+
+GRAPH_FIELDS = ("mean_degree", "lcc_share", "clustering", "reciprocity", "hub_share", "leaf_share", "root_share",
+                "in_degree_gini", "assortativity")
+
+
+def graph_stats(n: int, edges: np.ndarray | None) -> dict[str, float]:
+    """Shape of a directed call graph on ``n`` functions, independent of any subsystem
+    mapping or layout: mean degree, largest weakly connected component share, average
+    clustering (undirected), reciprocity, in-degree concentration (top 1% hub share,
+    Gini), leaf and root shares, and degree assortativity."""
+    from scipy.sparse import coo_matrix
+    from scipy.sparse.csgraph import connected_components
+
+    out = dict.fromkeys(GRAPH_FIELDS, float("nan"))
+    if n == 0:
+        return out
+    e = np.zeros((0, 2), dtype=np.int64) if edges is None or not len(edges) else np.unique(edges, axis=0)
+    e = e[e[:, 0] != e[:, 1]]
+    a = coo_matrix((np.ones(len(e)), (e[:, 0], e[:, 1])), shape=(n, n)).tocsr()
+    out_deg = np.asarray(a.sum(1)).ravel()
+    in_deg = np.asarray(a.sum(0)).ravel()
+    u = ((a + a.T) > 0).astype(np.float64).tocsr()
+    _, comp = connected_components(u, directed=False)
+    deg = np.asarray(u.sum(1)).ravel()
+    tri = np.asarray((u @ u).multiply(u).sum(1)).ravel() / 2
+    with np.errstate(invalid="ignore", divide="ignore"):
+        clust = np.where(deg >= 2, 2 * tri / (deg * (deg - 1)), 0.0)
+    top = max(1, int(np.ceil(n * 0.01)))
+    ui, uj = u.nonzero()
+    out.update({
+        "mean_degree": len(e) / n,
+        "lcc_share": float(np.bincount(comp).max() / n),
+        "clustering": float(clust.mean()),
+        "reciprocity": float(a.multiply(a.T).nnz / a.nnz) if a.nnz else 0.0,
+        "hub_share": float(np.sort(in_deg)[::-1][:top].sum() / in_deg.sum()) if in_deg.sum() else 0.0,
+        "leaf_share": float((out_deg == 0).mean()),
+        "root_share": float((in_deg == 0).mean()),
+        "in_degree_gini": _gini(in_deg),
+        "assortativity": float(np.corrcoef(deg[ui], deg[uj])[0, 1]) if len(ui) > 2 and deg[ui].std() > 0 else 0.0,
+    })
+    return out
+
+
+def _gini(x: np.ndarray) -> float:
+    x = np.sort(np.asarray(x, dtype=float))
+    if len(x) < 2 or x.sum() == 0:
+        return 0.0
+    k = np.arange(1, len(x) + 1)
+    return float(((2 * k - len(x) - 1) * x).sum() / (len(x) * x.sum()))
+
+
+def _shape_vector(g: dict[str, float]) -> np.ndarray:
+    v = np.array([g[f] for f in GRAPH_FIELDS], dtype=float)
+    v[0] = math.log1p(v[0]) if np.isfinite(v[0]) else v[0]
+    return v
+
+
+def _set_shape_distances(maps: list[SubwayMap]) -> None:
+    """Distance of each map's graph shape from the reference's (maps[0]), each field
+    standardized by its spread across the cohort, RMS over fields."""
+    m = np.array([_shape_vector(x.graph) for x in maps])
+    m = np.where(np.isfinite(m), m, np.nanmean(m, axis=0))
+    sd = m.std(0)
+    z = (m - m.mean(0)) / np.where(sd > 0, sd, 1.0)
+    for x, row in zip(maps, z, strict=True):
+        x.shape_distance = float(np.sqrt(np.mean((row - z[0]) ** 2)))
+
+
+def mapping_check(maps: list[SubwayMap]) -> dict:
+    """Is subway wiring similarity an artefact of the subsystem mapping? Compare it with
+    the mapping-free graph-shape distance across the cohort (Spearman). A clearly
+    negative rho means the two agree on which repositories stayed close to the reference."""
+    from scipy.stats import spearmanr
+
+    pts = [(x.wiring_similarity, x.shape_distance) for x in maps[1:]
+           if np.isfinite(x.wiring_similarity) and np.isfinite(x.shape_distance)]
+    if len(pts) < 4:
+        return {"n": len(pts), "spearman_rho": None, "p_value": None}
+    r = spearmanr([p[0] for p in pts], [p[1] for p in pts])
+    return {"n": len(pts), "spearman_rho": float(r.statistic), "p_value": float(r.pvalue)}
+
+
+def lineage_order(maps: list[SubwayMap], declared: dict[str, list[str]] | None) -> list[SubwayMap]:
+    """Reference first, then its declared descendants depth-first (siblings by wiring),
+    then everything else by wiring."""
+    def wiring(m: SubwayMap) -> float:
+        return m.wiring_similarity if np.isfinite(m.wiring_similarity) else -1.0
+
+    by = {m.repo: m for m in maps}
+    rest = sorted(maps[1:], key=lambda m: -wiring(m))
+    if not declared:
+        return [maps[0], *rest]
+    children: dict[str, list[SubwayMap]] = {}
+    for m in rest:
+        for p in declared.get(m.repo, []):
+            if p in by:
+                children.setdefault(p, []).append(m)
+                break
+    out, seen = [], set()
+
+    def visit(m: SubwayMap) -> None:
+        if m.repo in seen:
+            return
+        seen.add(m.repo)
+        out.append(m)
+        for c in children.get(m.repo, []):
+            visit(c)
+
+    visit(maps[0])
+    return out + [m for m in rest if m.repo not in seen]
 
 
 def _edges_kept(ref: FunctionTable, port: FunctionTable, ref_to_port: TwinResult | None,
@@ -255,11 +383,12 @@ def build_maps(tables: list[FunctionTable], reference: str, tax: Taxonomy | None
     ref = by[reference]
     tax = tax or Taxonomy.from_directories(ref)
     s = len(tax.subsystems)
-    ref_labels = np.where(_code_mask(ref), [tax.classify(str(x)) for x in ref.path], -1).astype(np.int64)
+    ref_labels = np.where(_code_mask(ref), [tax.classify(str(x), ref.repo) for x in ref.path], -1).astype(np.int64)
     ref_map = SubwayMap(reference, tax.subsystems, np.bincount(ref_labels[ref_labels >= 0], minlength=s),
                         _calls(ref_labels, ref.edges, s), {"path": int((ref_labels >= 0).sum())},
                         survival=np.where(np.bincount(ref_labels[ref_labels >= 0], minlength=s) > 0, 1.0, np.nan))
     ref_map.wiring_similarity, ref_map.edges_kept = 1.0, 1.0
+    ref_map.graph = _code_graph_stats(ref)
     maps = [ref_map]
     for t in tables:
         if t.repo == reference:
@@ -271,8 +400,19 @@ def build_maps(tables: list[FunctionTable], reference: str, tax: Taxonomy | None
                       _calls(labels, t.edges, s), src, survival=_survival(ref_labels, ref, from_ref, to_ref, s, p.min_loc))
         m.wiring_similarity = _cosine(m.share, ref_map.share)
         m.edges_kept = _edges_kept(ref, t, from_ref)
+        m.graph = _code_graph_stats(t)
         maps.append(m)
+    _set_shape_distances(maps)
     return maps, tax, layout(ref_map)
+
+
+def _code_graph_stats(t: FunctionTable) -> dict[str, float]:
+    code = _code_mask(t)
+    remap = -np.ones(len(t), dtype=np.int64)
+    remap[code] = np.arange(int(code.sum()))
+    e = remap[t.edges] if t.edges is not None and len(t.edges) else np.zeros((0, 2), dtype=np.int64)
+    e = e[(e >= 0).all(1)] if len(e) else e
+    return graph_stats(int(code.sum()), e)
 
 
 def layout(ref_map: SubwayMap, seed: int = 7, iterations: int = 600) -> np.ndarray:
@@ -383,10 +523,12 @@ def scatter_svg(points: list[tuple[str, float, float]], xlabel: str, ylabel: str
 
 
 def render_section(maps: list[SubwayMap], pos: np.ndarray, tax: Taxonomy, reference: str,
-                   profile_to_reference: dict[str, float] | None = None) -> str:
+                   profile_to_reference: dict[str, float] | None = None,
+                   declared: dict[str, list[str]] | None = None) -> str:
     from .html import _legend, sqrt_share_scale
 
-    order = [maps[0]] + sorted(maps[1:], key=lambda m: -(m.wiring_similarity if np.isfinite(m.wiring_similarity) else -1))
+    order = lineage_order(maps, declared)
+    check = mapping_check(maps)
     panels = []
     for m in order:
         is_ref = m.repo == reference
@@ -397,12 +539,32 @@ def render_section(maps: list[SubwayMap], pos: np.ndarray, tax: Taxonomy, refere
                       f"<span>{int(m.sizes.sum()):,} functions · {html.escape(sub)}</span></figcaption>"
                       f"{map_svg(m, pos, size=460 if is_ref else 230, labels=is_ref)}</figure>")
     scale = sqrt_share_scale(f"station colour: share of {reference}'s subsystem that survives (square-root scale)")
+    fallback = tax.index[tax.fallback]
+
+    def pct(x: float) -> str:
+        return "" if x is None or not np.isfinite(x) else f"{100 * x:.0f}%"
+
     rows = "".join(
         f"<tr><th scope=row>{html.escape(m.repo)}</th><td class=num>{int(m.sizes.sum()):,}</td>"
-        f"<td class=num>{m.wiring_similarity:.2f}</td>"
-        f"<td class=num>{'' if not np.isfinite(m.edges_kept) else f'{100 * m.edges_kept:.0f}%'}</td>"
+        f"<td class=num>{m.wiring_similarity:.2f}</td><td class=num>{pct(m.edges_kept)}</td>"
+        f"<td class=num>{pct(m.sizes[fallback] / m.sizes.sum() if m.sizes.sum() else float('nan'))}</td>"
+        f"<td class=num>{pct(m.graph.get('lcc_share', float('nan')))}</td>"
+        f"<td class=num>{m.graph.get('clustering', float('nan')):.3f}</td>"
+        f"<td class=num>{m.shape_distance:.2f}</td>"
         f"<td>{html.escape(', '.join(f'{k} {v:,}' for k, v in sorted(m.sources.items(), key=lambda kv: -kv[1])))}</td></tr>"
         for m in order)
+    rho = check.get("spearman_rho")
+    check_html = ("" if rho is None else
+                  "<h3>Mapping-free check</h3><p class=note>The subway maps depend on how functions are assigned "
+                  "to subsystems. As a check that needs no mapping or layout, each repository's raw call graph is "
+                  "summarised by its shape (mean degree, largest component, clustering, reciprocity, hub "
+                  "concentration, leaf and root shares, in-degree Gini, assortativity) and compared with "
+                  f"{html.escape(reference)}'s. Across {check['n']} repositories, wiring similarity and this "
+                  f"graph-shape distance have Spearman ρ = <strong>{rho:.2f}</strong> (p = {check['p_value']:.2g})"
+                  + ("; they agree on which repositories stayed close.</p>" if rho < -0.3 else
+                     "; they do not clearly agree, so read the wiring scores with care.</p>")
+                  + scatter_svg([(m.repo, m.shape_distance, m.wiring_similarity) for m in order if m.repo != reference],
+                                f"graph-shape distance from {reference}", f"wiring similarity to {reference}"))
     scatter = ""
     if profile_to_reference:
         pts = [(m.repo, profile_to_reference.get(m.repo, float("nan")), m.wiring_similarity) for m in order
@@ -416,22 +578,31 @@ def render_section(maps: list[SubwayMap], pos: np.ndarray, tax: Taxonomy, refere
             "Station size: functions. Line width: share of calls between two subsystems. Functions are placed by "
             f"structural twin in {html.escape(reference)} first, then by name, then by path. "
             "<em>Wiring</em> is the cosine similarity of the subsystem call matrix to the reference's; "
-            "<em>calls kept</em> is the share of the reference's calls still made between the corresponding functions.</p>"
-            f"{_legend(scale)}<div class=subways>{''.join(panels)}</div>{scatter}"
+            "<em>calls kept</em> is the share of the reference's calls still made between the corresponding functions. "
+            + ("Maps follow the declared lineage from the reference; the rest are ordered by wiring. "
+               if declared else "Maps are ordered by wiring. ")
+            + f"A large <em>{html.escape(tax.fallback)}</em> station is code the reference has no subsystem for "
+            "(new features, scripting, tools): a finding to explain, not noise.</p>"
+            f"{_legend(scale)}<div class=subways>{''.join(panels)}</div>{scatter}{check_html}"
             "<div class=tablewrap><table><thead><tr><th>Repository</th><th class=num>Functions on map</th>"
-            "<th class=num>Wiring</th><th class=num>Calls kept</th><th>Placed by</th></tr></thead>"
+            "<th class=num>Wiring</th><th class=num>Calls kept</th>"
+            f"<th class=num>{html.escape(tax.fallback)}</th><th class=num>Largest component</th>"
+            "<th class=num>Clustering</th><th class=num>Shape distance</th><th>Placed by</th></tr></thead>"
             f"<tbody>{rows}</tbody></table></div></section>")
 
 
 def write_outputs(out: Path, maps: list[SubwayMap], tax: Taxonomy, reference: str) -> None:
     out.mkdir(parents=True, exist_ok=True)
     (out / "subway.json").write_text(json.dumps({"reference": reference, "taxonomy": tax.name,
-                                                 "subsystems": tax.subsystems,
+                                                 "subsystems": tax.subsystems, "mapping_check": mapping_check(maps),
                                                  "maps": [m.to_dict() for m in maps]}, indent=1) + "\n")
     with open(out / "subway.csv", "w") as f:
-        f.write("repo,functions,wiring_similarity,edges_kept," + ",".join(f"survival_{s}" for s in tax.subsystems) + "\n")
+        f.write("repo,functions,wiring_similarity,edges_kept,shape_distance,"
+                + ",".join(GRAPH_FIELDS) + "," + ",".join(f"survival_{s}" for s in tax.subsystems) + "\n")
         for m in maps:
             surv = ["" if m.survival is None or not np.isfinite(v) else f"{v:.4f}"
                     for v in (m.survival if m.survival is not None else [np.nan] * len(tax.subsystems))]
             ek = "" if not np.isfinite(m.edges_kept) else f"{m.edges_kept:.4f}"
-            f.write(f"{m.repo},{int(m.sizes.sum())},{m.wiring_similarity:.4f},{ek}," + ",".join(surv) + "\n")
+            g = ["" if not np.isfinite(m.graph.get(k, float("nan"))) else f"{m.graph[k]:.4f}" for k in GRAPH_FIELDS]
+            f.write(f"{m.repo},{int(m.sizes.sum())},{m.wiring_similarity:.4f},{ek},{m.shape_distance:.4f},"
+                    + ",".join(g) + "," + ",".join(surv) + "\n")

@@ -90,3 +90,66 @@ def test_cli_subway_and_compare_section(cohort, tmp_path):
     html = (rep / "report.html").read_text()
     assert "Subway maps" in html and "Structure against wiring" in html
     assert (rep / "subway.json").is_file()
+
+
+def test_overrides_apply_to_their_repository_only(tmp_path):
+    p = tmp_path / "t.json"
+    p.write_text(json.dumps({"name": "t", "subsystems": ["render", "play", "other"],
+                             "path_keyword": [["draw", "render"]],
+                             "overrides": {"java-port": {"path_keyword": [["/src/p/", "play"]]}}}))
+    tax = SW.Taxonomy.load(p)
+    assert tax.subsystems[tax.classify("src/p/Actions.java", "java-port")] == "play"
+    assert tax.subsystems[tax.classify("src/p/Actions.java", "other-port")] == "other"
+    assert tax.subsystems[tax.classify("src/p/draw.java", "other-port")] == "render"
+    p.write_text(json.dumps({"name": "t", "subsystems": ["a"], "overrides": {"x": {"path_keyword": [["k", "zz"]]}}}))
+    with pytest.raises(ValueError):
+        SW.Taxonomy.load(p)
+
+
+def test_graph_stats_on_a_known_graph():
+    # triangle 0-1-2 plus a tail 2->3, and an isolated node 4
+    g = SW.graph_stats(5, np.array([[0, 1], [1, 2], [2, 0], [2, 3], [1, 0]]))
+    assert g["mean_degree"] == pytest.approx(5 / 5)
+    assert g["lcc_share"] == pytest.approx(4 / 5)
+    assert g["reciprocity"] == pytest.approx(2 / 5)
+    # clustering: nodes 0 and 1 have 1 triangle over 1 pair; node 2 has 1 of 3 pairs; 3 and 4 have none
+    assert g["clustering"] == pytest.approx((1 + 1 + 1 / 3) / 5)
+    assert g["leaf_share"] == pytest.approx(2 / 5) and g["root_share"] == pytest.approx(1 / 5)
+    assert all(np.isnan(v) for v in SW.graph_stats(0, None).values())
+
+
+def test_lineage_order_and_mapping_check(tables):
+    maps, _, _ = SW.build_maps(list(tables.values()), "base")
+    order = SW.lineage_order(maps, {"fork": ["base"]})
+    assert [m.repo for m in order][:2] == ["base", "fork"]
+    assert maps[0].shape_distance == 0.0 and all(np.isfinite(m.shape_distance) for m in maps)
+    assert set(maps[1].graph) == set(SW.GRAPH_FIELDS)
+    check = SW.mapping_check(maps)
+    # "other" has no calls, so its wiring is undefined and it is left out; too few points to test
+    assert check["n"] == 1 and check["spearman_rho"] is None
+
+
+def test_twin_browser_in_report(cohort, tmp_path):
+    from structural_fingerprint import browser as BR
+    from structural_fingerprint.lineage import descent_matrix
+
+    rep = tmp_path / "report"
+    assert main(["compare", str(cohort["root"]), "-o", str(rep), "--workers", "1"]) == 0
+    page = (rep / "report.html").read_text()
+    assert "id=twin-browser" in page and 'data-pair="' in page
+    blob = page.split("<script type=application/json id=twins>")[1].split("</script>")[0]
+    data = json.loads(blob.replace("<\\/", "</"))
+    pair = next(p for p in data["pairs"] if {p["q"], p["t"]} == {"base", "fork"})
+    assert pair["twins"] >= 0.85 * cohort["n_shared"] and len(pair["rows"]) == pair["shown"]
+    qn, qp, _qloc, tn, tp, _tloc, dist, flags = pair["rows"][0]
+    assert isinstance(qn, str) and isinstance(tn, str) and dist >= 0 and flags in (0, 1, 2, 3)
+    assert 0 <= qp < len(pair["paths"]) and 0 <= tp < len(pair["paths"])
+    assert not any({p["q"], p["t"]} == {"base", "other"} for p in data["pairs"])  # nothing shared, not listed
+    # The cap keeps the closest twins.
+    ref = load_reference()
+    tbl = {k: FP.build(load_scan(cohort[k], ref.signal_columns), ref, min_loc=3).functions for k in ("base", "fork")}
+    dm = descent_matrix(list(tbl.values()), keep_results=True)
+    capped = BR.payload(tbl, dm, max_rows=10)["pairs"][0]
+    assert capped["shown"] == 10 and [r[6] for r in capped["rows"]] == sorted(r[6] for r in capped["rows"])
+    assert main(["compare", str(cohort["root"]), "-o", str(tmp_path / "nb"), "--no-browser", "--workers", "1"]) == 0
+    assert "id=twin-browser" not in (tmp_path / "nb" / "report.html").read_text()
