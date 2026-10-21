@@ -13,21 +13,25 @@ per-repo scan bundles); this repo merges them into master SQLite databases (`bui
 
 ## What's here
 
+- **[structural-fingerprint-scanner](structural-fingerprint-scanner/)**: a packaged tool
+  (`sfs`) that fingerprints GitGalaxy scans in the engine's population reference frame,
+  compares repositories by design (profile distance) and by inherited code (calibrated
+  function-level structural twins), and draws profile and descent trees. It replaces the
+  earlier `twin_discovery*.py` and `mine_dna_stoichiometry.py` scripts (now in `archive/`).
+  Validated on 44 DOOM ports with known ancestry ([examples/doom](structural-fingerprint-scanner/examples/doom/)).
 - **Master database assembly** — `build_master_db.py` / `master_db_updater.py` merge raw-output
   scan DBs into one population database (`data/`); `db_health_assessor.py` sanity-checks it.
 - **Risk-exposure distributions** — `detailed_risk_exposure_stats_from_db.py`,
   `plot_ridgelines.py` → the ridgeline plots in `analyses_ridgeplots/` (66 charts: per-metric
   distributions across the population, e.g. `avg_func_args_ridgeplot.png`).
 - **Structural archetypes** — `archetype_analysis_suite.py`, `apply_language_specific_clusters.py`,
-  `repo_macro_fingerprints.py`, `twin_discovery*.py`: clustering repositories by structural
-  signature profile and hunting near-identical "twins" across the population.
+  `repo_macro_fingerprints.py`: clustering repositories by structural signature profile.
 - **Threat/malware population studies** — `analyze_threat_prediction_distributions.py`,
   `repo_level_malware_analysis_suite.py`, `graph_malware_zscores_by_cluster.py`,
   `malware_telemetry_report.py`, `extract_zero_day_suspects.py` → `analysis_outputs/`
   (z-score separations of malware-labeled vs. benign repos, classifier confusion heatmap,
   `danger_zone_audit.csv`).
-- **Function-level studies** — `function_analysis_suite.py`, `validate_function_metrics.py`,
-  `mine_dna_stoichiometry.py`.
+- **Function-level studies** — `function_analysis_suite.py`, `validate_function_metrics.py`.
 
 ![Repo-level malware z-score distribution](analysis_outputs/repo_malware_zscore_distribution.png)
 
