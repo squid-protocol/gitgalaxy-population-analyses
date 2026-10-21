@@ -1,0 +1,255 @@
+{
+ "schema": "structural-fingerprint/portable-weights/1",
+ "provenance": {
+  "source": "keyword-rosetta docs/bias_data.json",
+  "rosetta_commit": "cd8f272fe2807d41038edf152b681b5906fba3c7",
+  "rosetta_commit_date": "2026-09-07T07:44:37-04:00",
+  "languages": 46,
+  "band": 0.25,
+  "floor": 0.25,
+  "unmeasured": 0.5,
+  "derived_at": "2026-10-21T15:06:31+00:00"
+ },
+ "default_factor": 0.5,
+ "factors": {
+  "log_loc": 0.5,
+  "keyword_density": 0.0,
+  "log_complexity": 0.714,
+  "func_internal_density": 0.714,
+  "log_args": 0.857,
+  "struct_branch": 0.714,
+  "struct_linear": 0.5,
+  "struct_args": 0.857,
+  "struct_func_start": 0.976,
+  "struct_class_start": 0.895,
+  "def_safety": 0.929,
+  "state_safety_neg": 0.952,
+  "arch_io": 0.854,
+  "arch_api": 0.833,
+  "state_flux": 1.0,
+  "def_test": 0.925,
+  "arch_concurrency": 0.25,
+  "arch_ui_framework": 0.5,
+  "struct_closures": 0.5,
+  "arch_globals": 0.952,
+  "struct_decorators": 0.5,
+  "struct_generics": 0.5,
+  "struct_comprehensions": 0.5,
+  "arch_scientific": 0.5,
+  "state_heat_triggers": 0.25,
+  "arch_import": 0.952,
+  "struct_macros": 0.5,
+  "state_pointers": 0.5,
+  "state_memory_alloc": 0.5,
+  "state_print_hits": 0.25,
+  "state_cast_hits": 0.5,
+  "state_bailout_hits": 0.5,
+  "bitwise_ops": 0.5,
+  "def_freeze_hits": 0.25,
+  "def_cleanup": 0.976,
+  "def_encapsulation": 0.81,
+  "def_listeners": 0.5
+ },
+ "detail": {
+  "log_loc": {
+   "rule": "fixed",
+   "factor": 0.5
+  },
+  "keyword_density": {
+   "rule": "fixed",
+   "factor": 0.0
+  },
+  "log_complexity": {
+   "rule": "consistency",
+   "rosetta_metric": "branch",
+   "consistency": 0.714,
+   "languages": 42
+  },
+  "func_internal_density": {
+   "rule": "consistency",
+   "rosetta_metric": "branch",
+   "consistency": 0.714,
+   "languages": 42
+  },
+  "log_args": {
+   "rule": "consistency",
+   "rosetta_metric": "args",
+   "consistency": 0.857,
+   "languages": 42
+  },
+  "struct_branch": {
+   "rule": "consistency",
+   "rosetta_metric": "branch",
+   "consistency": 0.714,
+   "languages": 42
+  },
+  "struct_linear": {
+   "rule": "unmeasured",
+   "rosetta_metric": "structural_boundaries",
+   "factor": 0.5
+  },
+  "struct_args": {
+   "rule": "consistency",
+   "rosetta_metric": "args",
+   "consistency": 0.857,
+   "languages": 42
+  },
+  "struct_func_start": {
+   "rule": "consistency",
+   "rosetta_metric": "func_start",
+   "consistency": 0.976,
+   "languages": 42
+  },
+  "struct_class_start": {
+   "rule": "consistency",
+   "rosetta_metric": "class_start",
+   "consistency": 0.895,
+   "languages": 38
+  },
+  "def_safety": {
+   "rule": "consistency",
+   "rosetta_metric": "safety",
+   "consistency": 0.929,
+   "languages": 42
+  },
+  "state_safety_neg": {
+   "rule": "consistency",
+   "rosetta_metric": "safety_bypasses",
+   "consistency": 0.952,
+   "languages": 42
+  },
+  "arch_io": {
+   "rule": "consistency",
+   "rosetta_metric": "io",
+   "consistency": 0.854,
+   "languages": 41
+  },
+  "arch_api": {
+   "rule": "consistency",
+   "rosetta_metric": "raw_arch_api",
+   "consistency": 0.833,
+   "languages": 42
+  },
+  "state_flux": {
+   "rule": "consistency",
+   "rosetta_metric": "state_mutation",
+   "consistency": 1.0,
+   "languages": 42
+  },
+  "def_test": {
+   "rule": "consistency",
+   "rosetta_metric": "test",
+   "consistency": 0.925,
+   "languages": 40
+  },
+  "arch_concurrency": {
+   "rule": "unplanted_idiom",
+   "rosetta_metric": "concurrency",
+   "factor": 0.25
+  },
+  "arch_ui_framework": {
+   "rule": "unmeasured",
+   "rosetta_metric": "ui_framework",
+   "factor": 0.5
+  },
+  "struct_closures": {
+   "rule": "unmeasured",
+   "rosetta_metric": "closures",
+   "factor": 0.5
+  },
+  "arch_globals": {
+   "rule": "consistency",
+   "rosetta_metric": "globals",
+   "consistency": 0.952,
+   "languages": 42
+  },
+  "struct_decorators": {
+   "rule": "unmeasured",
+   "rosetta_metric": "decorators",
+   "factor": 0.5
+  },
+  "struct_generics": {
+   "rule": "unmeasured",
+   "rosetta_metric": "generics",
+   "factor": 0.5
+  },
+  "struct_comprehensions": {
+   "rule": "unmeasured",
+   "rosetta_metric": "comprehensions",
+   "factor": 0.5
+  },
+  "arch_scientific": {
+   "rule": "unmeasured",
+   "rosetta_metric": "scientific",
+   "factor": 0.5
+  },
+  "state_heat_triggers": {
+   "rule": "unplanted_idiom",
+   "rosetta_metric": "reflection_metaprogramming",
+   "factor": 0.25
+  },
+  "arch_import": {
+   "rule": "consistency",
+   "rosetta_metric": "import",
+   "consistency": 0.952,
+   "languages": 42
+  },
+  "struct_macros": {
+   "rule": "unmeasured",
+   "rosetta_metric": "macros",
+   "factor": 0.5
+  },
+  "state_pointers": {
+   "rule": "unmeasured",
+   "rosetta_metric": "pointers",
+   "factor": 0.5
+  },
+  "state_memory_alloc": {
+   "rule": "unmeasured",
+   "rosetta_metric": "memory_alloc",
+   "factor": 0.5
+  },
+  "state_print_hits": {
+   "rule": "unplanted_idiom",
+   "rosetta_metric": "debug_prints",
+   "factor": 0.25
+  },
+  "state_cast_hits": {
+   "rule": "unmeasured",
+   "rosetta_metric": "explicit_casts",
+   "factor": 0.5
+  },
+  "state_bailout_hits": {
+   "rule": "unmeasured",
+   "rosetta_metric": "panics_and_aborts",
+   "factor": 0.5
+  },
+  "bitwise_ops": {
+   "rule": "unmeasured",
+   "rosetta_metric": "bitwise_ops",
+   "factor": 0.5
+  },
+  "def_freeze_hits": {
+   "rule": "unplanted_idiom",
+   "rosetta_metric": "immutability_locks",
+   "factor": 0.25
+  },
+  "def_cleanup": {
+   "rule": "consistency",
+   "rosetta_metric": "cleanup",
+   "consistency": 0.976,
+   "languages": 42
+  },
+  "def_encapsulation": {
+   "rule": "consistency",
+   "rosetta_metric": "def_encapsulation",
+   "consistency": 0.81,
+   "languages": 42
+  },
+  "def_listeners": {
+   "rule": "unmeasured",
+   "rosetta_metric": "listeners",
+   "factor": 0.5
+  }
+ }
+}
