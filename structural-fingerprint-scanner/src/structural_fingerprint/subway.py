@@ -21,6 +21,14 @@ subsystems are the reference's top-level directories.
 Two wiring scores compare each map with the reference's: ``wiring_similarity``, the
 cosine of the subsystem call-share matrices, and ``edges_kept``, the share of the
 reference's function-level calls still present between the corresponding functions.
+
+``wiring_similarity`` has a floor: most calls stay inside one subsystem, so any map whose
+calls stay home scores well against the reference's mostly diagonal matrix
+(``wiring_floor``: a map with only intra-subsystem calls, spread evenly). Two reads
+correct for that. ``cross_wiring`` is the same cosine over the calls *between*
+subsystems only. ``wiring_null`` and ``cross_wiring_null`` are the mean scores of the
+same repository with its functions shuffled across subsystems (subsystem sizes kept):
+what the placement contributes is the gap between a score and its null.
 """
 
 from __future__ import annotations
@@ -123,6 +131,9 @@ class SubwayMap:
     survival: np.ndarray | None = None  # (S,) share of the reference's functions with a twin here
     wiring_similarity: float = float("nan")
     edges_kept: float = float("nan")
+    cross_wiring: float = float("nan")  # wiring over calls between subsystems only
+    wiring_null: float = float("nan")  # mean wiring with this repository's functions shuffled across subsystems
+    cross_wiring_null: float = float("nan")
     graph: dict[str, float] = field(default_factory=dict)  # mapping-free shape of the function call graph
     labels: np.ndarray | None = None  # subsystem index per function of the repository's table (-1: not on the map)
     ref_twinned: np.ndarray | None = None  # per reference function: has a twin here (either direction)
@@ -139,6 +150,9 @@ class SubwayMap:
             "functions": int(self.sizes.sum()),
             "wiring_similarity": _f(self.wiring_similarity),
             "edges_kept": _f(self.edges_kept),
+            "cross_wiring": _f(self.cross_wiring),
+            "wiring_null": _f(self.wiring_null),
+            "cross_wiring_null": _f(self.cross_wiring_null),
             "assigned_by": self.sources,
             "graph": {k: _f(v) for k, v in self.graph.items()},
             "shape_distance": _f(self.shape_distance),
@@ -210,6 +224,46 @@ def _cosine(a: np.ndarray, b: np.ndarray) -> float:
     a, b = a.ravel(), b.ravel()
     d = np.linalg.norm(a) * np.linalg.norm(b)
     return float(a @ b / d) if d else float("nan")
+
+
+def _off_diagonal(m: np.ndarray) -> np.ndarray:
+    out = m.astype(float)
+    np.fill_diagonal(out, 0.0)
+    return out
+
+
+def wiring_floor(ref_calls: np.ndarray) -> float:
+    """Wiring of a map whose calls all stay inside their subsystem, spread evenly: the score
+    a repository gets against this reference for keeping calls local, whatever its design."""
+    return _cosine(np.eye(len(ref_calls)), ref_calls.astype(float))
+
+
+NULL_DRAWS = 200
+
+
+def null_wiring(labels: np.ndarray, edges: np.ndarray | None, ref_calls: np.ndarray,
+                draws: int = NULL_DRAWS, seed: int = 0) -> tuple[float, float]:
+    """Mean (wiring, cross_wiring) over ``draws`` shuffles of the placed functions' labels:
+    the same call graph and subsystem sizes, placement at random. Deterministic for a seed."""
+    s = len(ref_calls)
+    placed = np.flatnonzero(labels >= 0)
+    if edges is None or not len(edges) or not len(placed):
+        return float("nan"), float("nan")
+    rng = np.random.default_rng(seed)
+    ref_off = _off_diagonal(ref_calls)
+    full, cross = [], []
+    for _ in range(draws):
+        shuffled = labels.copy()
+        shuffled[placed] = rng.permutation(labels[placed])
+        m = _calls(shuffled, edges, s)
+        full.append(_cosine(m, ref_calls))
+        cross.append(_cosine(_off_diagonal(m), ref_off))
+
+    def mean(xs: list[float]) -> float:
+        xs = [x for x in xs if np.isfinite(x)]
+        return float(np.mean(xs)) if xs else float("nan")
+
+    return mean(full), mean(cross)
 
 
 GRAPH_FIELDS = ("mean_degree", "lcc_share", "clustering", "reciprocity", "hub_share", "leaf_share", "root_share",
@@ -395,7 +449,7 @@ def build_maps(tables: list[FunctionTable], reference: str, tax: Taxonomy | None
     ref_map = SubwayMap(reference, tax.subsystems, np.bincount(ref_labels[ref_labels >= 0], minlength=s),
                         _calls(ref_labels, ref.edges, s), {"path": int((ref_labels >= 0).sum())},
                         survival=np.where(np.bincount(ref_labels[ref_labels >= 0], minlength=s) > 0, 1.0, np.nan))
-    ref_map.wiring_similarity, ref_map.edges_kept = 1.0, 1.0
+    ref_map.wiring_similarity, ref_map.edges_kept, ref_map.cross_wiring = 1.0, 1.0, 1.0
     ref_map.graph = _code_graph_stats(ref)
     ref_map.labels = ref_labels
     maps = [ref_map]
@@ -408,6 +462,8 @@ def build_maps(tables: list[FunctionTable], reference: str, tax: Taxonomy | None
         m = SubwayMap(t.repo, tax.subsystems, np.bincount(labels[labels >= 0], minlength=s),
                       _calls(labels, t.edges, s), src, survival=_survival(ref_labels, ref, from_ref, to_ref, s, p.min_loc))
         m.wiring_similarity = _cosine(m.share, ref_map.share)
+        m.cross_wiring = _cosine(_off_diagonal(m.calls), _off_diagonal(ref_map.calls))
+        m.wiring_null, m.cross_wiring_null = null_wiring(labels, t.edges, ref_map.calls)
         m.edges_kept = _edges_kept(ref, t, from_ref)
         m.graph = _code_graph_stats(t)
         m.labels = labels
@@ -561,9 +617,17 @@ def render_section(maps: list[SubwayMap], pos: np.ndarray, tax: Taxonomy, refere
     def pct(x: float) -> str:
         return "" if x is None or not np.isfinite(x) else f"{100 * x:.0f}%"
 
+    def two(x: float) -> str:
+        return "" if x is None or not np.isfinite(x) else f"{x:.2f}"
+
+    ref_map = next(m for m in maps if m.repo == reference)
+    floor = wiring_floor(ref_map.calls)
+
     rows = "".join(
         f"<tr><th scope=row>{html.escape(m.repo)}</th><td class=num>{int(m.sizes.sum()):,}</td>"
-        f"<td class=num>{m.wiring_similarity:.2f}</td><td class=num>{pct(m.edges_kept)}</td>"
+        f"<td class=num>{m.wiring_similarity:.2f}</td><td class=num>{two(m.wiring_null)}</td>"
+        f"<td class=num>{two(m.cross_wiring)}</td><td class=num>{two(m.cross_wiring_null)}</td>"
+        f"<td class=num>{pct(m.edges_kept)}</td>"
         f"<td class=num>{pct(m.sizes[fallback] / m.sizes.sum() if m.sizes.sum() else float('nan'))}</td>"
         f"<td class=num>{pct(m.graph.get('lcc_share', float('nan')))}</td>"
         f"<td class=num>{m.graph.get('clustering', float('nan')):.3f}</td>"
@@ -596,13 +660,18 @@ def render_section(maps: list[SubwayMap], pos: np.ndarray, tax: Taxonomy, refere
             f"structural twin in {html.escape(reference)} first, then by name, then by path. "
             "<em>Wiring</em> is the cosine similarity of the subsystem call matrix to the reference's; "
             "<em>calls kept</em> is the share of the reference's calls still made between the corresponding functions. "
+            f"Wiring has a floor: a map whose calls all stay inside their subsystem scores {two(floor)} against "
+            f"{html.escape(reference)}. <em>Cross wiring</em> is the same cosine over calls between subsystems only; "
+            "each <em>null</em> is the mean score with the repository's functions shuffled across subsystems "
+            f"({NULL_DRAWS} draws, subsystem sizes kept), so the placement's contribution is the gap to it. "
             + ("Maps follow the declared lineage from the reference; the rest are ordered by wiring. "
                if declared else "Maps are ordered by wiring. ")
             + f"A large <em>{html.escape(tax.fallback)}</em> station is code the reference has no subsystem for "
             "(new features, scripting, tools): a finding to explain, not noise.</p>"
             f"{_legend(scale)}<div class=subways>{''.join(panels)}</div>{scatter}{check_html}"
             "<div class=tablewrap><table><thead><tr><th>Repository</th><th class=num>Functions on map</th>"
-            "<th class=num>Wiring</th><th class=num>Calls kept</th>"
+            "<th class=num>Wiring</th><th class=num>Wiring null</th><th class=num>Cross wiring</th>"
+            "<th class=num>Cross null</th><th class=num>Calls kept</th>"
             f"<th class=num>{html.escape(tax.fallback)}</th><th class=num>Largest component</th>"
             "<th class=num>Clustering</th><th class=num>Shape distance</th><th>Placed by</th></tr></thead>"
             f"<tbody>{rows}</tbody></table></div></section>")
@@ -610,16 +679,22 @@ def render_section(maps: list[SubwayMap], pos: np.ndarray, tax: Taxonomy, refere
 
 def write_outputs(out: Path, maps: list[SubwayMap], tax: Taxonomy, reference: str) -> None:
     out.mkdir(parents=True, exist_ok=True)
+    ref_map = next(m for m in maps if m.repo == reference)
     (out / "subway.json").write_text(json.dumps({"reference": reference, "taxonomy": tax.name,
                                                  "subsystems": tax.subsystems, "mapping_check": mapping_check(maps),
+                                                 "wiring_floor": _f(wiring_floor(ref_map.calls)),
                                                  "maps": [m.to_dict() for m in maps]}, indent=1) + "\n")
+
+    def num(x: float) -> str:
+        return "" if not np.isfinite(x) else f"{x:.4f}"
+
     with open(out / "subway.csv", "w") as f:
-        f.write("repo,functions,wiring_similarity,edges_kept,shape_distance,"
+        f.write("repo,functions,wiring_similarity,edges_kept,shape_distance,cross_wiring,wiring_null,cross_wiring_null,"
                 + ",".join(GRAPH_FIELDS) + "," + ",".join(f"survival_{s}" for s in tax.subsystems) + "\n")
         for m in maps:
             surv = ["" if m.survival is None or not np.isfinite(v) else f"{v:.4f}"
                     for v in (m.survival if m.survival is not None else [np.nan] * len(tax.subsystems))]
-            ek = "" if not np.isfinite(m.edges_kept) else f"{m.edges_kept:.4f}"
-            g = ["" if not np.isfinite(m.graph.get(k, float("nan"))) else f"{m.graph[k]:.4f}" for k in GRAPH_FIELDS]
-            f.write(f"{m.repo},{int(m.sizes.sum())},{m.wiring_similarity:.4f},{ek},{m.shape_distance:.4f},"
+            g = [num(m.graph.get(k, float("nan"))) for k in GRAPH_FIELDS]
+            f.write(f"{m.repo},{int(m.sizes.sum())},{m.wiring_similarity:.4f},{num(m.edges_kept)},{m.shape_distance:.4f},"
+                    f"{num(m.cross_wiring)},{num(m.wiring_null)},{num(m.cross_wiring_null)},"
                     + ",".join(g) + "," + ",".join(surv) + "\n")
