@@ -161,7 +161,8 @@ but the differences are one or two branches.
 GitGalaxy scores each file on surface areas (cognitive load, safety, tech debt, verification, API exposure,
 state flux, dead code, documentation) and counts 22 signal families. On these systems, the tech-debt and dead-code
 readings lean toward Claude Code, and every part of them traces to how GitGalaxy scores COBOL, not to the code.
-Per 100 COBOL lines (`signals.py`; the comment-rule lines from `graveyard_lines.py`):
+Per 100 COBOL lines except where noted (`signals.py`; the entry paragraphs and matched comment lines from
+`scoring_checks.py`):
 
 | pair, Claude Code / Codex | TODO-style | HACK-style | entry paragraphs flagged unreferenced | comments the dead-code rule matched | `DISPLAY` |
 |---|---:|---:|---:|---:|---:|
