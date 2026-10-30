@@ -1,0 +1,2616 @@
+{
+ "reference": "linuxdoom",
+ "lens": "portable",
+ "params": {
+  "method": "fgw",
+  "k": 15,
+  "alpha": 0.5,
+  "epsilon": 0.01,
+  "outer": 40,
+  "hop_cap": 4,
+  "smooth": 0.3,
+  "smooth_steps": 3,
+  "decision": "lift",
+  "use_graph": true,
+  "use_measures": true,
+  "geometry_only": false
+ },
+ "lens_weights": false,
+ "ports": [
+  {
+   "repo": "helion",
+   "functions": 8386,
+   "edges": 14368,
+   "key_sources": {
+    "fallback": 3170,
+    "name": 182,
+    "path": 5029,
+    "twin": 5
+   },
+   "scored": 5211,
+   "accuracy": 0.04855114181539052,
+   "accuracy_null": {
+    "mean": 0.05190136250239877,
+    "sd": 0.0027237290009605626,
+    "p95": 0.056611015160237955,
+    "p_value": 0.8990504747626187
+   },
+   "kappa": -0.0035336204003528337,
+   "balanced_accuracy": 0.07037875066768134,
+   "balanced_accuracy_null": {
+    "mean": 0.06664489568224202,
+    "sd": 0.014067955807787488,
+    "p95": 0.09168084088516279,
+    "p_value": 0.36926147704590817
+   },
+   "accuracy_top_quartile_confidence": 0.1273983115886416,
+   "accuracy_by_source": {
+    "twin": 0.2,
+    "name": 0.21428571428571427,
+    "path": 0.0425531914893617
+   },
+   "per_subsystem": {
+    "renderer": {
+     "key": 1176,
+     "placed": 228,
+     "recall": 0.03486394557823129,
+     "precision": 0.17982456140350878
+    },
+    "playsim": {
+     "key": 2405,
+     "placed": 236,
+     "recall": 0.05488565488565489,
+     "precision": 0.559322033898305
+    },
+    "game": {
+     "key": 29,
+     "placed": 275,
+     "recall": 0.06896551724137931,
+     "precision": 0.007272727272727273
+    },
+    "main": {
+     "key": 1,
+     "placed": 320,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "menu/misc": {
+     "key": 557,
+     "placed": 316,
+     "recall": 0.0466786355475763,
+     "precision": 0.08227848101265822
+    },
+    "hud": {
+     "key": 18,
+     "placed": 337,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "automap": {
+     "key": 21,
+     "placed": 375,
+     "recall": 0.047619047619047616,
+     "precision": 0.0026666666666666666
+    },
+    "intermission": {
+     "key": 2,
+     "placed": 399,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "finale": {
+     "key": 0,
+     "placed": 192,
+     "recall": null,
+     "precision": 0.0
+    },
+    "sound": {
+     "key": 200,
+     "placed": 265,
+     "recall": 0.07,
+     "precision": 0.052830188679245285
+    },
+    "video": {
+     "key": 39,
+     "placed": 512,
+     "recall": 0.1282051282051282,
+     "precision": 0.009765625
+    },
+    "wad": {
+     "key": 658,
+     "placed": 393,
+     "recall": 0.041033434650455926,
+     "precision": 0.06870229007633588
+    },
+    "zone": {
+     "key": 8,
+     "placed": 501,
+     "recall": 0.25,
+     "precision": 0.003992015968063872
+    },
+    "system": {
+     "key": 94,
+     "placed": 409,
+     "recall": 0.031914893617021274,
+     "precision": 0.007334963325183374
+    },
+    "net": {
+     "key": 0,
+     "placed": 144,
+     "recall": null,
+     "precision": 0.0
+    },
+    "other": {
+     "key": 3,
+     "placed": 309,
+     "recall": 0.0,
+     "precision": 0.0
+    }
+   },
+   "wiring_key": {
+    "full": 0.5450159559552072,
+    "off": 0.07366957815786476
+   },
+   "wiring_blind": {
+    "full": 0.28375992167586855,
+    "off": 0.5201878375379032
+   },
+   "wiring_null_shuffle": {
+    "full": {
+     "mean": 0.18744136594306135,
+     "sd": 0.01403408691778523,
+     "p95": 0.21237925710145267,
+     "p_value": 0.001996007984031936
+    },
+    "off": {
+     "mean": 0.32222050718013456,
+     "sd": 0.017816323944484083,
+     "p95": 0.3520879215658727,
+     "p_value": 0.001996007984031936
+    }
+   },
+   "wiring_null_rename": {
+    "full": {
+     "mean": 0.26987206186714663,
+     "sd": 0.10406599095599627,
+     "p95": 0.5077190558943805,
+     "p_value": 0.23353293413173654
+    },
+    "off": {
+     "mean": 0.209464996039102,
+     "sd": 0.06091822389522832,
+     "p95": 0.3160220308108184,
+     "p_value": 0.003992015968063872
+    }
+   },
+   "blind_sizes": {
+    "renderer": 359,
+    "playsim": 574,
+    "game": 500,
+    "main": 564,
+    "menu/misc": 554,
+    "hud": 429,
+    "automap": 464,
+    "intermission": 463,
+    "finale": 248,
+    "sound": 327,
+    "video": 867,
+    "wad": 768,
+    "zone": 1032,
+    "system": 534,
+    "net": 197,
+    "other": 506
+   },
+   "rewired": {
+    "accuracy": 0.04500095950873153,
+    "balanced_accuracy": 0.06494472133704789,
+    "full": 0.2561574836464208,
+    "off": 0.5520653845581414,
+    "draws": 2
+   }
+  },
+  {
+   "repo": "room4doom",
+   "functions": 4582,
+   "edges": 7032,
+   "key_sources": {
+    "fallback": 2202,
+    "name": 348,
+    "path": 2030,
+    "twin": 2
+   },
+   "scored": 2378,
+   "accuracy": 0.07653490328006729,
+   "accuracy_null": {
+    "mean": 0.05736101766190076,
+    "sd": 0.004292880984030438,
+    "p95": 0.06433978132884777,
+    "p_value": 0.0004997501249375312
+   },
+   "kappa": 0.02034064575879101,
+   "balanced_accuracy": 0.08969609855860447,
+   "balanced_accuracy_null": {
+    "mean": 0.06664780405907682,
+    "sd": 0.010775827761844419,
+    "p95": 0.08462091414390381,
+    "p_value": 0.017964071856287425
+   },
+   "accuracy_top_quartile_confidence": 0.16638655462184873,
+   "accuracy_by_source": {
+    "twin": 0.5,
+    "name": 0.15804597701149425,
+    "path": 0.06256157635467981
+   },
+   "per_subsystem": {
+    "renderer": {
+     "key": 775,
+     "placed": 116,
+     "recall": 0.04387096774193548,
+     "precision": 0.29310344827586204
+    },
+    "playsim": {
+     "key": 736,
+     "placed": 147,
+     "recall": 0.10461956521739131,
+     "precision": 0.5238095238095238
+    },
+    "game": {
+     "key": 132,
+     "placed": 133,
+     "recall": 0.09848484848484848,
+     "precision": 0.09774436090225563
+    },
+    "main": {
+     "key": 17,
+     "placed": 200,
+     "recall": 0.058823529411764705,
+     "precision": 0.005
+    },
+    "menu/misc": {
+     "key": 38,
+     "placed": 157,
+     "recall": 0.13157894736842105,
+     "precision": 0.03184713375796178
+    },
+    "hud": {
+     "key": 51,
+     "placed": 93,
+     "recall": 0.0196078431372549,
+     "precision": 0.010752688172043012
+    },
+    "automap": {
+     "key": 19,
+     "placed": 107,
+     "recall": 0.05263157894736842,
+     "precision": 0.009345794392523364
+    },
+    "intermission": {
+     "key": 33,
+     "placed": 154,
+     "recall": 0.21212121212121213,
+     "precision": 0.045454545454545456
+    },
+    "finale": {
+     "key": 4,
+     "placed": 127,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "sound": {
+     "key": 160,
+     "placed": 83,
+     "recall": 0.0625,
+     "precision": 0.12048192771084337
+    },
+    "video": {
+     "key": 124,
+     "placed": 241,
+     "recall": 0.11290322580645161,
+     "precision": 0.058091286307053944
+    },
+    "wad": {
+     "key": 238,
+     "placed": 132,
+     "recall": 0.06302521008403361,
+     "precision": 0.11363636363636363
+    },
+    "zone": {
+     "key": 0,
+     "placed": 149,
+     "recall": null,
+     "precision": 0.0
+    },
+    "system": {
+     "key": 34,
+     "placed": 167,
+     "recall": 0.029411764705882353,
+     "precision": 0.005988023952095809
+    },
+    "net": {
+     "key": 0,
+     "placed": 51,
+     "recall": null,
+     "precision": 0.0
+    },
+    "other": {
+     "key": 17,
+     "placed": 321,
+     "recall": 0.17647058823529413,
+     "precision": 0.009345794392523364
+    }
+   },
+   "wiring_key": {
+    "full": 0.2842092445312972,
+    "off": 0.07693818620580026
+   },
+   "wiring_blind": {
+    "full": 0.2872751110274515,
+    "off": 0.5310604354766271
+   },
+   "wiring_null_shuffle": {
+    "full": {
+     "mean": 0.1996524861840389,
+     "sd": 0.019676106601599904,
+     "p95": 0.23393081303860963,
+     "p_value": 0.001996007984031936
+    },
+    "off": {
+     "mean": 0.3043735162021135,
+     "sd": 0.026219356872873526,
+     "p95": 0.35112419834946856,
+     "p_value": 0.001996007984031936
+    }
+   },
+   "wiring_null_rename": {
+    "full": {
+     "mean": 0.23270461202659098,
+     "sd": 0.08425862133480198,
+     "p95": 0.44446345510589863,
+     "p_value": 0.23552894211576847
+    },
+    "off": {
+     "mean": 0.19766542600957918,
+     "sd": 0.07288668106029471,
+     "p95": 0.3284622714112341,
+     "p_value": 0.005988023952095809
+    }
+   },
+   "blind_sizes": {
+    "renderer": 225,
+    "playsim": 327,
+    "game": 304,
+    "main": 378,
+    "menu/misc": 339,
+    "hud": 190,
+    "automap": 208,
+    "intermission": 291,
+    "finale": 188,
+    "sound": 160,
+    "video": 422,
+    "wad": 319,
+    "zone": 344,
+    "system": 271,
+    "net": 89,
+    "other": 527
+   },
+   "rewired": {
+    "accuracy": 0.06770395290159797,
+    "balanced_accuracy": 0.07943353132089297,
+    "full": 0.22501476292250958,
+    "off": 0.4409754134532827,
+    "draws": 2
+   }
+  },
+  {
+   "repo": "chocolate-doom",
+   "functions": 5129,
+   "edges": 11929,
+   "key_sources": {
+    "fallback": 644,
+    "name": 1466,
+    "path": 2616,
+    "twin": 403
+   },
+   "scored": 4082,
+   "accuracy": 0.3314551690347869,
+   "accuracy_null": {
+    "mean": 0.08980181283684467,
+    "sd": 0.003988132404287693,
+    "p95": 0.09627633512983831,
+    "p_value": 0.0004997501249375312
+   },
+   "kappa": 0.2654953169607063,
+   "balanced_accuracy": 0.35386848778960794,
+   "balanced_accuracy_null": {
+    "mean": 0.06275733667141054,
+    "sd": 0.007288697373860528,
+    "p95": 0.0750185459365685,
+    "p_value": 0.001996007984031936
+   },
+   "accuracy_top_quartile_confidence": 0.7433888344760039,
+   "accuracy_by_source": {
+    "twin": 0.7270471464019851,
+    "name": 0.5791268758526603,
+    "path": 0.1926605504587156
+   },
+   "per_subsystem": {
+    "renderer": {
+     "key": 249,
+     "placed": 244,
+     "recall": 0.7550200803212851,
+     "precision": 0.7704918032786885
+    },
+    "playsim": {
+     "key": 1581,
+     "placed": 587,
+     "recall": 0.3586337760910816,
+     "precision": 0.9659284497444633
+    },
+    "game": {
+     "key": 224,
+     "placed": 234,
+     "recall": 0.36607142857142855,
+     "precision": 0.3504273504273504
+    },
+    "main": {
+     "key": 171,
+     "placed": 306,
+     "recall": 0.4327485380116959,
+     "precision": 0.24183006535947713
+    },
+    "menu/misc": {
+     "key": 287,
+     "placed": 301,
+     "recall": 0.3170731707317073,
+     "precision": 0.3023255813953488
+    },
+    "hud": {
+     "key": 121,
+     "placed": 195,
+     "recall": 0.371900826446281,
+     "precision": 0.23076923076923078
+    },
+    "automap": {
+     "key": 137,
+     "placed": 222,
+     "recall": 0.708029197080292,
+     "precision": 0.4369369369369369
+    },
+    "intermission": {
+     "key": 17,
+     "placed": 267,
+     "recall": 0.4117647058823529,
+     "precision": 0.026217228464419477
+    },
+    "finale": {
+     "key": 52,
+     "placed": 136,
+     "recall": 0.6153846153846154,
+     "precision": 0.23529411764705882
+    },
+    "sound": {
+     "key": 108,
+     "placed": 186,
+     "recall": 0.39814814814814814,
+     "precision": 0.23118279569892472
+    },
+    "video": {
+     "key": 350,
+     "placed": 228,
+     "recall": 0.13714285714285715,
+     "precision": 0.21052631578947367
+    },
+    "wad": {
+     "key": 70,
+     "placed": 326,
+     "recall": 0.21428571428571427,
+     "precision": 0.046012269938650305
+    },
+    "zone": {
+     "key": 22,
+     "placed": 271,
+     "recall": 0.18181818181818182,
+     "precision": 0.014760147601476014
+    },
+    "system": {
+     "key": 409,
+     "placed": 203,
+     "recall": 0.11735941320293398,
+     "precision": 0.23645320197044334
+    },
+    "net": {
+     "key": 264,
+     "placed": 120,
+     "recall": 0.026515151515151516,
+     "precision": 0.058333333333333334
+    },
+    "other": {
+     "key": 20,
+     "placed": 256,
+     "recall": 0.25,
+     "precision": 0.01953125
+    }
+   },
+   "wiring_key": {
+    "full": 0.9479451696764142,
+    "off": 0.8271568998844296
+   },
+   "wiring_blind": {
+    "full": 0.7900425366804404,
+    "off": 0.7684130683641988
+   },
+   "wiring_null_shuffle": {
+    "full": {
+     "mean": 0.4196766605041909,
+     "sd": 0.027544678837691846,
+     "p95": 0.46598929193872046,
+     "p_value": 0.001996007984031936
+    },
+    "off": {
+     "mean": 0.4237011658484256,
+     "sd": 0.029243432219147256,
+     "p95": 0.47377296294421434,
+     "p_value": 0.001996007984031936
+    }
+   },
+   "wiring_null_rename": {
+    "full": {
+     "mean": 0.3004845178089937,
+     "sd": 0.1262190813543567,
+     "p95": 0.7028174372654509,
+     "p_value": 0.001996007984031936
+    },
+    "off": {
+     "mean": 0.20451909832138468,
+     "sd": 0.07146658059864623,
+     "p95": 0.30700820427680475,
+     "p_value": 0.001996007984031936
+    }
+   },
+   "blind_sizes": {
+    "renderer": 299,
+    "playsim": 748,
+    "game": 270,
+    "main": 342,
+    "menu/misc": 366,
+    "hud": 275,
+    "automap": 272,
+    "intermission": 318,
+    "finale": 180,
+    "sound": 243,
+    "video": 311,
+    "wad": 398,
+    "zone": 343,
+    "system": 254,
+    "net": 151,
+    "other": 359
+   },
+   "rewired": {
+    "accuracy": 0.20418912297893188,
+    "balanced_accuracy": 0.21139399197425018,
+    "full": 0.34449604572550685,
+    "off": 0.6480104665030302,
+    "draws": 2
+   }
+  },
+  {
+   "repo": "mochadoom",
+   "functions": 3037,
+   "edges": 3790,
+   "key_sources": {
+    "fallback": 300,
+    "name": 871,
+    "path": 1827,
+    "twin": 39
+   },
+   "scored": 2698,
+   "accuracy": 0.12120088954781319,
+   "accuracy_null": {
+    "mean": 0.060244440326167534,
+    "sd": 0.004480443140445726,
+    "p95": 0.06782802075611565,
+    "p_value": 0.0004997501249375312
+   },
+   "kappa": 0.06486415386869564,
+   "balanced_accuracy": 0.16841062758158654,
+   "balanced_accuracy_null": {
+    "mean": 0.06114322531349973,
+    "sd": 0.007581516623259126,
+    "p95": 0.07434953467349717,
+    "p_value": 0.001996007984031936
+   },
+   "accuracy_top_quartile_confidence": 0.21333333333333335,
+   "accuracy_by_source": {
+    "twin": 0.20512820512820512,
+    "name": 0.21814006888633755,
+    "path": 0.0749863163656267
+   },
+   "per_subsystem": {
+    "renderer": {
+     "key": 541,
+     "placed": 142,
+     "recall": 0.09426987060998152,
+     "precision": 0.3591549295774648
+    },
+    "playsim": {
+     "key": 525,
+     "placed": 194,
+     "recall": 0.18857142857142858,
+     "precision": 0.5103092783505154
+    },
+    "game": {
+     "key": 114,
+     "placed": 150,
+     "recall": 0.21929824561403508,
+     "precision": 0.16666666666666666
+    },
+    "main": {
+     "key": 204,
+     "placed": 215,
+     "recall": 0.06862745098039216,
+     "precision": 0.06511627906976744
+    },
+    "menu/misc": {
+     "key": 205,
+     "placed": 120,
+     "recall": 0.09268292682926829,
+     "precision": 0.15833333333333333
+    },
+    "hud": {
+     "key": 85,
+     "placed": 107,
+     "recall": 0.10588235294117647,
+     "precision": 0.08411214953271028
+    },
+    "automap": {
+     "key": 83,
+     "placed": 188,
+     "recall": 0.1686746987951807,
+     "precision": 0.07446808510638298
+    },
+    "intermission": {
+     "key": 27,
+     "placed": 193,
+     "recall": 0.5555555555555556,
+     "precision": 0.07772020725388601
+    },
+    "finale": {
+     "key": 30,
+     "placed": 136,
+     "recall": 0.13333333333333333,
+     "precision": 0.029411764705882353
+    },
+    "sound": {
+     "key": 270,
+     "placed": 73,
+     "recall": 0.03333333333333333,
+     "precision": 0.1232876712328767
+    },
+    "video": {
+     "key": 264,
+     "placed": 270,
+     "recall": 0.09848484848484848,
+     "precision": 0.0962962962962963
+    },
+    "wad": {
+     "key": 147,
+     "placed": 141,
+     "recall": 0.17687074829931973,
+     "precision": 0.18439716312056736
+    },
+    "zone": {
+     "key": 1,
+     "placed": 225,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "system": {
+     "key": 151,
+     "placed": 133,
+     "recall": 0.019867549668874173,
+     "precision": 0.022556390977443608
+    },
+    "net": {
+     "key": 33,
+     "placed": 83,
+     "recall": 0.18181818181818182,
+     "precision": 0.07228915662650602
+    },
+    "other": {
+     "key": 18,
+     "placed": 328,
+     "recall": 0.3888888888888889,
+     "precision": 0.021341463414634148
+    }
+   },
+   "wiring_key": {
+    "full": 0.776629288271231,
+    "off": 0.37851960926773603
+   },
+   "wiring_blind": {
+    "full": 0.41625085888978564,
+    "off": 0.4700645789382567
+   },
+   "wiring_null_shuffle": {
+    "full": {
+     "mean": 0.20918521306416285,
+     "sd": 0.023028573924803064,
+     "p95": 0.2486603324757483,
+     "p_value": 0.001996007984031936
+    },
+    "off": {
+     "mean": 0.27108059736138557,
+     "sd": 0.02220272729438151,
+     "p95": 0.30732043171409107,
+     "p_value": 0.001996007984031936
+    }
+   },
+   "wiring_null_rename": {
+    "full": {
+     "mean": 0.3028037929161775,
+     "sd": 0.12106893870131231,
+     "p95": 0.5892894423162676,
+     "p_value": 0.1596806387225549
+    },
+    "off": {
+     "mean": 0.2252080357909023,
+     "sd": 0.06755680734259799,
+     "p95": 0.3508758420261088,
+     "p_value": 0.00998003992015968
+    }
+   },
+   "blind_sizes": {
+    "renderer": 148,
+    "playsim": 253,
+    "game": 158,
+    "main": 234,
+    "menu/misc": 134,
+    "hud": 120,
+    "automap": 207,
+    "intermission": 211,
+    "finale": 143,
+    "sound": 105,
+    "video": 293,
+    "wad": 173,
+    "zone": 259,
+    "system": 147,
+    "net": 90,
+    "other": 362
+   },
+   "rewired": {
+    "accuracy": 0.09525574499629355,
+    "balanced_accuracy": 0.10881861484237468,
+    "full": 0.25768006635486806,
+    "off": 0.42500775511997657,
+    "draws": 2
+   }
+  },
+  {
+   "repo": "kocoa-doom",
+   "functions": 2902,
+   "edges": 2789,
+   "key_sources": {
+    "fallback": 264,
+    "name": 1020,
+    "path": 1618
+   },
+   "scored": 2638,
+   "accuracy": 0.09287338893100834,
+   "accuracy_null": {
+    "mean": 0.05574601971190296,
+    "sd": 0.004380369929146093,
+    "p95": 0.06292645943896892,
+    "p_value": 0.0004997501249375312
+   },
+   "kappa": 0.039319261548442314,
+   "balanced_accuracy": 0.1356191292231787,
+   "balanced_accuracy_null": {
+    "mean": 0.05953107943373563,
+    "sd": 0.008993258532572945,
+    "p95": 0.07462373469740226,
+    "p_value": 0.001996007984031936
+   },
+   "accuracy_top_quartile_confidence": 0.16515151515151516,
+   "accuracy_by_source": {
+    "name": 0.11960784313725491,
+    "path": 0.07601977750309023
+   },
+   "per_subsystem": {
+    "renderer": {
+     "key": 420,
+     "placed": 148,
+     "recall": 0.08095238095238096,
+     "precision": 0.22972972972972974
+    },
+    "playsim": {
+     "key": 491,
+     "placed": 168,
+     "recall": 0.12830957230142567,
+     "precision": 0.375
+    },
+    "game": {
+     "key": 104,
+     "placed": 161,
+     "recall": 0.20192307692307693,
+     "precision": 0.13043478260869565
+    },
+    "main": {
+     "key": 209,
+     "placed": 167,
+     "recall": 0.05741626794258373,
+     "precision": 0.0718562874251497
+    },
+    "menu/misc": {
+     "key": 177,
+     "placed": 86,
+     "recall": 0.04519774011299435,
+     "precision": 0.09302325581395349
+    },
+    "hud": {
+     "key": 231,
+     "placed": 59,
+     "recall": 0.017316017316017316,
+     "precision": 0.06779661016949153
+    },
+    "automap": {
+     "key": 79,
+     "placed": 102,
+     "recall": 0.189873417721519,
+     "precision": 0.14705882352941177
+    },
+    "intermission": {
+     "key": 27,
+     "placed": 187,
+     "recall": 0.37037037037037035,
+     "precision": 0.053475935828877004
+    },
+    "finale": {
+     "key": 24,
+     "placed": 167,
+     "recall": 0.25,
+     "precision": 0.03592814371257485
+    },
+    "sound": {
+     "key": 243,
+     "placed": 82,
+     "recall": 0.0411522633744856,
+     "precision": 0.12195121951219512
+    },
+    "video": {
+     "key": 299,
+     "placed": 267,
+     "recall": 0.11371237458193979,
+     "precision": 0.12734082397003746
+    },
+    "wad": {
+     "key": 140,
+     "placed": 180,
+     "recall": 0.12857142857142856,
+     "precision": 0.1
+    },
+    "zone": {
+     "key": 3,
+     "placed": 259,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "system": {
+     "key": 145,
+     "placed": 84,
+     "recall": 0.013793103448275862,
+     "precision": 0.023809523809523808
+    },
+    "net": {
+     "key": 31,
+     "placed": 61,
+     "recall": 0.12903225806451613,
+     "precision": 0.06557377049180328
+    },
+    "other": {
+     "key": 15,
+     "placed": 460,
+     "recall": 0.26666666666666666,
+     "precision": 0.008695652173913044
+    }
+   },
+   "wiring_key": {
+    "full": 0.7652385088043178,
+    "off": 0.27010978139920544
+   },
+   "wiring_blind": {
+    "full": 0.2587674753272029,
+    "off": 0.4019082397642172
+   },
+   "wiring_null_shuffle": {
+    "full": {
+     "mean": 0.15570635380160167,
+     "sd": 0.019099939672876577,
+     "p95": 0.1892825595103496,
+     "p_value": 0.003992015968063872
+    },
+    "off": {
+     "mean": 0.20196033926193963,
+     "sd": 0.020251187153340566,
+     "p95": 0.23782248225735028,
+     "p_value": 0.001996007984031936
+    }
+   },
+   "wiring_null_rename": {
+    "full": {
+     "mean": 0.26853655448004304,
+     "sd": 0.12762118860916608,
+     "p95": 0.606295795879096,
+     "p_value": 0.42714570858283435
+    },
+    "off": {
+     "mean": 0.20618482119093706,
+     "sd": 0.07042607328084478,
+     "p95": 0.3518028807067952,
+     "p_value": 0.00998003992015968
+    }
+   },
+   "blind_sizes": {
+    "renderer": 154,
+    "playsim": 205,
+    "game": 169,
+    "main": 176,
+    "menu/misc": 92,
+    "hud": 69,
+    "automap": 111,
+    "intermission": 207,
+    "finale": 171,
+    "sound": 100,
+    "video": 297,
+    "wad": 201,
+    "zone": 280,
+    "system": 89,
+    "net": 68,
+    "other": 513
+   },
+   "rewired": {
+    "accuracy": 0.08756633813495072,
+    "balanced_accuracy": 0.10889608010324742,
+    "full": 0.20628645850125427,
+    "off": 0.3975110437791479,
+    "draws": 2
+   }
+  },
+  {
+   "repo": "doom-scheme",
+   "functions": 798,
+   "edges": 1138,
+   "key_sources": {
+    "fallback": 133,
+    "name": 485,
+    "path": 180
+   },
+   "scored": 665,
+   "accuracy": 0.2857142857142857,
+   "accuracy_null": {
+    "mean": 0.08008120300751881,
+    "sd": 0.009236741456268285,
+    "p95": 0.0962406015037594,
+    "p_value": 0.0004997501249375312
+   },
+   "kappa": 0.22353395036502077,
+   "balanced_accuracy": 0.3316802818271664,
+   "balanced_accuracy_null": {
+    "mean": 0.06198991267564636,
+    "sd": 0.012967149351187453,
+    "p95": 0.08475917494598988,
+    "p_value": 0.001996007984031936
+   },
+   "accuracy_top_quartile_confidence": 0.5149700598802395,
+   "accuracy_by_source": {
+    "name": 0.35876288659793815,
+    "path": 0.08888888888888889
+   },
+   "per_subsystem": {
+    "renderer": {
+     "key": 88,
+     "placed": 38,
+     "recall": 0.3068181818181818,
+     "precision": 0.7105263157894737
+    },
+    "playsim": {
+     "key": 252,
+     "placed": 81,
+     "recall": 0.2976190476190476,
+     "precision": 0.9259259259259259
+    },
+    "game": {
+     "key": 37,
+     "placed": 41,
+     "recall": 0.43243243243243246,
+     "precision": 0.3902439024390244
+    },
+    "main": {
+     "key": 1,
+     "placed": 42,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "menu/misc": {
+     "key": 21,
+     "placed": 29,
+     "recall": 0.09523809523809523,
+     "precision": 0.06896551724137931
+    },
+    "hud": {
+     "key": 41,
+     "placed": 34,
+     "recall": 0.2926829268292683,
+     "precision": 0.35294117647058826
+    },
+    "automap": {
+     "key": 37,
+     "placed": 40,
+     "recall": 0.4594594594594595,
+     "precision": 0.425
+    },
+    "intermission": {
+     "key": 3,
+     "placed": 39,
+     "recall": 0.3333333333333333,
+     "precision": 0.02564102564102564
+    },
+    "finale": {
+     "key": 20,
+     "placed": 36,
+     "recall": 0.5,
+     "precision": 0.2777777777777778
+    },
+    "sound": {
+     "key": 37,
+     "placed": 31,
+     "recall": 0.10810810810810811,
+     "precision": 0.12903225806451613
+    },
+    "video": {
+     "key": 9,
+     "placed": 59,
+     "recall": 0.7777777777777778,
+     "precision": 0.11864406779661017
+    },
+    "wad": {
+     "key": 16,
+     "placed": 44,
+     "recall": 0.3125,
+     "precision": 0.11363636363636363
+    },
+    "zone": {
+     "key": 1,
+     "placed": 50,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "system": {
+     "key": 70,
+     "placed": 33,
+     "recall": 0.05714285714285714,
+     "precision": 0.12121212121212122
+    },
+    "net": {
+     "key": 19,
+     "placed": 19,
+     "recall": 0.21052631578947367,
+     "precision": 0.21052631578947367
+    },
+    "other": {
+     "key": 13,
+     "placed": 49,
+     "recall": 0.46153846153846156,
+     "precision": 0.12244897959183673
+    }
+   },
+   "wiring_key": {
+    "full": 0.951631723769362,
+    "off": 0.7511756641487073
+   },
+   "wiring_blind": {
+    "full": 0.5441894301116944,
+    "off": 0.6109535485278229
+   },
+   "wiring_null_shuffle": {
+    "full": {
+     "mean": 0.2796832171550459,
+     "sd": 0.05059303587586208,
+     "p95": 0.36556534486534864,
+     "p_value": 0.001996007984031936
+    },
+    "off": {
+     "mean": 0.32889936989262003,
+     "sd": 0.04556649341334896,
+     "p95": 0.41604329129560713,
+     "p_value": 0.001996007984031936
+    }
+   },
+   "wiring_null_rename": {
+    "full": {
+     "mean": 0.2620870111815377,
+     "sd": 0.11198441568688143,
+     "p95": 0.5294765883223103,
+     "p_value": 0.03992015968063872
+    },
+    "off": {
+     "mean": 0.20827122923620314,
+     "sd": 0.06412984499159724,
+     "p95": 0.3268909355952897,
+     "p_value": 0.001996007984031936
+    }
+   },
+   "blind_sizes": {
+    "renderer": 40,
+    "playsim": 91,
+    "game": 43,
+    "main": 53,
+    "menu/misc": 47,
+    "hud": 38,
+    "automap": 46,
+    "intermission": 49,
+    "finale": 46,
+    "sound": 38,
+    "video": 64,
+    "wad": 62,
+    "zone": 52,
+    "system": 39,
+    "net": 19,
+    "other": 71
+   },
+   "rewired": {
+    "accuracy": 0.13533834586466165,
+    "balanced_accuracy": 0.1717760658186006,
+    "full": 0.2398099278341928,
+    "off": 0.45374291320828386,
+    "draws": 2
+   }
+  },
+  {
+   "repo": "gore",
+   "functions": 996,
+   "edges": 1942,
+   "key_sources": {
+    "fallback": 273,
+    "name": 715,
+    "path": 8
+   },
+   "scored": 723,
+   "accuracy": 0.5352697095435685,
+   "accuracy_null": {
+    "mean": 0.11028077455048411,
+    "sd": 0.01063143553216626,
+    "p95": 0.12863070539419086,
+    "p_value": 0.0004997501249375312
+   },
+   "kappa": 0.47766635005371016,
+   "balanced_accuracy": 0.5796395427349706,
+   "balanced_accuracy_null": {
+    "mean": 0.065883972493462,
+    "sd": 0.014792338886411143,
+    "p95": 0.09030066836735397,
+    "p_value": 0.001996007984031936
+   },
+   "accuracy_top_quartile_confidence": 0.9005524861878453,
+   "accuracy_by_source": {
+    "name": 0.5412587412587413,
+    "path": 0.0
+   },
+   "per_subsystem": {
+    "renderer": {
+     "key": 73,
+     "placed": 55,
+     "recall": 0.6164383561643836,
+     "precision": 0.8181818181818182
+    },
+    "playsim": {
+     "key": 244,
+     "placed": 157,
+     "recall": 0.639344262295082,
+     "precision": 0.9936305732484076
+    },
+    "game": {
+     "key": 29,
+     "placed": 29,
+     "recall": 0.5172413793103449,
+     "precision": 0.5172413793103449
+    },
+    "main": {
+     "key": 12,
+     "placed": 49,
+     "recall": 0.75,
+     "precision": 0.1836734693877551
+    },
+    "menu/misc": {
+     "key": 63,
+     "placed": 39,
+     "recall": 0.5238095238095238,
+     "precision": 0.8461538461538461
+    },
+    "hud": {
+     "key": 134,
+     "placed": 45,
+     "recall": 0.2462686567164179,
+     "precision": 0.7333333333333333
+    },
+    "automap": {
+     "key": 33,
+     "placed": 42,
+     "recall": 0.8787878787878788,
+     "precision": 0.6904761904761905
+    },
+    "intermission": {
+     "key": 34,
+     "placed": 36,
+     "recall": 0.7352941176470589,
+     "precision": 0.6944444444444444
+    },
+    "finale": {
+     "key": 22,
+     "placed": 27,
+     "recall": 0.5,
+     "precision": 0.4074074074074074
+    },
+    "sound": {
+     "key": 15,
+     "placed": 35,
+     "recall": 0.9333333333333333,
+     "precision": 0.4
+    },
+    "video": {
+     "key": 7,
+     "placed": 43,
+     "recall": 0.7142857142857143,
+     "precision": 0.11627906976744186
+    },
+    "wad": {
+     "key": 7,
+     "placed": 60,
+     "recall": 0.42857142857142855,
+     "precision": 0.05
+    },
+    "zone": {
+     "key": 1,
+     "placed": 38,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "system": {
+     "key": 38,
+     "placed": 15,
+     "recall": 0.13157894736842105,
+     "precision": 0.3333333333333333
+    },
+    "net": {
+     "key": 3,
+     "placed": 12,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "other": {
+     "key": 8,
+     "placed": 41,
+     "recall": 0.5,
+     "precision": 0.0975609756097561
+    }
+   },
+   "wiring_key": {
+    "full": 0.8564070830345379,
+    "off": 0.6494830826067343
+   },
+   "wiring_blind": {
+    "full": 0.8906803622630756,
+    "off": 0.7902264657331951
+   },
+   "wiring_null_shuffle": {
+    "full": {
+     "mean": 0.4312096602518966,
+     "sd": 0.04912333877885684,
+     "p95": 0.5155610951171242,
+     "p_value": 0.001996007984031936
+    },
+    "off": {
+     "mean": 0.3480392785310061,
+     "sd": 0.043951346498207984,
+     "p95": 0.42209774415622375,
+     "p_value": 0.001996007984031936
+    }
+   },
+   "wiring_null_rename": {
+    "full": {
+     "mean": 0.26749686575000425,
+     "sd": 0.14162856813747216,
+     "p95": 0.7521837735543533,
+     "p_value": 0.001996007984031936
+    },
+    "off": {
+     "mean": 0.16577200008667972,
+     "sd": 0.06272629916816971,
+     "p95": 0.27849305886301545,
+     "p_value": 0.001996007984031936
+    }
+   },
+   "blind_sizes": {
+    "renderer": 64,
+    "playsim": 167,
+    "game": 39,
+    "main": 78,
+    "menu/misc": 53,
+    "hud": 61,
+    "automap": 50,
+    "intermission": 77,
+    "finale": 41,
+    "sound": 42,
+    "video": 60,
+    "wad": 82,
+    "zone": 52,
+    "system": 32,
+    "net": 24,
+    "other": 74
+   },
+   "rewired": {
+    "accuracy": 0.22406639004149378,
+    "balanced_accuracy": 0.2427155671133856,
+    "full": 0.39507618866896344,
+    "off": 0.6098594481157669,
+    "draws": 2
+   }
+  },
+  {
+   "repo": "dartdoom",
+   "functions": 723,
+   "edges": 1329,
+   "key_sources": {
+    "fallback": 14,
+    "name": 439,
+    "path": 268,
+    "twin": 2
+   },
+   "scored": 707,
+   "accuracy": 0.2857142857142857,
+   "accuracy_null": {
+    "mean": 0.09962800565770863,
+    "sd": 0.01000471341297309,
+    "p95": 0.1173974540311174,
+    "p_value": 0.0004997501249375312
+   },
+   "kappa": 0.2066771081574015,
+   "balanced_accuracy": 0.29480735816862147,
+   "balanced_accuracy_null": {
+    "mean": 0.06767166404929859,
+    "sd": 0.014362262501795743,
+    "p95": 0.09012992009124783,
+    "p_value": 0.001996007984031936
+   },
+   "accuracy_top_quartile_confidence": 0.6384180790960452,
+   "accuracy_by_source": {
+    "twin": 0.0,
+    "name": 0.4054669703872437,
+    "path": 0.08955223880597014
+   },
+   "per_subsystem": {
+    "renderer": {
+     "key": 100,
+     "placed": 45,
+     "recall": 0.19,
+     "precision": 0.4222222222222222
+    },
+    "playsim": {
+     "key": 290,
+     "placed": 109,
+     "recall": 0.3689655172413793,
+     "precision": 0.981651376146789
+    },
+    "game": {
+     "key": 30,
+     "placed": 38,
+     "recall": 0.3333333333333333,
+     "precision": 0.2631578947368421
+    },
+    "main": {
+     "key": 18,
+     "placed": 56,
+     "recall": 0.3333333333333333,
+     "precision": 0.10714285714285714
+    },
+    "menu/misc": {
+     "key": 30,
+     "placed": 48,
+     "recall": 0.4,
+     "precision": 0.25
+    },
+    "hud": {
+     "key": 21,
+     "placed": 49,
+     "recall": 0.2857142857142857,
+     "precision": 0.12244897959183673
+    },
+    "automap": {
+     "key": 30,
+     "placed": 42,
+     "recall": 0.43333333333333335,
+     "precision": 0.30952380952380953
+    },
+    "intermission": {
+     "key": 21,
+     "placed": 35,
+     "recall": 0.3333333333333333,
+     "precision": 0.2
+    },
+    "finale": {
+     "key": 15,
+     "placed": 28,
+     "recall": 0.4,
+     "precision": 0.21428571428571427
+    },
+    "sound": {
+     "key": 107,
+     "placed": 45,
+     "recall": 0.08411214953271028,
+     "precision": 0.2
+    },
+    "video": {
+     "key": 6,
+     "placed": 41,
+     "recall": 0.3333333333333333,
+     "precision": 0.04878048780487805
+    },
+    "wad": {
+     "key": 10,
+     "placed": 38,
+     "recall": 0.3,
+     "precision": 0.07894736842105263
+    },
+    "zone": {
+     "key": 0,
+     "placed": 35,
+     "recall": null,
+     "precision": 0.0
+    },
+    "system": {
+     "key": 2,
+     "placed": 34,
+     "recall": 0.5,
+     "precision": 0.029411764705882353
+    },
+    "net": {
+     "key": 0,
+     "placed": 19,
+     "recall": null,
+     "precision": 0.0
+    },
+    "other": {
+     "key": 27,
+     "placed": 45,
+     "recall": 0.037037037037037035,
+     "precision": 0.022222222222222223
+    }
+   },
+   "wiring_key": {
+    "full": 0.9324465124754104,
+    "off": 0.5863094926582579
+   },
+   "wiring_blind": {
+    "full": 0.7428109227791767,
+    "off": 0.8069120787464338
+   },
+   "wiring_null_shuffle": {
+    "full": {
+     "mean": 0.4030773697649133,
+     "sd": 0.05431741375850062,
+     "p95": 0.49486628133876487,
+     "p_value": 0.001996007984031936
+    },
+    "off": {
+     "mean": 0.3911332216079544,
+     "sd": 0.047332792159510584,
+     "p95": 0.4702975173796104,
+     "p_value": 0.001996007984031936
+    }
+   },
+   "wiring_null_rename": {
+    "full": {
+     "mean": 0.2530144796103608,
+     "sd": 0.12196858997806051,
+     "p95": 0.6262033599058319,
+     "p_value": 0.001996007984031936
+    },
+    "off": {
+     "mean": 0.1674511201886062,
+     "sd": 0.06628000680757358,
+     "p95": 0.29986421374240224,
+     "p_value": 0.001996007984031936
+    }
+   },
+   "blind_sizes": {
+    "renderer": 45,
+    "playsim": 110,
+    "game": 39,
+    "main": 57,
+    "menu/misc": 48,
+    "hud": 49,
+    "automap": 42,
+    "intermission": 35,
+    "finale": 30,
+    "sound": 45,
+    "video": 45,
+    "wad": 40,
+    "zone": 36,
+    "system": 35,
+    "net": 20,
+    "other": 47
+   },
+   "rewired": {
+    "accuracy": 0.13295615275813294,
+    "balanced_accuracy": 0.14782213793654336,
+    "full": 0.3486214975235466,
+    "off": 0.5993752810466159,
+    "draws": 2
+   }
+  },
+  {
+   "repo": "managed-doom",
+   "functions": 1285,
+   "edges": 2814,
+   "key_sources": {
+    "fallback": 226,
+    "name": 392,
+    "path": 666,
+    "twin": 1
+   },
+   "scored": 1058,
+   "accuracy": 0.16540642722117202,
+   "accuracy_null": {
+    "mean": 0.09329111531190927,
+    "sd": 0.007375259733568196,
+    "p95": 0.10586011342155009,
+    "p_value": 0.0004997501249375312
+   },
+   "kappa": 0.07953524348012816,
+   "balanced_accuracy": 0.13160498450065625,
+   "balanced_accuracy_null": {
+    "mean": 0.07075323459323266,
+    "sd": 0.012316531677151759,
+    "p95": 0.09180036891461713,
+    "p_value": 0.001996007984031936
+   },
+   "accuracy_top_quartile_confidence": 0.4075471698113208,
+   "accuracy_by_source": {
+    "twin": 0.0,
+    "name": 0.18112244897959184,
+    "path": 0.15615615615615616
+   },
+   "per_subsystem": {
+    "renderer": {
+     "key": 121,
+     "placed": 60,
+     "recall": 0.21487603305785125,
+     "precision": 0.43333333333333335
+    },
+    "playsim": {
+     "key": 523,
+     "placed": 132,
+     "recall": 0.19120458891013384,
+     "precision": 0.7575757575757576
+    },
+    "game": {
+     "key": 72,
+     "placed": 47,
+     "recall": 0.1388888888888889,
+     "precision": 0.2127659574468085
+    },
+    "main": {
+     "key": 2,
+     "placed": 52,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "menu/misc": {
+     "key": 70,
+     "placed": 32,
+     "recall": 0.04285714285714286,
+     "precision": 0.09375
+    },
+    "hud": {
+     "key": 1,
+     "placed": 34,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "automap": {
+     "key": 3,
+     "placed": 77,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "intermission": {
+     "key": 48,
+     "placed": 73,
+     "recall": 0.3541666666666667,
+     "precision": 0.2328767123287671
+    },
+    "finale": {
+     "key": 3,
+     "placed": 44,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "sound": {
+     "key": 14,
+     "placed": 66,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "video": {
+     "key": 71,
+     "placed": 109,
+     "recall": 0.056338028169014086,
+     "precision": 0.03669724770642202
+    },
+    "wad": {
+     "key": 39,
+     "placed": 91,
+     "recall": 0.05128205128205128,
+     "precision": 0.02197802197802198
+    },
+    "zone": {
+     "key": 0,
+     "placed": 92,
+     "recall": null,
+     "precision": 0.0
+    },
+    "system": {
+     "key": 89,
+     "placed": 63,
+     "recall": 0.1348314606741573,
+     "precision": 0.19047619047619047
+    },
+    "net": {
+     "key": 0,
+     "placed": 24,
+     "recall": null,
+     "precision": 0.0
+    },
+    "other": {
+     "key": 2,
+     "placed": 62,
+     "recall": 0.5,
+     "precision": 0.016129032258064516
+    }
+   },
+   "wiring_key": {
+    "full": 0.7245991061126685,
+    "off": 0.09515815957015743
+   },
+   "wiring_blind": {
+    "full": 0.4056800293367436,
+    "off": 0.45269550870477043
+   },
+   "wiring_null_shuffle": {
+    "full": {
+     "mean": 0.27335890386955375,
+     "sd": 0.04073326710027802,
+     "p95": 0.34220413310137876,
+     "p_value": 0.003992015968063872
+    },
+    "off": {
+     "mean": 0.35281018117598445,
+     "sd": 0.045260908834533334,
+     "p95": 0.4277021861734095,
+     "p_value": 0.021956087824351298
+    }
+   },
+   "wiring_null_rename": {
+    "full": {
+     "mean": 0.18856556616916448,
+     "sd": 0.08155654897198826,
+     "p95": 0.37867509632402596,
+     "p_value": 0.013972055888223553
+    },
+    "off": {
+     "mean": 0.13306474536649746,
+     "sd": 0.0689763378002323,
+     "p95": 0.23951458209280335,
+     "p_value": 0.011976047904191617
+    }
+   },
+   "blind_sizes": {
+    "renderer": 63,
+    "playsim": 139,
+    "game": 50,
+    "main": 76,
+    "menu/misc": 90,
+    "hud": 42,
+    "automap": 100,
+    "intermission": 86,
+    "finale": 49,
+    "sound": 70,
+    "video": 124,
+    "wad": 123,
+    "zone": 106,
+    "system": 74,
+    "net": 27,
+    "other": 66
+   },
+   "rewired": {
+    "accuracy": 0.09971644612476371,
+    "balanced_accuracy": 0.0801071188776206,
+    "full": 0.23716081114311305,
+    "off": 0.47908700788025793,
+    "draws": 2
+   }
+  },
+  {
+   "repo": "doomf77",
+   "functions": 146,
+   "edges": 327,
+   "key_sources": {
+    "name": 11,
+    "path": 135
+   },
+   "scored": 146,
+   "accuracy": 0.136986301369863,
+   "accuracy_null": {
+    "mean": 0.06693150684931506,
+    "sd": 0.017913304280815525,
+    "p95": 0.0958904109589041,
+    "p_value": 0.0009995002498750624
+   },
+   "kappa": 0.07508001291951727,
+   "balanced_accuracy": 0.1985660173160173,
+   "balanced_accuracy_null": {
+    "mean": 0.06596194083694085,
+    "sd": 0.026802234007721342,
+    "p95": 0.11137152777777778,
+    "p_value": 0.001996007984031936
+   },
+   "accuracy_top_quartile_confidence": 0.2702702702702703,
+   "accuracy_by_source": {
+    "name": 0.09090909090909091,
+    "path": 0.14074074074074075
+   },
+   "per_subsystem": {
+    "renderer": {
+     "key": 24,
+     "placed": 8,
+     "recall": 0.08333333333333333,
+     "precision": 0.25
+    },
+    "playsim": {
+     "key": 70,
+     "placed": 10,
+     "recall": 0.11428571428571428,
+     "precision": 0.8
+    },
+    "game": {
+     "key": 0,
+     "placed": 8,
+     "recall": null,
+     "precision": 0.0
+    },
+    "main": {
+     "key": 6,
+     "placed": 13,
+     "recall": 0.6666666666666666,
+     "precision": 0.3076923076923077
+    },
+    "menu/misc": {
+     "key": 10,
+     "placed": 15,
+     "recall": 0.3,
+     "precision": 0.2
+    },
+    "hud": {
+     "key": 9,
+     "placed": 9,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "automap": {
+     "key": 0,
+     "placed": 11,
+     "recall": null,
+     "precision": 0.0
+    },
+    "intermission": {
+     "key": 1,
+     "placed": 10,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "finale": {
+     "key": 0,
+     "placed": 5,
+     "recall": null,
+     "precision": 0.0
+    },
+    "sound": {
+     "key": 6,
+     "placed": 5,
+     "recall": 0.3333333333333333,
+     "precision": 0.4
+    },
+    "video": {
+     "key": 0,
+     "placed": 13,
+     "recall": null,
+     "precision": 0.0
+    },
+    "wad": {
+     "key": 11,
+     "placed": 11,
+     "recall": 0.09090909090909091,
+     "precision": 0.09090909090909091
+    },
+    "zone": {
+     "key": 0,
+     "placed": 6,
+     "recall": null,
+     "precision": 0.0
+    },
+    "system": {
+     "key": 9,
+     "placed": 6,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "net": {
+     "key": 0,
+     "placed": 3,
+     "recall": null,
+     "precision": 0.0
+    },
+    "other": {
+     "key": 0,
+     "placed": 13,
+     "recall": null,
+     "precision": 0.0
+    }
+   },
+   "wiring_key": {
+    "full": 0.9139324951765372,
+    "off": 0.41133657125344497
+   },
+   "wiring_blind": {
+    "full": 0.2137812159522739,
+    "off": 0.3247985566016609
+   },
+   "wiring_null_shuffle": {
+    "full": {
+     "mean": 0.15797613864829668,
+     "sd": 0.041783093619219155,
+     "p95": 0.22906333080934094,
+     "p_value": 0.08183632734530938
+    },
+    "off": {
+     "mean": 0.2511392982917295,
+     "sd": 0.05317620069251854,
+     "p95": 0.3470629460689807,
+     "p_value": 0.09780439121756487
+    }
+   },
+   "wiring_null_rename": {
+    "full": {
+     "mean": 0.2022980461905241,
+     "sd": 0.0891495051681997,
+     "p95": 0.39107131482654284,
+     "p_value": 0.3313373253493014
+    },
+    "off": {
+     "mean": 0.18640930240644707,
+     "sd": 0.06829263905048362,
+     "p95": 0.32100520853031433,
+     "p_value": 0.04790419161676647
+    }
+   },
+   "blind_sizes": {
+    "renderer": 8,
+    "playsim": 10,
+    "game": 8,
+    "main": 13,
+    "menu/misc": 15,
+    "hud": 9,
+    "automap": 11,
+    "intermission": 10,
+    "finale": 5,
+    "sound": 5,
+    "video": 13,
+    "wad": 11,
+    "zone": 6,
+    "system": 6,
+    "net": 3,
+    "other": 13
+   },
+   "rewired": {
+    "accuracy": 0.14383561643835616,
+    "balanced_accuracy": 0.18318903318903318,
+    "full": 0.33673722460376654,
+    "off": 0.5198027096647004,
+    "draws": 2
+   }
+  },
+  {
+   "repo": "rust-doom",
+   "functions": 582,
+   "edges": 471,
+   "key_sources": {
+    "fallback": 238,
+    "name": 9,
+    "path": 335
+   },
+   "scored": 344,
+   "accuracy": 0.05232558139534884,
+   "accuracy_null": {
+    "mean": 0.04571511627906976,
+    "sd": 0.009276820048428492,
+    "p95": 0.061046511627906974,
+    "p_value": 0.2888555722138931
+   },
+   "kappa": 0.006927140132937739,
+   "balanced_accuracy": 0.03468323349122318,
+   "balanced_accuracy_null": {
+    "mean": 0.04618350445806631,
+    "sd": 0.022154511407962787,
+    "p95": 0.08778843340763444,
+    "p_value": 0.6526946107784432
+   },
+   "accuracy_top_quartile_confidence": 0.09302325581395349,
+   "accuracy_by_source": {
+    "name": 0.2222222222222222,
+    "path": 0.04776119402985075
+   },
+   "per_subsystem": {
+    "renderer": {
+     "key": 4,
+     "placed": 11,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "playsim": {
+     "key": 37,
+     "placed": 14,
+     "recall": 0.05405405405405406,
+     "precision": 0.14285714285714285
+    },
+    "game": {
+     "key": 64,
+     "placed": 19,
+     "recall": 0.078125,
+     "precision": 0.2631578947368421
+    },
+    "main": {
+     "key": 4,
+     "placed": 29,
+     "recall": 0.25,
+     "precision": 0.034482758620689655
+    },
+    "menu/misc": {
+     "key": 1,
+     "placed": 9,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "hud": {
+     "key": 5,
+     "placed": 16,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "automap": {
+     "key": 2,
+     "placed": 14,
+     "recall": 0.5,
+     "precision": 0.07142857142857142
+    },
+    "intermission": {
+     "key": 0,
+     "placed": 19,
+     "recall": null,
+     "precision": 0.0
+    },
+    "finale": {
+     "key": 0,
+     "placed": 25,
+     "recall": null,
+     "precision": 0.0
+    },
+    "sound": {
+     "key": 0,
+     "placed": 8,
+     "recall": null,
+     "precision": 0.0
+    },
+    "video": {
+     "key": 0,
+     "placed": 42,
+     "recall": null,
+     "precision": 0.0
+    },
+    "wad": {
+     "key": 194,
+     "placed": 14,
+     "recall": 0.041237113402061855,
+     "precision": 0.5714285714285714
+    },
+    "zone": {
+     "key": 0,
+     "placed": 26,
+     "recall": null,
+     "precision": 0.0
+    },
+    "system": {
+     "key": 30,
+     "placed": 16,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "net": {
+     "key": 0,
+     "placed": 3,
+     "recall": null,
+     "precision": 0.0
+    },
+    "other": {
+     "key": 3,
+     "placed": 79,
+     "recall": 0.3333333333333333,
+     "precision": 0.012658227848101266
+    }
+   },
+   "wiring_key": {
+    "full": 0.1612442552865436,
+    "off": 0.09786131731790122
+   },
+   "wiring_blind": {
+    "full": 0.0894164445740127,
+    "off": 0.20422872644053347
+   },
+   "wiring_null_shuffle": {
+    "full": {
+     "mean": 0.09604338081573374,
+     "sd": 0.01714505484381118,
+     "p95": 0.12768555725133698,
+     "p_value": 0.592814371257485
+    },
+    "off": {
+     "mean": 0.11508537633330156,
+     "sd": 0.024479644269806512,
+     "p95": 0.15828341536628884,
+     "p_value": 0.001996007984031936
+    }
+   },
+   "wiring_null_rename": {
+    "full": {
+     "mean": 0.18189805860418035,
+     "sd": 0.10757406160197094,
+     "p95": 0.4235865299492051,
+     "p_value": 0.9021956087824351
+    },
+    "off": {
+     "mean": 0.13881091235268905,
+     "sd": 0.07744070841438955,
+     "p95": 0.3000455292305592,
+     "p_value": 0.1437125748502994
+    }
+   },
+   "blind_sizes": {
+    "renderer": 21,
+    "playsim": 24,
+    "game": 29,
+    "main": 51,
+    "menu/misc": 23,
+    "hud": 30,
+    "automap": 17,
+    "intermission": 33,
+    "finale": 30,
+    "sound": 16,
+    "video": 64,
+    "wad": 24,
+    "zone": 39,
+    "system": 20,
+    "net": 5,
+    "other": 156
+   },
+   "rewired": {
+    "accuracy": 0.06686046511627906,
+    "balanced_accuracy": 0.04921745843781926,
+    "full": 0.13484776493395326,
+    "off": 0.2842720757409147,
+    "draws": 2
+   }
+  },
+  {
+   "repo": "cssdoom",
+   "functions": 217,
+   "edges": 320,
+   "key_sources": {
+    "fallback": 25,
+    "name": 5,
+    "path": 187
+   },
+   "scored": 192,
+   "accuracy": 0.0625,
+   "accuracy_null": {
+    "mean": 0.0577890625,
+    "sd": 0.014929285490837366,
+    "p95": 0.08333333333333333,
+    "p_value": 0.4312843578210895
+   },
+   "kappa": 0.004999875624984451,
+   "balanced_accuracy": 0.04612299465240642,
+   "balanced_accuracy_null": {
+    "mean": 0.056133523469994055,
+    "sd": 0.0202093442370301,
+    "p95": 0.09315612002376707,
+    "p_value": 0.6506986027944112
+   },
+   "accuracy_top_quartile_confidence": 0.16666666666666666,
+   "accuracy_by_source": {
+    "name": 0.2,
+    "path": 0.058823529411764705
+   },
+   "per_subsystem": {
+    "renderer": {
+     "key": 68,
+     "placed": 10,
+     "recall": 0.014705882352941176,
+     "precision": 0.1
+    },
+    "playsim": {
+     "key": 40,
+     "placed": 14,
+     "recall": 0.125,
+     "precision": 0.35714285714285715
+    },
+    "game": {
+     "key": 55,
+     "placed": 11,
+     "recall": 0.09090909090909091,
+     "precision": 0.45454545454545453
+    },
+    "main": {
+     "key": 0,
+     "placed": 21,
+     "recall": null,
+     "precision": 0.0
+    },
+    "menu/misc": {
+     "key": 4,
+     "placed": 10,
+     "recall": 0.25,
+     "precision": 0.1
+    },
+    "hud": {
+     "key": 1,
+     "placed": 19,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "automap": {
+     "key": 0,
+     "placed": 10,
+     "recall": null,
+     "precision": 0.0
+    },
+    "intermission": {
+     "key": 0,
+     "placed": 15,
+     "recall": null,
+     "precision": 0.0
+    },
+    "finale": {
+     "key": 0,
+     "placed": 9,
+     "recall": null,
+     "precision": 0.0
+    },
+    "sound": {
+     "key": 9,
+     "placed": 9,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "video": {
+     "key": 0,
+     "placed": 21,
+     "recall": null,
+     "precision": 0.0
+    },
+    "wad": {
+     "key": 0,
+     "placed": 10,
+     "recall": null,
+     "precision": 0.0
+    },
+    "zone": {
+     "key": 0,
+     "placed": 15,
+     "recall": null,
+     "precision": 0.0
+    },
+    "system": {
+     "key": 15,
+     "placed": 9,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "net": {
+     "key": 0,
+     "placed": 2,
+     "recall": null,
+     "precision": 0.0
+    },
+    "other": {
+     "key": 0,
+     "placed": 7,
+     "recall": null,
+     "precision": 0.0
+    }
+   },
+   "wiring_key": {
+    "full": 0.5011124516097191,
+    "off": 0.2649573042137754
+   },
+   "wiring_blind": {
+    "full": 0.15736915140441865,
+    "off": 0.25181649083063773
+   },
+   "wiring_null_shuffle": {
+    "full": {
+     "mean": 0.1593576660646463,
+     "sd": 0.05080519608537686,
+     "p95": 0.2524024870436082,
+     "p_value": 0.45708582834331335
+    },
+    "off": {
+     "mean": 0.23073531206519404,
+     "sd": 0.04718153300167025,
+     "p95": 0.30646827444715813,
+     "p_value": 0.31137724550898205
+    }
+   },
+   "wiring_null_rename": {
+    "full": {
+     "mean": 0.1945202535585572,
+     "sd": 0.10638422807608702,
+     "p95": 0.4897815276895136,
+     "p_value": 0.49101796407185627
+    },
+    "off": {
+     "mean": 0.16686887720813018,
+     "sd": 0.0748257031326441,
+     "p95": 0.32884088582792986,
+     "p_value": 0.10578842315369262
+    }
+   },
+   "blind_sizes": {
+    "renderer": 11,
+    "playsim": 17,
+    "game": 12,
+    "main": 21,
+    "menu/misc": 11,
+    "hud": 19,
+    "automap": 10,
+    "intermission": 15,
+    "finale": 9,
+    "sound": 10,
+    "video": 21,
+    "wad": 13,
+    "zone": 19,
+    "system": 11,
+    "net": 2,
+    "other": 16
+   },
+   "rewired": {
+    "accuracy": 0.0625,
+    "balanced_accuracy": 0.055268865121806295,
+    "full": 0.20511056176095374,
+    "off": 0.2715557192918551,
+    "draws": 2
+   }
+  },
+  {
+   "repo": "fps-cob",
+   "functions": 51,
+   "edges": 79,
+   "key_sources": {
+    "fallback": 48,
+    "name": 3
+   },
+   "scored": 3,
+   "accuracy": 0.0,
+   "accuracy_null": {
+    "mean": 0.11416666666666665,
+    "sd": 0.15818194517004075,
+    "p95": 0.3333333333333333,
+    "p_value": 1.0
+   },
+   "kappa": -0.1288805268109125,
+   "balanced_accuracy": null,
+   "balanced_accuracy_null": {
+    "mean": null,
+    "sd": null,
+    "p95": null,
+    "p_value": 0.001996007984031936
+   },
+   "accuracy_top_quartile_confidence": 0.0,
+   "accuracy_by_source": {
+    "name": 0.0
+   },
+   "per_subsystem": {
+    "playsim": {
+     "key": 1,
+     "placed": 1,
+     "recall": 0.0,
+     "precision": 0.0
+    },
+    "automap": {
+     "key": 1,
+     "placed": 0,
+     "recall": 0.0,
+     "precision": null
+    },
+    "intermission": {
+     "key": 0,
+     "placed": 1,
+     "recall": null,
+     "precision": 0.0
+    },
+    "finale": {
+     "key": 0,
+     "placed": 1,
+     "recall": null,
+     "precision": 0.0
+    },
+    "other": {
+     "key": 1,
+     "placed": 0,
+     "recall": 0.0,
+     "precision": null
+    }
+   },
+   "wiring_key": {
+    "full": 0.07649709667563405,
+    "off": 0.0
+   },
+   "wiring_blind": {
+    "full": 0.4580609678409103,
+    "off": 0.4499240668970874
+   },
+   "wiring_null_shuffle": {
+    "full": {
+     "mean": 0.11514881019031792,
+     "sd": 0.06724669010574102,
+     "p95": 0.2422431291359047,
+     "p_value": 0.001996007984031936
+    },
+    "off": {
+     "mean": 0.16000494133079068,
+     "sd": 0.06118685413566218,
+     "p95": 0.2608339855035661,
+     "p_value": 0.001996007984031936
+    }
+   },
+   "wiring_null_rename": {
+    "full": {
+     "mean": 0.1755491799051481,
+     "sd": 0.11850768183103073,
+     "p95": 0.4896198098769926,
+     "p_value": 0.06387225548902195
+    },
+    "off": {
+     "mean": 0.12896459844786515,
+     "sd": 0.07567397029158178,
+     "p95": 0.28644725783975844,
+     "p_value": 0.003992015968063872
+    }
+   },
+   "blind_sizes": {
+    "renderer": 1,
+    "playsim": 5,
+    "game": 2,
+    "main": 3,
+    "menu/misc": 3,
+    "hud": 3,
+    "automap": 4,
+    "intermission": 5,
+    "finale": 4,
+    "sound": 4,
+    "video": 8,
+    "wad": 1,
+    "zone": 3,
+    "system": 2,
+    "other": 3
+   },
+   "rewired": {
+    "accuracy": 0.0,
+    "balanced_accuracy": null,
+    "full": 0.23359176626788025,
+    "off": 0.25434481271815135,
+    "draws": 2
+   }
+  },
+  {
+   "repo": "agentic-cobol-doom-cc",
+   "functions": 45,
+   "edges": 51,
+   "key_sources": {
+    "fallback": 1,
+    "name": 1,
+    "path": 43
+   },
+   "scored": 44,
+   "accuracy": 0.1590909090909091,
+   "accuracy_null": {
+    "mean": 0.08086363636363635,
+    "sd": 0.03398191667868405,
+    "p95": 0.13636363636363635,
+    "p_value": 0.022988505747126436
+   },
+   "kappa": 0.0851095395875575,
+   "balanced_accuracy": 0.14393939393939392,
+   "balanced_accuracy_null": {
+    "mean": 0.08242727272727271,
+    "sd": 0.039324425731812315,
+    "p95": 0.15454545454545454,
+    "p_value": 0.06187624750499002
+   },
+   "accuracy_top_quartile_confidence": 0.36363636363636365,
+   "accuracy_by_source": {
+    "name": 0.0,
+    "path": 0.16279069767441862
+   },
+   "per_subsystem": {
+    "renderer": {
+     "key": 20,
+     "placed": 3,
+     "recall": 0.15,
+     "precision": 1.0
+    },
+    "playsim": {
+     "key": 11,
+     "placed": 7,
+     "recall": 0.18181818181818182,
+     "precision": 0.2857142857142857
+    },
+    "game": {
+     "key": 10,
+     "placed": 1,
+     "recall": 0.1,
+     "precision": 1.0
+    },
+    "main": {
+     "key": 0,
+     "placed": 9,
+     "recall": null,
+     "precision": 0.0
+    },
+    "menu/misc": {
+     "key": 0,
+     "placed": 2,
+     "recall": null,
+     "precision": 0.0
+    },
+    "hud": {
+     "key": 0,
+     "placed": 2,
+     "recall": null,
+     "precision": 0.0
+    },
+    "automap": {
+     "key": 0,
+     "placed": 3,
+     "recall": null,
+     "precision": 0.0
+    },
+    "intermission": {
+     "key": 0,
+     "placed": 2,
+     "recall": null,
+     "precision": 0.0
+    },
+    "finale": {
+     "key": 0,
+     "placed": 1,
+     "recall": null,
+     "precision": 0.0
+    },
+    "sound": {
+     "key": 0,
+     "placed": 1,
+     "recall": null,
+     "precision": 0.0
+    },
+    "video": {
+     "key": 3,
+     "placed": 3,
+     "recall": 0.3333333333333333,
+     "precision": 0.3333333333333333
+    },
+    "wad": {
+     "key": 0,
+     "placed": 2,
+     "recall": null,
+     "precision": 0.0
+    },
+    "zone": {
+     "key": 0,
+     "placed": 2,
+     "recall": null,
+     "precision": 0.0
+    },
+    "system": {
+     "key": 0,
+     "placed": 1,
+     "recall": null,
+     "precision": 0.0
+    },
+    "other": {
+     "key": 0,
+     "placed": 5,
+     "recall": null,
+     "precision": 0.0
+    }
+   },
+   "wiring_key": {
+    "full": 0.49537094126277925,
+    "off": 0.01971391956985075
+   },
+   "wiring_blind": {
+    "full": 0.6304024264399618,
+    "off": 0.36856348826452634
+   },
+   "wiring_null_shuffle": {
+    "full": {
+     "mean": 0.1771937796359864,
+     "sd": 0.11822094950847874,
+     "p95": 0.39316868805597693,
+     "p_value": 0.003992015968063872
+    },
+    "off": {
+     "mean": 0.133525006431716,
+     "sd": 0.06412272155998072,
+     "p95": 0.2460764734419596,
+     "p_value": 0.003992015968063872
+    }
+   },
+   "wiring_null_rename": {
+    "full": {
+     "mean": 0.1569874029905677,
+     "sd": 0.15270402946579403,
+     "p95": 0.5785744829860571,
+     "p_value": 0.027944111776447105
+    },
+    "off": {
+     "mean": 0.09880380887741373,
+     "sd": 0.0662627881219145,
+     "p95": 0.2296803196398465,
+     "p_value": 0.007984031936127744
+    }
+   },
+   "blind_sizes": {
+    "renderer": 3,
+    "playsim": 8,
+    "game": 1,
+    "main": 9,
+    "menu/misc": 2,
+    "hud": 2,
+    "automap": 3,
+    "intermission": 2,
+    "finale": 1,
+    "sound": 1,
+    "video": 3,
+    "wad": 2,
+    "zone": 2,
+    "system": 1,
+    "other": 5
+   },
+   "rewired": {
+    "accuracy": 0.10227272727272727,
+    "balanced_accuracy": 0.09848484848484848,
+    "full": 0.39079045674832796,
+    "off": 0.28179090943443064,
+    "draws": 2
+   }
+  }
+ ]
+}
