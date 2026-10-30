@@ -67,6 +67,28 @@ def test_maps_on_reference_layout(tables):
     assert sum(by["fork"].sources.values()) == int(by["fork"].sizes.sum())
 
 
+def test_wiring_floor_and_cross_wiring():
+    ref = np.array([[6, 2, 0], [0, 4, 2], [1, 0, 3]])
+    assert SW.wiring_floor(np.eye(3)) == pytest.approx(1.0)
+    assert 0 < SW.wiring_floor(ref) < 1
+    # Same cross-subsystem calls, different local traffic: cross wiring ignores the diagonal.
+    local = np.array([[1, 2, 0], [0, 9, 2], [1, 0, 0]])
+    assert SW._cosine(SW._off_diagonal(local), SW._off_diagonal(ref)) == pytest.approx(1.0)
+    assert SW._cosine(local, ref) < 1.0
+
+
+def test_null_wiring_is_seeded_and_below_a_copy(tables):
+    maps, _, _ = SW.build_maps(list(tables.values()), "base")
+    by = {m.repo: m for m in maps}
+    fork, base = by["fork"], by["base"]
+    t = tables["fork"]
+    again = SW.null_wiring(fork.labels, t.edges, base.calls)
+    assert again == pytest.approx((fork.wiring_null, fork.cross_wiring_null), nan_ok=True)
+    # A copy's placement is never worse than shuffling its own functions (equal here: one live subsystem).
+    assert fork.wiring_similarity >= fork.wiring_null - 1e-9
+    assert np.isnan(SW.null_wiring(np.full(3, -1), None, base.calls)[0])
+
+
 def test_layout_is_deterministic(tables):
     _, _, a = SW.build_maps(list(tables.values()), "base")
     _, _, b = SW.build_maps(list(tables.values()), "base")
@@ -83,7 +105,9 @@ def test_cli_subway_and_compare_section(cohort, tmp_path):
     assert main(["subway", str(cohort["root"]), "--reference", "base", "-o", str(out)]) == 0
     d = json.loads((out / "subway.json").read_text())
     assert d["reference"] == "base" and {m["repo"] for m in d["maps"]} == {"base", "fork", "other"}
-    assert (out / "subway.csv").read_text().startswith("repo,functions,wiring_similarity,edges_kept,")
+    assert (out / "subway.csv").read_text().startswith(
+        "repo,functions,wiring_similarity,edges_kept,shape_distance,cross_wiring,wiring_null,cross_wiring_null,")
+    assert 0 < d["wiring_floor"] <= 1 and "cross_wiring" in d["maps"][1]
     assert "Subway maps" in (out / "subway.html").read_text()
     rep = tmp_path / "report"
     assert main(["compare", str(cohort["root"]), "-o", str(rep), "--subway-reference", "base", "--workers", "1"]) == 0
