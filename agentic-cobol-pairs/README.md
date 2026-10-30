@@ -28,8 +28,9 @@ Four differences hold in every pair, or in every pair where they can apply:
 
 Two more results come from the rest of the engine's measurements and from the structural fingerprint scanner:
 
-5. **Neither agent left a TODO-style marker or a line of commented-out code in any of the ten systems.** What
-   GitGalaxy's "debt" surface counts here is `DISPLAY` output, which Claude Code writes more of.
+5. **Neither agent left a TODO-style marker or a line of commented-out code in any of the ten systems.** The
+   tech-debt and dead-code scores GitGalaxy gives these systems come from two COBOL scoring errors instead: a
+   program's entry paragraph counted as an orphan, and English comments counted as commented-out code.
 6. **Structure finds no copying between the paired versions, and no author signature.** The two systems of each
    task share no more structure than unrelated programs do. A system's structurally nearest neighbour is the
    other agent's version of the same task in four of ten systems (about one by chance) and a system by the same
@@ -155,33 +156,41 @@ in lowercase (`trim-helper`, `render-scene`); its `gpt-5.2` systems and every Cl
 None of these is consistent across the pairs. Median complexity leans to Claude Code (four pairs and a tie),
 but the differences are one or two branches.
 
-### 5. Output, markers and commented-out code
+### 5. Debt, dead code and output: three COBOL scoring errors
 
 GitGalaxy scores each file on surface areas (cognitive load, safety, tech debt, verification, API exposure,
-state flux, dead code, documentation) and counts 22 signal families. Over the COBOL files of each system, two
-families lean the same way in all five pairs, both higher for Claude Code: *debt* and *dead code*. Their parts
-show what they measure on these systems (per 100 COBOL lines; `signals.py`):
+state flux, dead code, documentation) and counts 22 signal families. On these systems, the tech-debt and dead-code
+readings lean toward Claude Code, and every part of them traces to how GitGalaxy scores COBOL, not to the code.
+Per 100 COBOL lines (`signals.py`; the comment-rule lines from `graveyard_lines.py`):
 
-| family | TODO-style | HACK-style | `DISPLAY` output | commented-out code | unreferenced paragraphs |
+| pair, Claude Code / Codex | TODO-style | HACK-style | entry paragraphs flagged unreferenced | comments the dead-code rule matched | `DISPLAY` |
 |---|---:|---:|---:|---:|---:|
-| chess, Claude Code / Codex | 0 / 0 | 0 / 0 | 0.31 / 0.27 | 0 / 0 | 0.03 / 0 |
-| compressor | 0 / 0 | 0 / 0 | **5.11 / 0.77** | 0 / 0 | 0.11 / 0 |
-| DOOM-like game | 0 / 0 | 0 / 0 | **1.18 / 0.05** | 0 / 0 | 0.06 / 0 |
-| pygame-style framework | 0 / 0 | 0.13 / 0 | **2.09 / 1.01** | 0 / 0 | 0.52 / 0 |
-| SAT solver | 0 / 0 | 0 / 0 | 2.90 / 2.87 | 0 / 0 | 0.07 / 0.06 |
+| chess engine | 0 / 0 | 0 / 0 | 0.03 / 0 | 7 / 5 lines | 0.31 / 0.27 |
+| compressor | 0 / 0 | 0 / 0 | 0.11 / 0 | 2 / 0 lines | **5.11 / 0.77** |
+| DOOM-like game | 0 / 0 | 0 / 0 | 0.06 / 0 | 0 / 0 | **1.18 / 0.05** |
+| pygame-style framework | 0 / 0 | 0.13 / 0 | 0.52 / 0 | 0 / 0 | **2.09 / 1.01** |
+| SAT solver | 0 / 0 | 0 / 0 | 0.07 / 0.06 | 7 / 0 lines | 2.90 / 2.87 |
 
-- **No TODO-style marker and no commented-out statement in any of the ten systems**, and one HACK-style marker in
-  all of them (Claude Code's pygame framework).
-- **The debt family here is `DISPLAY` statements.** GitGalaxy counts COBOL's `DISPLAY` as a debug print, which
-  fits an online program but not a batch program or game that writes its output that way. Claude Code writes
-  clearly more `DISPLAY` in three pairs (the compressor, 5.1 against 0.8 per 100 lines); the other two are close.
-  The Codex DOOM-like game draws through its C bridge and barely uses `DISPLAY`.
-- **The dead-code family here is paragraphs nothing calls**, which in Claude Code's systems are mostly each
-  program's opening paragraph: the entry point that Codex writes as a main line instead.
+- **The entry paragraph is scored as an orphan.** A COBOL program starts by falling into the first paragraph
+  after its PROCEDURE DIVISION header; nothing calls it by name. GitGalaxy's orphan rule flags it, and the tech-debt
+  score weighs each orphan twice. Every "unreferenced" paragraph in the ten systems (10 of 10) is such an entry
+  paragraph, and every COBOL file with a non-zero tech-debt score has exactly one. Claude Code's DOOM-like
+  `walker.cob` scores 37.8 tech debt from it alone. A program that opens with a main line instead (Codex's usual
+  form) has no such paragraph and scores 0, since a main line is exempt from the orphan rule (#7170). The same
+  structure is penalised in one style and not the other.
+- **English comments are scored as commented-out code.** The dead-code rule matches any comment that begins with
+  MOVE, COMPUTE, IF, PERFORM, CALL or EXEC, in any case. All 21 lines it matched in these systems are prose,
+  headings or pseudocode: "Move the piece", "If king moved, clear both rights for that side.", "Compute truth
+  state of ...", "MOVE LIST". None is a commented-out statement. Codex's chess `types.cpy` scores 64.6 dead code
+  from two headings.
+- **`DISPLAY` counts as a debug print.** It feeds the debt signal family (and amplifies the secrets score), though
+  not the tech-debt score. That fits an online CICS program, where `DISPLAY` is usually debugging, but not a batch
+  program or a game that writes its output with it. Claude Code writes clearly more `DISPLAY` in three pairs (the
+  compressor, 5.1 against 0.8 per 100 lines); the Codex DOOM-like game draws through its C bridge instead.
 
-The other surface areas split between the agents (documentation exposure is higher for Codex in three pairs,
-safety in four), with no pair-wide pattern. Treat the debt and dead-code readings as a calibration note for
-COBOL rather than as findings about the agents.
+What the code does show: neither agent left a single TODO-style marker or commented-out statement in ten systems,
+and one HACK-style marker between them. The other surface areas split between the agents (documentation exposure
+higher for Codex in three pairs, safety in four) with no pair-wide pattern.
 
 ### 6. What the structural fingerprint scanner sees
 
@@ -229,6 +238,7 @@ comparison meant to characterise "Codex" or "Claude Code" needs several systems 
 ENGINE=/path/to/gitgalaxy WORK=/path/to/work ./fetch_scan.sh
 python measure.py --repos $WORK/repos --scans $WORK/scans --out data/
 python signals.py --scans $WORK/scans                          # section 5
+python scoring_checks.py --repos $WORK/repos --scans $WORK/scans # section 5: entry paragraphs, matched comments
 sfs compare $WORK/scans -o sfs-structure                         # section 6 (twins on)
 sfs compare $WORK/scans -o sfs-portable --lens portable --no-twins
 ```
