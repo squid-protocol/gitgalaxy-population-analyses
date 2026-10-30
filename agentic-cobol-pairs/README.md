@@ -26,6 +26,15 @@ Four differences hold in every pair, or in every pair where they can apply:
 4. **Codex writes free-format COBOL in all five systems; Claude Code in one.** Codex's three systems built with
    `gpt-5.4` also name every paragraph in lowercase; its two built with `gpt-5.2` use uppercase.
 
+Two more results come from the rest of the engine's measurements and from the structural fingerprint scanner:
+
+5. **Neither agent left a TODO-style marker or a line of commented-out code in any of the ten systems.** What
+   GitGalaxy's "debt" surface counts here is `DISPLAY` output, which Claude Code writes more of.
+6. **Structure finds no copying between the paired versions, and no author signature.** The two systems of each
+   task share no more structure than unrelated programs do. A system's structurally nearest neighbour is the
+   other agent's version of the same task in four of ten systems (about one by chance) and a system by the same
+   agent in four of ten (about four by chance).
+
 Size, branching and the rate of state changes do not separate the agents. Five pairs cannot establish a rule:
 even a five-of-five difference has a two-sided sign-test p of 0.0625. Several differences also follow the model
 version rather than the agent (see *Agent or model?*). Read these as consistent patterns in this sample.
@@ -146,6 +155,53 @@ in lowercase (`trim-helper`, `render-scene`); its `gpt-5.2` systems and every Cl
 None of these is consistent across the pairs. Median complexity leans to Claude Code (four pairs and a tie),
 but the differences are one or two branches.
 
+### 5. Output, markers and commented-out code
+
+GitGalaxy scores each file on surface areas (cognitive load, safety, tech debt, verification, API exposure,
+state flux, dead code, documentation) and counts 22 signal families. Over the COBOL files of each system, two
+families lean the same way in all five pairs, both higher for Claude Code: *debt* and *dead code*. Their parts
+show what they measure on these systems (per 100 COBOL lines; `signals.py`):
+
+| family | TODO-style | HACK-style | `DISPLAY` output | commented-out code | unreferenced paragraphs |
+|---|---:|---:|---:|---:|---:|
+| chess, Claude Code / Codex | 0 / 0 | 0 / 0 | 0.31 / 0.27 | 0 / 0 | 0.03 / 0 |
+| compressor | 0 / 0 | 0 / 0 | **5.11 / 0.77** | 0 / 0 | 0.11 / 0 |
+| DOOM-like game | 0 / 0 | 0 / 0 | **1.18 / 0.05** | 0 / 0 | 0.06 / 0 |
+| pygame-style framework | 0 / 0 | 0.13 / 0 | **2.09 / 1.01** | 0 / 0 | 0.52 / 0 |
+| SAT solver | 0 / 0 | 0 / 0 | 2.90 / 2.87 | 0 / 0 | 0.07 / 0.06 |
+
+- **No TODO-style marker and no commented-out statement in any of the ten systems**, and one HACK-style marker in
+  all of them (Claude Code's pygame framework).
+- **The debt family here is `DISPLAY` statements.** GitGalaxy counts COBOL's `DISPLAY` as a debug print, which
+  fits an online program but not a batch program or game that writes its output that way. Claude Code writes
+  clearly more `DISPLAY` in three pairs (the compressor, 5.1 against 0.8 per 100 lines); the other two are close.
+  The Codex DOOM-like game draws through its C bridge and barely uses `DISPLAY`.
+- **The dead-code family here is paragraphs nothing calls**, which in Claude Code's systems are mostly each
+  program's opening paragraph: the entry point that Codex writes as a main line instead.
+
+The other surface areas split between the agents (documentation exposure is higher for Codex in three pairs,
+safety in four), with no pair-wide pattern. Treat the debt and dead-code readings as a calibration note for
+COBOL rather than as findings about the agents.
+
+### 6. What the structural fingerprint scanner sees
+
+`sfs compare` (gitgalaxy-population-analyses, `structural-fingerprint-scanner`) fingerprints each system from its
+functions' measurements and looks for structural twins between them. It reads no names and no source text.
+
+- **No copying between the paired versions.** The two systems of each task share 0 to 0.4% of their structure,
+  with 0 or 1 twin. Unrelated programs (Quake and Lua against DOOM, in the DOOM port study) share about 0.5%; a
+  real descendant (Chocolate Doom) 31%. The agents wrote independent implementations, and the scanner does not
+  invent a lineage between them. The most-shared pair of any two of the ten systems shares 0.9% (3 twins).
+- **Structure groups them by task a little, and by author not at all.** By profile distance, a system's nearest
+  neighbour is the other agent's version of the same task for 4 of the 10 systems (one same-task system among
+  nine others, so about 1.1 by chance) and a system by the same agent for 4 of 10 (four of the nine others, about
+  4.4 by chance). The same-task matches are two mutual pairs: the SAT solvers, the closest pair of all (the Claude
+  Code one is a replication of the Codex one from replay prompts), and the two pygame-style frameworks (both an
+  SDL wrapper with a C shim). Both lenses (structure and portable) give the same neighbours.
+
+The consistent differences in sections 1 to 4 are specific measures. Taken together, the fingerprints do not
+identify who wrote a system.
+
 ## Agent or model?
 
 The study used two Claude models and two Codex models, and several differences follow the model version:
@@ -172,9 +228,13 @@ comparison meant to characterise "Codex" or "Claude Code" needs several systems 
 # a GitGalaxy checkout with the #7170 fix (PR #7172) and the #7169 fix (PR #7183)
 ENGINE=/path/to/gitgalaxy WORK=/path/to/work ./fetch_scan.sh
 python measure.py --repos $WORK/repos --scans $WORK/scans --out data/
+python signals.py --scans $WORK/scans                          # section 5
+sfs compare $WORK/scans -o sfs-structure                         # section 6 (twins on)
+sfs compare $WORK/scans -o sfs-portable --lens portable --no-twins
 ```
 
-`data/profile.json` holds every per-system number above. The scan checks use GitGalaxy's
+`data/profile.json` holds the per-system numbers of sections 1 to 4; `data/sfs_pairs_*.csv` are the two `sfs`
+runs' pair tables. The scan checks use GitGalaxy's
 `tests/tools/cobol_answer_key.py draft`, `add-extents` and `score` per repository, with the checkout's
 `gitgalaxy` on `PYTHONPATH`.
 
