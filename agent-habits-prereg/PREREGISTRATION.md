@@ -325,3 +325,42 @@ Codex lane (D8).
 * Smoke-tested on a toy task (outside the study): model `claude-haiku-5-5`, no error.
 
 sha256 after this change: run.py `30e85d4aeb4b9c761fd13e86f77a2adcae9cb1048596f1d39cda52462791d94f`, cells.py `e762ff38e34f570ea3925921666eb943a340f6df31b5d120bee7b7db6f932b33` (D8: run.py `b6776338...`).
+
+### D10 (2026-11-01, before any Haiku run was measured): the Haiku arm becomes confirmatory; a rule for more arms
+
+D9 set the Haiku arm as exploratory. No measure of any confirmation run (any arm) had been computed or looked at
+when this was written: only pass/fail, active time and line counts of the Sonnet and Codex runs, and nothing of the
+Haiku runs (the first was in progress). So the Haiku comparisons are registered as confirmatory here, replacing D9's
+"exploratory only". Arms: **S** = Claude Code on Sonnet 5.5, **X** = Codex on gpt-6-luna, **K** = Claude Code on
+Haiku 5.5 (D9).
+
+**Family A, S vs X** (H1-H5, S1-S6, V1-V2): unchanged.
+
+**Family B, K vs X: the habits belong to Claude Code, not one model.** Same measures, same directions, same tests
+as H1-H5 (one-sided sign test over the 10 cells, ties dropped; Holm across B1-B5 at family-wise α = 0.05; the first
+run per agent in the repeat cells):
+
+| id | prediction (K vs X) | measure |
+|---|---|---|
+| AH-B1 | K writes more comments | as H1 |
+| AH-B2 | K documents more of its functions | as H2 |
+| AH-B3 | X exits early more | as H3 |
+| AH-B4 | X adds Python helper code to non-Python projects | as H4 |
+| AH-B5 | K uses `while` more (non-COBOL cells) | as H5 |
+
+**Family C, K vs S: does the model change the habit inside Claude Code?** No direction is justified, so two-sided
+sign tests on the five H1-H5 measures (AH-C1..C5), Holm across C1-C5 at α = 0.05. Reading, fixed now: A and B
+confirmed with C null = a habit of Claude Code / its vendor; A confirmed, B not = a habit of the Sonnet model. A null
+in C is reported as "no difference detected", not as equivalence.
+
+**Variance.** K's repeat cells (chess/Rust, SAT/Python) give its within-agent spread; reported beside S's and X's for
+V1/V2, descriptively.
+
+**Reading across families.** Holm controls each family; across families the report states that three families (A,
+B, C) were tested and gives every raw p beside its adjusted one.
+
+**Rule for future arms** (another model, agent or vendor on the same tasks): before any of its runs is measured, the
+new arm registers its families against each existing arm on the same measures (directional where a prior result
+gives a direction, two-sided otherwise), Holm within each family; its runs use the same kit, held-out set, cap,
+nudge rule and image, on a pinned lane; its order gets its own seed. A deviation records the arm before its first
+run.
