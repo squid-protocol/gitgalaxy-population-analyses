@@ -388,3 +388,9 @@ reported beside the registered two-cell V1/V2, which stay the registered tests.
 independent Sonnet runs (X runs are shared, so it is not independent evidence).
 
 cells.py sha256 after this change: `6b486e1ccac6a6438e6a19359f61d10e96df976095da675399de008153c4058e` (run.py unchanged since D9).
+
+### D12 (2026-11-01, before any run of K' or S'): lane rebalance
+
+Pacing only. K' (`haiku-b`) moves from cores 0-2 (after K) to cores 3-5, after S' (`sonnet-b`), so the cores freed
+by the Codex lane are not idle while K's slower runs continue on cores 0-2. Each agent still runs in one lane at a
+time, in its own order; the cores are identical; nothing else changes.
