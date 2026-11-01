@@ -394,3 +394,10 @@ cells.py sha256 after this change: `6b486e1ccac6a6438e6a19359f61d10e96df976095da
 Pacing only. K' (`haiku-b`) moves from cores 0-2 (after K) to cores 3-5, after S' (`sonnet-b`), so the cores freed
 by the Codex lane are not idle while K's slower runs continue on cores 0-2. Each agent still runs in one lane at a
 time, in its own order; the cores are identical; nothing else changes.
+
+### D13 (2026-11-01, during K' (`haiku-b`) after 3 of its runs; no run measured): K' on two lanes
+
+Pacing only. When K's lane (cores 0-2) finishes, a second K' lane starts there beside the one on cores 3-5. Both
+take K's next pending run in its frozen order; a run's slot is fixed by that order, r1 of a repeat cell still starts
+before r2, and a simultaneous pick of the same run fails before any agent starts (the run directory is created
+atomically) and is retried. Same image, kit, cap and nudge rule; cores identical.
