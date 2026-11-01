@@ -236,3 +236,18 @@ runs completed per agent can drift in calendar time; the run dates are reported 
 
 `run.py` sha256 after this change: `ce451276ab1b93b81fa1a8570310d5cf81c4edb288d42a66a783985c3207f15c`
 (was `2727e697...` in D5; runs 1-2 used the D5 version).
+
+### D7 (2026-11-01, after the two pilot runs, before any of their measures was looked at): harder tasks
+
+**Why:** the first two runs passed the D5 checker in one session each (49 s and 103 s of agent time; 154 and 944
+lines), far smaller than the exploratory set's programs (2-10k lines). Structure-based tests (S1-S3, V2) would be
+starved of functions. Only pass/fail, active time and line counts of the two runs were seen.
+
+**Decision (owner, 2026-11-01):**
+* The two runs (`sat-rust-codex-r1`, `chess-rust-claude-r1`) are a **pilot**: moved to `confirm/pilot/`, excluded
+  from every test, never measured for the study. Every cell is run afresh under the new kit, same plan and order.
+* The done condition is raised so that a one-shot minimal program does not pass: chess adds tactical puzzles and a
+  short match against a weak opponent; SAT adds hard random and large formulas under a time limit. The prompts say
+  so (and still say nothing about comments, tests, structure or helper scripts). Cap and nudge rule unchanged.
+* The new kit (prompts, checker, instances, image) is frozen by hash in a D7 addendum **before** the first run under
+  it, and smoke-tested on toy tasks only.
