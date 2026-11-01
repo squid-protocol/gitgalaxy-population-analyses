@@ -37,7 +37,7 @@ RUNS = CONFIRM / "runs"
 LOG = CONFIRM / "runs.csv"
 SECRET = CONFIRM / "secrets" / "claude_token"
 HOST_CODEX_AUTH = Path.home() / ".codex" / "auth.json"
-IMAGE = "agent-habits-run:1"
+IMAGE = "agent-habits-run:2"
 ORDER_SEED = 20261101
 LIMIT_RE = re.compile(r"usage limit|rate limit|limit reached|hit your limit|try again (?:at|in)|quota|"
                       r"too many requests|\b429\b", re.I)
@@ -75,9 +75,12 @@ def image_id() -> str:
                           text=True).stdout.strip()[:19]
 
 
-def docker(rd: Path, agent: str, argv: list[str], name: str, timeout: float | None) -> tuple[int | None, str]:
-    cmd = ["docker", "run", "--rm", "--name", name, "-v", f"{rd / 'repo'}:/work", "-v", f"{KIT / 'check'}:/check:ro",
-           "--cpus", "3", "--memory", "6g"]
+def docker(rd: Path, agent: str, argv: list[str], name: str, timeout: float | None,
+           check_dir: str = "check_public") -> tuple[int | None, str]:
+    # D7: agent sessions see the practice checker (check_public: same code, practice puzzles and formulas);
+    # only the harness's final check mounts the held-out set (check).
+    cmd = ["docker", "run", "--rm", "--name", name, "-v", f"{rd / 'repo'}:/work",
+           "-v", f"{KIT / check_dir}:/check:ro", "--cpus", "3", "--memory", "6g"]
     if agent == "claude":
         cmd += ["-v", f"{rd / 'agent-home'}:/home/agent/.claude", "-e", "CLAUDE_CODE_OAUTH_TOKEN"]
     else:
@@ -141,7 +144,8 @@ def codex_auth_out(rd: Path) -> None:
 
 
 def check(rd: Path, task: str, agent: str, name: str) -> tuple[bool, str]:
-    rc, out = docker(rd, agent, ["sh", "-c", f"cd /work && /check/check {task}"], name + "-check", 1500)
+    rc, out = docker(rd, agent, ["sh", "-c", f"cd /work && /check/check {task}"], name + "-check", 1500,
+                     check_dir="check")
     return rc == 0 and out.lstrip().startswith("PASS"), out.strip()
 
 

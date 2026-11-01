@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /opt/checkvenv/bin/python /check/check.py "$@"

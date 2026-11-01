@@ -4,8 +4,11 @@ FROM gitgalaxy-gnucobol:3
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
-      openjdk-17-jdk-headless python3 gcc g++ make git curl ca-certificates nodejs npm procps \
+      openjdk-17-jdk-headless python3 python3-venv gcc g++ make git curl ca-certificates nodejs npm procps \
     && rm -rf /var/lib/apt/lists/*
+
+# D7: the checker's referee (python-chess) in its own venv, used only by /check/check.
+RUN python3 -m venv /opt/checkvenv && /opt/checkvenv/bin/pip install --no-cache-dir chess==1.11.2
 
 # Codex CLI, pinned (D2).
 RUN npm install -g @openai/codex@0.166.0 && codex --version

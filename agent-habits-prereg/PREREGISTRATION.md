@@ -251,3 +251,45 @@ starved of functions. Only pass/fail, active time and line counts of the two run
   so (and still say nothing about comments, tests, structure or helper scripts). Cap and nudge rule unchanged.
 * The new kit (prompts, checker, instances, image) is frozen by hash in a D7 addendum **before** the first run under
   it, and smoke-tested on toy tasks only.
+
+#### D7 addendum (2026-11-01, before the first run under it): the frozen harder kit
+
+**Chess done condition** (adds to the D5 checks): 22 unique forced mates (14 mate-in-2, 8 mate-in-3; each verified
+by brute force to have exactly one mating first move and no faster mate), 2 s each, at least 80 % (18) solved; and a
+4-game match against a greedy material-grabbing opponent (colours alternating, 0.5 s per engine move, illegal move =
+loss), at least 3 points. Games end only on the automatic rules (checkmate, stalemate, insufficient material,
+fivefold repetition, 75-move rule); at 300 plies a side 5+ points of material ahead is adjudicated the winner,
+otherwise a draw. The referee is python-chess 1.11.2 in `/opt/checkvenv` (checker only).
+
+**SAT done condition** (adds to the D5 checks): 13 hard formulas, 60 s each: random 3-SAT at ratio 4.26 with
+n = 150 (4), 200 (4), 250 (2) (status from picosat: 5 SAT, 5 UNSAT) and planted 3-SAT at ratio 3.5 with
+n = 2,000 (2) and 5,000 (1); no wrong answer allowed, at least 80 % (11) answered. Each formula is handed to the
+solver under a random file name, without its comment line.
+
+**Practice vs held-out.** An agent's session mounts `check_public/` (same checker code, a practice set generated
+with seed 20262101: no puzzle in common with the held-out set). Only the harness's final check mounts the held-out
+set (seed 20261101). The held-out files are not committed until the study ends (agents have network access); their
+hash is fixed here.
+
+**Validation** (scratch references, not shipped): a picosat-backed solver passes 13/13 hard formulas (6 s); a plain
+recursive DPLL in Python answers 0/13. An engine with exact mate search and a 2-ply search passes (22/22 puzzles,
+3.0/4 match); a correct move generator that plays its first legal move fails (1/22, 0.5/4). Both agents ran a
+20-second toy task on image v2 (outside the study).
+
+**Frozen (sha256):**
+
+```
+a633a5675fcce5b70caca199ac54c9c7de476657aee11106595e92b25533d549  prompts/chess.md
+7800c32ac5490fe3c1d68f2ea645266b7dfbaf87ab93b2d5b2bfcd52e31c8635  prompts/sat.md
+5e8711a7ad38c9ab6b8210b6ea39ecf0705a04181dce690e75c89ea1032d07d7  cells.py
+018b8f342feab7f2a74bc3ba6810c77b523e56e5a7cdb604281d4788293e536e  run.py
+cffa114d66f34803809e3629fa674ef0f79fc61e8e2eafeda66fb604167d1d31  check/check.py (= check_public/check.py)
+150386ce78c1d768a13a06456eeb193f89f25d1ef3461e2dee00bce2e106397c  check/check (= check_public/check)
+858decbacefc9b1333c4852e271b6ebf87885a92662da9dd89dd5d7300c890d8  docker/Dockerfile
+df1c49beec75f82a117079171ebb2817886697378fc8107fdbbdabeec2404125  gen_assets.py
+482bc1ce419af5e56d5a5c4f6a908eb17310c0250ff448c3a6e92bbb68149024  held-out assets (sha256 of the sorted per-file sha256 list)
+c6cdb5807895fd66e2a553150e0ff3b9d24101fa112a7f910cea294bf8cd7724  practice assets (same method; committed)
+image agent-habits-run:2 = sha256:5f635efda4054dc78a22f5b14c83159d375580cf871ea015c794d2068f174719
+```
+
+Cap (60 active minutes), nudge rule (2), cells, order (seed 20261101) and agents/models (D2) are unchanged.

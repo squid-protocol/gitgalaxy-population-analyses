@@ -8,6 +8,7 @@ Standard library only.
 """
 
 import itertools
+import json
 import os
 import random
 import select
@@ -15,6 +16,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from pathlib import Path
 
 BUILD_TIMEOUT = 900
 
@@ -29,6 +31,14 @@ PERFT = [
 ]
 START_MOVES = {f + r1 + f + r2 for f in "abcdefgh" for r1, r2 in (("2", "3"), ("2", "4"))} | {
     "b1a3", "b1c3", "g1f3", "g1h3"}
+
+# D7 additions. Assets are generated once by gen_assets.py (fixed seeds, verified) and shipped beside this file.
+ASSETS = Path(__file__).resolve().parent / "assets"
+PUZZLE_SHARE_NUM, PUZZLE_SHARE_DEN = 4, 5      # solve at least 80 % of the mate puzzles
+MATCH_GAMES, MATCH_NEED, MATCH_MAX_PLIES, MATCH_SEED = 4, 3.0, 300, 20261101
+PIECE_VALUE = {1: 1, 2: 3, 3: 3, 4: 5, 5: 9, 6: 0}
+SAT_HARD_TIMEOUT = 60
+SAT_HARD_SHARE_NUM, SAT_HARD_SHARE_DEN = 4, 5  # solve at least 80 % of the hard formulas, never a wrong answer
 
 
 def build() -> str | None:
@@ -126,9 +136,114 @@ def check_chess() -> list[tuple[bool, str]]:
         ok, lines = e.until(lambda s: s.startswith("bestmove"), 15)
         mv = lines[-1].split()[1] if ok and len(lines[-1].split()) > 1 else None
         out.append((mv in START_MOVES, f"go movetime 1000 from the start position: bestmove {mv}"))
+        out.append(puzzle_test(e))
     finally:
         e.close()
+    out.append(match_test())
     return out
+
+
+def bestmove(e: "Engine", setup: str, go: str, timeout: float) -> str | None:
+    e.send(setup)
+    e.send(go)
+    ok, lines = e.until(lambda s: s.startswith("bestmove"), timeout)
+    if not ok:
+        return None
+    t = lines[-1].split()
+    return t[1] if len(t) > 1 else None
+
+
+def puzzle_test(e: "Engine") -> tuple[bool, str]:
+    """D7: unique forced mates (mate in 2 or 3); the engine must find the mating first move in 2 s."""
+    ps = json.loads((ASSETS / "puzzles.json").read_text())
+    solved = 0
+    missed = []
+    for p in ps:
+        e.send("ucinewgame")
+        mv = bestmove(e, f"position fen {p['fen']}", "go movetime 2000", 10)
+        if mv == p["move"]:
+            solved += 1
+        else:
+            missed.append(f"mate in {p['mate_in']}: {p['fen']} (played {mv})")
+    need = -(-PUZZLE_SHARE_NUM * len(ps) // PUZZLE_SHARE_DEN)
+    msg = f"mate puzzles: solved {solved} of {len(ps)} (need {need}) in 2 s each"
+    if missed and solved < need:
+        msg += "\n         missed, first 3: " + "; ".join(missed[:3])
+    return solved >= need, msg
+
+
+def greedy_move(board, rng: random.Random):
+    """The weak opponent: take the most valuable piece it can (mate if it can), else a random move."""
+    import chess
+    best, best_score = [], None
+    for m in board.legal_moves:
+        score = 0
+        victim = board.piece_at(m.to_square)
+        if victim:
+            score += PIECE_VALUE[victim.piece_type]
+        elif board.is_en_passant(m):
+            score += 1
+        if m.promotion:
+            score += PIECE_VALUE[m.promotion] - 1
+        board.push(m)
+        if board.is_checkmate():
+            score += 1000
+        board.pop()
+        if best_score is None or score > best_score:
+            best, best_score = [m], score
+        elif score == best_score:
+            best.append(m)
+    return rng.choice(best)
+
+
+def match_test() -> tuple[bool, str]:
+    """D7: 4 games against the greedy opponent, colours alternating, 0.5 s per engine move; need 3 points."""
+    import chess
+    points, results = 0.0, []
+    for g in range(MATCH_GAMES):
+        rng = random.Random(MATCH_SEED + g)
+        engine_white = g % 2 == 0
+        board = chess.Board()
+        moves: list[str] = []
+        e = Engine()
+        result = None
+        try:
+            e.send("uci")
+            e.until(lambda s: s == "uciok", 10)
+            e.send("ucinewgame")
+            me = chess.WHITE if engine_white else chess.BLACK
+            while result is None:
+                # Only the automatic draw rules (fivefold repetition, 75 moves) end a game; at the ply cap a side
+                # 5+ points of material ahead is adjudicated the winner (standard tournament adjudication).
+                if board.is_game_over():
+                    o = board.outcome()
+                    result = 0.5 if o.winner is None else (1.0 if o.winner == me else 0.0)
+                    break
+                if board.ply() >= MATCH_MAX_PLIES:
+                    diff = sum(PIECE_VALUE[p.piece_type] * (1 if p.color == me else -1) for p in board.piece_map().values())
+                    result = 1.0 if diff >= 5 else 0.0 if diff <= -5 else 0.5
+                    break
+                if board.turn == (chess.WHITE if engine_white else chess.BLACK):
+                    setup = "position startpos" + (" moves " + " ".join(moves) if moves else "")
+                    mv = bestmove(e, setup, "go movetime 500", 10)
+                    try:
+                        m = chess.Move.from_uci(mv) if mv else None
+                    except ValueError:
+                        m = None
+                    if m is None or m not in board.legal_moves:
+                        result = 0.0
+                        results.append(f"game {g + 1}: illegal or missing move {mv!r} at ply {board.ply()}")
+                        break
+                else:
+                    m = greedy_move(board, rng)
+                board.push(m)
+                moves.append(m.uci())
+        finally:
+            e.close()
+        points += result
+        results.append(f"game {g + 1} ({'white' if engine_white else 'black'}): {result} after {board.ply()} plies")
+    msg = f"match vs greedy opponent: {points} of {MATCH_GAMES} (need {MATCH_NEED})\n         " + "; ".join(results)
+    return points >= MATCH_NEED, msg
 
 
 def planted(n: int, m: int, rng: random.Random) -> list[list[int]]:
@@ -202,7 +317,67 @@ def check_sat() -> list[tuple[bool, str]]:
                 ok = status == "s UNSATISFIABLE" and p.returncode == 20
                 why = "" if ok else f" (status {status!r}, exit {p.returncode})"
             out.append((ok, f"{name}: {'SAT' if want else 'UNSAT'}{why}"))
+    out.append(hard_sat_test())
     return out
+
+
+def read_cnf(path: Path) -> tuple[int, list[list[int]]]:
+    n, cl, cur = 0, [], []
+    for ln in path.read_text().splitlines():
+        ln = ln.strip()
+        if not ln or ln[0] == "c":
+            continue
+        if ln[0] == "p":
+            n = int(ln.split()[2])
+            continue
+        for t in map(int, ln.split()):
+            if t == 0:
+                cl.append(cur)
+                cur = []
+            else:
+                cur.append(t)
+    return n, cl
+
+
+def hard_sat_test() -> tuple[bool, str]:
+    """D7: random 3-SAT at ratio 4.26 (n = 150-250) and large planted formulas, 60 s each.
+    Never a wrong answer; at least 80 % answered."""
+    man = json.loads((ASSETS / "sat" / "manifest.json").read_text())
+    solved, wrong, timeouts = 0, [], []
+    tmp = Path(tempfile.mkdtemp())
+    for c in man:
+        src = ASSETS / "sat" / c["file"]
+        path = tmp / f"{random.SystemRandom().getrandbits(64):016x}.cnf"  # an anonymous name: the file name tells nothing
+        path.write_text(src.read_text().split("\n", 1)[1])               # and the descriptive comment line is dropped
+        t0 = time.time()
+        try:
+            p = subprocess.run(["./solver", str(path)], capture_output=True, text=True, timeout=SAT_HARD_TIMEOUT)
+        except subprocess.TimeoutExpired:
+            timeouts.append(c["file"])
+            continue
+        lines = [ln.strip() for ln in p.stdout.splitlines()]
+        status = next((ln for ln in lines if ln.startswith("s ")), None)
+        if c["status"] == "SAT":
+            n, cl = read_cnf(path)
+            lits = [int(t) for ln in lines if ln.startswith("v") for t in ln[1:].split()]
+            model = {abs(x): x > 0 for x in lits if x}
+            good = all(v in model for v in range(1, n + 1)) and all(any(model.get(abs(l)) == (l > 0) for l in k) for k in cl)
+            ok = status == "s SATISFIABLE" and p.returncode == 10 and good
+        else:
+            ok = status == "s UNSATISFIABLE" and p.returncode == 20
+        if ok:
+            solved += 1
+        elif status is None and p.returncode not in (10, 20):
+            timeouts.append(f"{c['file']} (no answer, exit {p.returncode})")
+        else:
+            wrong.append(f"{c['file']} (want {c['status']}, got {status!r}, exit {p.returncode}, {time.time() - t0:.1f}s)")
+    need = -(-SAT_HARD_SHARE_NUM * len(man) // SAT_HARD_SHARE_DEN)
+    msg = f"hard formulas: {solved} of {len(man)} answered correctly within {SAT_HARD_TIMEOUT}s (need {need}, no wrong answers)"
+    if wrong:
+        msg += "\n         WRONG: " + "; ".join(wrong[:4])
+    if timeouts and solved < need:
+        msg += "\n         unanswered: " + "; ".join(timeouts[:4])
+    return solved >= need and not wrong, msg
 
 
 def main() -> int:
