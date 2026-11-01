@@ -11,6 +11,15 @@ per-repo scan bundles); this repo merges them into master SQLite databases (`bui
 
 ![Archetype z-score distribution](analyses_ridgeplots/archetype_zscore_distribution.png)
 
+## How studies are run
+
+Hypothesis first: a confirmatory claim is registered (direction, test, α, frozen analysis code) and pushed
+before the data that could confirm it is generated or opened; every verdict is published either way;
+exploratory work stays labelled exploratory. The rules and the guards for population studies are in
+[`CONTRIBUTING.md`](CONTRIBUTING.md), the register of record in [`docs/HYPOTHESES.md`](docs/HYPOTHESES.md),
+the index of studies in [`docs/EXPERIMENTS.md`](docs/EXPERIMENTS.md), and the templates in `docs/`. The
+method is shared with [temporal-crucible](https://github.com/squid-protocol/temporal-crucible).
+
 ## What's here
 
 - **[structural-fingerprint-scanner](structural-fingerprint-scanner/)**: a packaged tool
