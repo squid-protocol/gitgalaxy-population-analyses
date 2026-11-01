@@ -364,3 +364,27 @@ new arm registers its families against each existing arm on the same measures (d
 gives a direction, two-sided otherwise), Holm within each family; its runs use the same kit, held-out set, cap,
 nudge rule and image, on a pinned lane; its order gets its own seed. A deviation records the arm before its first
 run.
+
+### D11 (2026-11-01, before any run of the new rounds and before any measure of any run): second rounds of S and K
+
+The owner added a second, independent full round of each Claude arm: **S'** (`sonnet-b`: Claude Code 2.1.316,
+`claude-sonnet-5-5`) and **K'** (`haiku-b`: `claude-haiku-5-5`), each the same 10 cells + 2 repeat cells (12 runs),
+same kit, held-out set, cap, nudge rule and image; own seeded orders (seeds 20261103 for `haiku-b`, 20261104 for
+`sonnet-b`), appended after the existing orders (checked: the first 36 positions are unchanged). Lanes (D8): K' on
+cores 0-2 after K; S' on cores 3-5 after the Codex lane.
+
+**Families D (S vs S') and E (K vs K'): the within-model noise floor (negative controls).** Two-sided sign tests on
+the five H1-H5 measures over the 10 cells (first run per arm in repeat cells), Holm across D1-D5 and across E1-E5
+at α = 0.05 each. **Predicted: no difference.** Reading, fixed now: Family A (S vs X) confirmed with D null = the
+agent gap exceeds run-to-run noise; a measure significant in D is reported as unstable within the model, and its
+A result is read with that caveat.
+
+**Variance, upgraded.** With S and S' (and K and K') the within-model spread is available in all 10 cells, not only
+the two repeat cells: V1 is additionally reported over all 10 cells as (|mean S - X| > |S - S'|) per cell, counted
+over cells; V2 likewise with sfs distance (S-S' distance vs S-X distance per cell). These all-cell versions are
+reported beside the registered two-cell V1/V2, which stay the registered tests.
+
+**Replication (reported, not a family):** S' vs X on the H1-H5 measures, described as a replication of Family A with
+independent Sonnet runs (X runs are shared, so it is not independent evidence).
+
+cells.py sha256 after this change: `6b486e1ccac6a6438e6a19359f61d10e96df976095da675399de008153c4058e` (run.py unchanged since D9).

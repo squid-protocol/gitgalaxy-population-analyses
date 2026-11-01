@@ -18,6 +18,9 @@ AGENTS = {
 # AGENTS so plan() -- and with it the frozen D5 order of the registered runs -- is unchanged; it gets its own order.
 EXTRA_AGENTS = {
     "haiku": {"cli": "Claude Code 2.1.316", "model": "claude-haiku-5-5", "setting": "default effort", "kind": "claude"},
+    # D11: a second, independent round of each Claude model (within-model noise floor; families D and E).
+    "haiku-b": {"cli": "Claude Code 2.1.316", "model": "claude-haiku-5-5", "setting": "default effort", "kind": "claude"},
+    "sonnet-b": {"cli": "Claude Code 2.1.316", "model": "claude-sonnet-5-5", "setting": "default effort", "kind": "claude"},
 }
 ALL_AGENTS = {**AGENTS, **EXTRA_AGENTS}
 CAP_MIN = 60          # active minutes per run, all sessions together

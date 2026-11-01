@@ -54,6 +54,8 @@ before any confirmation run of any arm was measured.
 | AH-B4 | X adds Python helper code to non-Python projects more than K | same (discordant cells) | 2026-11-01 | ○ | — |
 | AH-B5 | K uses `while` more than X (non-COBOL cells) | same | 2026-11-01 | ○ | — |
 | AH-C1..C5 | K (Haiku) vs S (Sonnet) differ on the H1-H5 measures (no direction) | two-sided sign test, Holm across AH-C1..C5 | 2026-11-01 | ○ | — |
+| AH-D1..D5 | S vs S' (two independent Sonnet rounds) differ on the H1-H5 measures: **predicted null** (negative control) | two-sided sign test, Holm across D1..D5 | 2026-11-01 | ○ | — |
+| AH-E1..E5 | K vs K' (two independent Haiku rounds) differ on the H1-H5 measures: **predicted null** (negative control) | two-sided sign test, Holm across E1..E5 | 2026-11-01 | ○ | — |
 
 ## Earlier studies (before this register)
 
