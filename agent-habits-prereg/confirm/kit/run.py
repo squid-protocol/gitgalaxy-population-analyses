@@ -230,6 +230,8 @@ def main() -> None:
     ap.add_argument("--next", action="store_true")
     ap.add_argument("--order", action="store_true")
     ap.add_argument("--smoke", choices=sorted(cells.AGENTS))
+    ap.add_argument("--agent", choices=sorted(cells.AGENTS),
+                    help="with --next: the next pending run of this agent only (D6); the order itself is unchanged")
     a = ap.parse_args()
     if a.order:
         for i, r in enumerate(order(), 1):
@@ -242,9 +244,9 @@ def main() -> None:
         print(json.dumps(run(r, smoke_prompt=msg), indent=1))
         return
     if a.next:
-        todo = [r for r in order() if not (RUNS / r["run_id"]).exists()]
+        todo = [r for r in order() if not (RUNS / r["run_id"]).exists() and (not a.agent or r["agent"] == a.agent)]
         if not todo:
-            print("all runs started")
+            print("all runs started" + (f" for {a.agent}" if a.agent else ""))
             return
         r = todo[0]
     else:

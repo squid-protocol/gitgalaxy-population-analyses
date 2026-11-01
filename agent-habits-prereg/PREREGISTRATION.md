@@ -222,3 +222,17 @@ per agent, outside the study (no study cell was run).
 
 Measurements, counts, keyword and technique names only; no source text (the owner's LLC licence rule). Every
 outcome is reported, including refuted and inconclusive hypotheses.
+
+### D6 (2026-11-01, after runs 1-2 started): pacing, and a selection option
+
+**Pacing.** The owner stopped the batch after two runs (`sat-rust-codex-r1` finished, `chess-rust-claude-r1` in
+progress): the remaining runs are started one at a time, by hand, at a pace the Codex Free allowance and the Claude
+5-hour window allow. Neither run was redone or inspected for its measures.
+
+**`run.py --next --agent AGENT`** picks the next pending run of one agent in the frozen order, so Claude runs can
+continue while the Codex allowance recovers. It changes no prompt, checker, cap, nudge rule or order; within an agent
+the order (and so which run is r1) is unchanged. The agent each run's slot belonged to is fixed by the order, so
+runs completed per agent can drift in calendar time; the run dates are reported per run.
+
+`run.py` sha256 after this change: `ce451276ab1b93b81fa1a8570310d5cf81c4edb288d42a66a783985c3207f15c`
+(was `2727e697...` in D5; runs 1-2 used the D5 version).
