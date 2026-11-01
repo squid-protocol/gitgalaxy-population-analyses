@@ -179,6 +179,45 @@ beside the confirmation as a **supplementary, uncorrected check** of H1-H5 where
 primary test. The selection rule is fixed: every candidate marked usable in `confirm/candidates.csv` as of
 2026-11-01. The marginal receipts-CLI pair is included only if its Codex side has at least 300 code lines.
 
+### D5 (2026-11-01, before any confirmation run): autonomous runs, and the frozen run kit
+
+**Autonomous, not steered.** The exploratory set's runs were interactive: the authors state, for example,
+"47 substantive prompts, 15.5 active hours" for one COBOL chess engine. No verbatim prompt was published. The
+confirmation runs are autonomous: one fixed prompt per task (`confirm/kit/prompts/`, written once, identical for both
+agents; it states the task, the interface, the language rule and how completion is checked, and says nothing about
+comments, tests, structure or helper scripts), then no human input. What is confirmed is therefore each agent's
+habits **without human steering**; a hypothesis not confirmed is reported with that difference named, beside D2's.
+
+**Done condition and budget.** The harness, not the agent, decides done: after each session it runs the checker
+(`confirm/kit/check/check.py`: builds with `./build.sh`, then chess: UCI handshake, perft on six published positions,
+a timed `go`; SAT: planted-satisfiable, pigeonhole and brute-forced random formulas, every model verified). On FAIL
+it resumes the same session with the checker's first 40 lines, at most **2 times**. Cap: **60 active minutes** per
+run over all sessions (limit waits excluded, D3). A run that ends without PASS is kept and flagged (section 4).
+
+**Environment.** Every session runs in a fresh container of one image (`agent-habits-run:1`, id
+`sha256:8f66cca4bca0480d590dbd758c0fa5b80e06e34c11585f636a79b562ec931150`): Debian 12, GnuCOBOL 3.1.2, JDK 17,
+Python 3.11, gcc 12, Rust 1.82.0, Codex CLI 0.166.0, Claude Code 2.1.316, 3 CPUs, 6 GB, network on (model APIs);
+each run's agent home starts empty except for its login, so no memory, settings or skills from the host reach it.
+
+**Order.** The 24 runs execute in a fixed shuffled order (`run.py --order`, seed 20261101); in a repeat cell, r1 is
+the run that happens first.
+
+**Frozen kit (sha256):**
+
+```
+23af9554e6a00bdc2a8e2e53cb2fa493dfd536e557f729f42b26533644edc5f7  prompts/chess.md
+6113f82425a820a859a7144c60854b59a3a969212128e2e2fb88e110bd5510f7  prompts/sat.md
+5e8711a7ad38c9ab6b8210b6ea39ecf0705a04181dce690e75c89ea1032d07d7  cells.py
+2727e697eda093c4bfadb0bb24fb8d7fd5d80f4997feb0c01bca4a5dc2f9a193  run.py
+28ed58675d728d6e3756f24fef3911e7788e9b3a2064c9b5a678379f73987efb  check/check.py
+89bbf9ff9934ed8f6aa194f1665174bc71187a240b3d3524ece0ddf272b8fd3c  check/check
+437c4757e157bdff6e978df0dbef8ad26b760b9d8506300d54571b5af78ba548  docker/Dockerfile
+fd13c70000fec3f2116dfbcbb6121210b4a29328bf0e46210a59dd594a67d824  docker/claude-2.1.316  (Anthropic's binary; not committed)
+```
+
+The kit is committed in `confirm/kit/` (all but the Claude binary). It was smoke-tested on a toy task, one session
+per agent, outside the study (no study cell was run).
+
 ## 9. Publication
 
 Measurements, counts, keyword and technique names only; no source text (the owner's LLC licence rule). Every
