@@ -81,6 +81,8 @@ def docker(rd: Path, agent: str, argv: list[str], name: str, timeout: float | No
     # only the harness's final check mounts the held-out set (check).
     cmd = ["docker", "run", "--rm", "--name", name, "-v", f"{rd / 'repo'}:/work",
            "-v", f"{KIT / check_dir}:/check:ro", "--cpus", "3", "--memory", "6g"]
+    if os.environ.get("AH_CPUSET"):  # D8: a parallel lane pins its containers to its own cores
+        cmd += ["--cpuset-cpus", os.environ["AH_CPUSET"]]
     if agent == "claude":
         cmd += ["-v", f"{rd / 'agent-home'}:/home/agent/.claude", "-e", "CLAUDE_CODE_OAUTH_TOKEN"]
     else:

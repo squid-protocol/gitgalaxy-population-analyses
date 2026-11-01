@@ -293,3 +293,16 @@ image agent-habits-run:2 = sha256:5f635efda4054dc78a22f5b14c83159d375580cf871ea0
 ```
 
 Cap (60 active minutes), nudge rule (2), cells, order (seed 20261101) and agents/models (D2) are unchanged.
+
+### D8 (2026-11-01, after run 1 and while run 2 is in progress): two parallel lanes
+
+To save wall-clock time the runs execute in **two lanes at once, one per agent**: Claude Code runs on CPU cores 0-2,
+Codex runs on cores 3-5 (`AH_CPUSET`, `docker run --cpuset-cpus`), each lane one run at a time in its agent's frozen
+order (`batch_n.sh`). Pinning keeps the timing-sensitive checks (2 s puzzles, 0.5 s match moves, 60 s formulas) from
+competing for cores between lanes; the cores are identical, and other load on the host falls on both lanes alike.
+Runs 1 (`sat-rust-codex-r1`) and 2 (`chess-rust-claude-r1`) ran unpinned, one at a time. The owner set this batch
+at 5 runs per agent; after each Codex run the free plan's `used_percent` is logged and Codex runs pause at 60 %.
+No prompt, checker, asset, cap, nudge rule or order changed.
+
+`run.py` sha256 after this change: `b67763385c38c6b9c292f8cb06dca0b6541c0e29878e85f0e168c73b0084750e`
+(only the `AH_CPUSET` option was added).
