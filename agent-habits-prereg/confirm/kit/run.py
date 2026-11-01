@@ -52,6 +52,11 @@ def now() -> str:
     return dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def kind(agent: str) -> str:
+    """D9: which CLI an agent runs ("claude" or "codex")."""
+    return cells.ALL_AGENTS[agent].get("kind", agent)
+
+
 def order() -> list[dict]:
     runs = cells.plan()
     random.Random(ORDER_SEED).shuffle(runs)
@@ -62,6 +67,17 @@ def order() -> list[dict]:
         seen[k] = seen.get(k, 0) + 1
         r["rep"] = seen[k]
         r["run_id"] = f"{r['task']}-{r['lang']}-{r['agent']}-r{r['rep']}"
+    # D9: each exploratory agent's runs follow, in their own order (seed + 1); the registered order above is unchanged.
+    for i, agent in enumerate(cells.EXTRA_AGENTS, 1):
+        extra = cells.plan_extra(agent)
+        random.Random(ORDER_SEED + i).shuffle(extra)
+        seen_x: dict[tuple, int] = {}
+        for r in extra:
+            k = (r["task"], r["lang"])
+            seen_x[k] = seen_x.get(k, 0) + 1
+            r["rep"] = seen_x[k]
+            r["run_id"] = f"{r['task']}-{r['lang']}-{agent}-r{r['rep']}"
+        runs += extra
     return runs
 
 
@@ -83,13 +99,13 @@ def docker(rd: Path, agent: str, argv: list[str], name: str, timeout: float | No
            "-v", f"{KIT / check_dir}:/check:ro", "--cpus", "3", "--memory", "6g"]
     if os.environ.get("AH_CPUSET"):  # D8: a parallel lane pins its containers to its own cores
         cmd += ["--cpuset-cpus", os.environ["AH_CPUSET"]]
-    if agent == "claude":
+    if kind(agent) == "claude":
         cmd += ["-v", f"{rd / 'agent-home'}:/home/agent/.claude", "-e", "CLAUDE_CODE_OAUTH_TOKEN"]
     else:
         cmd += ["-v", f"{rd / 'agent-home'}:/home/agent/.codex"]
     cmd += [IMAGE] + argv
     env = dict(os.environ)
-    if agent == "claude":
+    if kind(agent) == "claude":
         env["CLAUDE_CODE_OAUTH_TOKEN"] = SECRET.read_text().strip()
     try:
         p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout, env=env)
@@ -101,8 +117,8 @@ def docker(rd: Path, agent: str, argv: list[str], name: str, timeout: float | No
 
 
 def agent_argv(agent: str, message: str, session: str | None) -> list[str]:
-    if agent == "claude":
-        a = ["claude", "-p", message, "--model", cells.AGENTS["claude"]["model"], "--dangerously-skip-permissions",
+    if kind(agent) == "claude":
+        a = ["claude", "-p", message, "--model", cells.ALL_AGENTS[agent]["model"], "--dangerously-skip-permissions",
              "--output-format", "json"]
         return a + (["--resume", session] if session else [])
     base = ["--skip-git-repo-check", "--dangerously-bypass-approvals-and-sandbox", "-m", cells.AGENTS["codex"]["model"],
@@ -113,7 +129,7 @@ def agent_argv(agent: str, message: str, session: str | None) -> list[str]:
 
 
 def find_session(agent: str, out: str, rd: Path) -> str | None:
-    keys = ("session_id",) if agent == "claude" else ("thread_id", "session_id", "conversation_id")
+    keys = ("session_id",) if kind(agent) == "claude" else ("thread_id", "session_id", "conversation_id")
     for line in out.splitlines():
         line = line.strip()
         if not line.startswith("{"):
@@ -176,8 +192,8 @@ def run(r: dict, smoke_prompt: str | None = None) -> dict:
     cap = (2 if smoke_prompt else cells.CAP_MIN) * 60
     row = {k: "" for k in FIELDS}
     row.update({"run_id": r["run_id"], "task": task, "lang": r["lang"], "agent": agent, "rep": r["rep"],
-                "cli": cells.AGENTS[agent]["cli"], "model": cells.AGENTS[agent]["model"],
-                "setting": cells.AGENTS[agent]["setting"], "image": image_id(), "started": now()})
+                "cli": cells.ALL_AGENTS[agent]["cli"], "model": cells.ALL_AGENTS[agent]["model"],
+                "setting": cells.ALL_AGENTS[agent]["setting"], "image": image_id(), "started": now()})
     active, sessions, nudges, limits, waited = 0.0, 0, 0, 0, 0
     session, message, passed, last_check, cap_hit = None, prompt, False, "", False
     in_limit, limit_started = False, 0.0
@@ -235,8 +251,8 @@ def main() -> None:
     ap.add_argument("run_id", nargs="?")
     ap.add_argument("--next", action="store_true")
     ap.add_argument("--order", action="store_true")
-    ap.add_argument("--smoke", choices=sorted(cells.AGENTS))
-    ap.add_argument("--agent", choices=sorted(cells.AGENTS),
+    ap.add_argument("--smoke", choices=sorted(cells.ALL_AGENTS))
+    ap.add_argument("--agent", choices=sorted(cells.ALL_AGENTS),
                     help="with --next: the next pending run of this agent only (D6); the order itself is unchanged")
     a = ap.parse_args()
     if a.order:

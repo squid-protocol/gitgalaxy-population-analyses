@@ -306,3 +306,22 @@ No prompt, checker, asset, cap, nudge rule or order changed.
 
 `run.py` sha256 after this change: `b67763385c38c6b9c292f8cb06dca0b6541c0e29878e85f0e168c73b0084750e`
 (only the `AH_CPUSET` option was added).
+
+### D9 (2026-11-01, before any Haiku run): an exploratory third arm, Claude Code on Haiku 5.5
+
+The owner added a third arm: **Claude Code 2.1.316 with `claude-haiku-5-5`** (default effort), the same 10 cells and
+2 repeat cells (12 runs), same prompts, checker, held-out set, cap, nudge rule and image, on CPU cores 0-2 beside the
+Codex lane (D8).
+
+* **Exploratory only.** H1-H5, S1-S6 and V1-V2 are and stay Claude Code (Sonnet 5.5) vs Codex; no Haiku run enters
+  any registered test. Haiku results are reported descriptively, labelled exploratory, with no p-values.
+* **The question it opens** (for a later registration on unseen data, never tested on these runs): do the registered
+  directions also hold for Haiku vs Codex (a habit of Claude Code / Anthropic's training generally) or only for Sonnet
+  vs Codex (a habit of one model)? And Haiku vs Sonnet within Claude Code (the model's share of the habit).
+* **Order.** `cells.AGENTS` (and so `plan()` and the registered order, seed 20261101) is unchanged; Haiku is in
+  `cells.EXTRA_AGENTS` with its own shuffled order (seed 20261102), appended after the registered order. Checked:
+  the registered 24-run order is identical before and after the change. r1/r2 of a Haiku repeat cell follow that
+  order.
+* Smoke-tested on a toy task (outside the study): model `claude-haiku-5-5`, no error.
+
+sha256 after this change: run.py `30e85d4aeb4b9c761fd13e86f77a2adcae9cb1048596f1d39cda52462791d94f`, cells.py `e762ff38e34f570ea3925921666eb943a340f6df31b5d120bee7b7db6f932b33` (D8: run.py `b6776338...`).

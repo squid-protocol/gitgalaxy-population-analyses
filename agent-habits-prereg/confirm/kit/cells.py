@@ -14,6 +14,12 @@ AGENTS = {
     "claude": {"cli": "Claude Code 2.1.316", "model": "claude-sonnet-5-5", "setting": "default effort"},
     "codex": {"cli": "Codex CLI 0.166.0", "model": "gpt-6-luna", "setting": "model_reasoning_effort=medium"},
 }
+# D9 (exploratory arm, owner 2026-11-01): Claude Code on Haiku 5.5, same cells and repeats (12 runs). Kept out of
+# AGENTS so plan() -- and with it the frozen D5 order of the registered runs -- is unchanged; it gets its own order.
+EXTRA_AGENTS = {
+    "haiku": {"cli": "Claude Code 2.1.316", "model": "claude-haiku-5-5", "setting": "default effort", "kind": "claude"},
+}
+ALL_AGENTS = {**AGENTS, **EXTRA_AGENTS}
 CAP_MIN = 60          # active minutes per run, all sessions together
 MAX_NUDGES = 2        # follow-ups after a failed check, each carrying the check's output
 
@@ -27,6 +33,18 @@ def plan() -> list[dict]:
                 for agent in AGENTS:
                     runs.append({"run_id": f"{task}-{lang}-{agent}-r{rep}", "task": task, "lang": lang,
                                  "agent": agent, "rep": rep})
+    return runs
+
+
+def plan_extra(agent: str) -> list[dict]:
+    """D9: the same cells and repeats for one exploratory agent."""
+    runs = []
+    for task in TASKS:
+        for lang in LANGS:
+            reps = 2 if (task, lang) in REPEAT_CELLS else 1
+            for rep in range(1, reps + 1):
+                runs.append({"run_id": f"{task}-{lang}-{agent}-r{rep}", "task": task, "lang": lang,
+                             "agent": agent, "rep": rep})
     return runs
 
 
