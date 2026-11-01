@@ -129,7 +129,55 @@ hand-check of the confirmation comments is reported, to show the classifier's ac
 
 ## 8. Deviations
 
-None yet. Any departure from this note is added here, dated, with a reason, before the results are reported.
+Any departure from this note is added here, dated, with a reason, before the results are reported.
+
+### D1 (2026-11-01, before any confirmation run): 24 runs instead of 40
+
+**Why:** cost and time. A public search for licensed same-task pairs (metadata only, no source opened;
+`confirm/candidates.md`) found one usable pair, so generation stays the plan, at a lower cost.
+
+* **Primary and secondary tests (H1-H5, S1-S6):** all 10 cells, **one run per agent per cell** (20 runs). Power
+  is unchanged: the tests run over the same 10 cells (9/10 still needed). In the two repeat cells below, these
+  tests use each agent's **first** run only, so every cell has one run per agent.
+* **Variance tests (V1, V2):** **two repeat cells only**, chess/Rust and SAT/Python, with **2 runs per agent**
+  in each (1 extra per agent per cell: 4 runs). Total 20 + 4 = **24 generated repos** (24 agent sessions).
+  - Within-agent spread in a repeat cell is the difference between that agent's two runs.
+  - V1 passes if the between-agent gap exceeds the pooled within-agent SD in **both** repeat cells.
+  - V2 passes if the mean, over the two repeat cells, of (within-agent / between-agent sfs distance) is ≥ 0.85.
+  - With two cells, V1 and V2 are labelled **underpowered** whatever the outcome.
+
+### D2 (2026-11-01, before any confirmation run): the agents and models
+
+The exploratory set's authors state Claude Code with **Opus 4.6** and Codex with **GPT-5.2-5.4 / gpt-5-codex**:
+flagship models of early 2026, none available now. The confirmation uses:
+
+| side | agent | model | setting | account |
+|---|---|---|---|---|
+| Claude Code | Claude Code 2.1.316 | `claude-sonnet-5-5` (Sonnet 5.5) | default effort | the owner's Team seat |
+| Codex | Codex CLI 0.166.0 (`@openai/codex`) | `gpt-6-luna` (the CLI's default for this account) | reasoning effort medium | ChatGPT Free |
+
+Both are a **newer generation and a lighter tier** than the exploratory set's. How a result is read (fixed now):
+* a hypothesis **confirmed** here holds across a change of model generation and tier on both sides (a stronger
+  claim than the exploratory one);
+* a hypothesis **not confirmed** here is reported as "not confirmed under a model change": it cannot separate a
+  habit that disappeared from an effect of the new models, and is never reported as a clean refutation of the
+  exploratory observation.
+The exact versions are recorded per run (`confirm/runs.csv`) and no version changes during the study; if either
+CLI auto-updates, the run is redone on the pinned version before any measurement.
+
+### D3 (2026-11-01): usage limits
+
+The Codex Free allowance is unpublished, and Claude Code has a 5-hour limit. A run interrupted by a limit is
+**resumed in the same session** after the reset (`codex exec resume <id>`, `claude --resume <id>`) with the
+single message "continue"; it is never restarted from scratch. Each interruption is logged in `confirm/runs.csv`.
+The wall-clock cap counts active time only.
+
+### D4 (2026-11-01): found pairs as a supplementary check
+
+The usable found pair (Crown Defender TD, JavaScript, MIT, `confirm/candidates.csv`) is scanned and reported
+beside the confirmation as a **supplementary, uncorrected check** of H1-H5 where they apply. It is not part of any
+primary test. The selection rule is fixed: every candidate marked usable in `confirm/candidates.csv` as of
+2026-11-01. The marginal receipts-CLI pair is included only if its Codex side has at least 300 code lines.
 
 ## 9. Publication
 
