@@ -439,3 +439,26 @@ had stopped on errors before writing its tables; only run ids of the comment pip
 Two further facts from wiring, recorded here: `comments/analyze.py`'s descriptive flag-rate summary hard-codes the
 exploratory agent names and divides by zero for the confirmation arms; it runs after `per_repo.csv` (H2's only input)
 is written, so the adapter accepts that one failure only when `per_repo.csv` was written in the same run.
+
+### D16 (2026-11-02): a scan-validity gap found after the tests ran; how it will be handled
+
+**Order of events, stated plainly.** CONTRIBUTING's guard 2 asks for a scan-quality appraisal before analysis. Here
+the adapter computed the registered tests first (2026-11-02 ~02:27Z), and a missing-value pattern in its output
+exposed the gap below. The numbers have not been reported, interpreted or used. The appraisal (GG vs tree-sitter vs
+ctags on all 60 runs, `confirm/validity/`) was started next; the handling below is decided from the appraisal alone.
+
+**The gap.** GitGalaxy's aperture blocks a file with any line over 500 characters ("Saturation", a guard against
+minified code). In the 60 confirmation runs it blocked exactly 4 files, all a run's main source and all Codex:
+`chess-c-codex-r1` engine.c, `chess-rust-codex-r1` and `-r2` src/main.rs, `sat-c-codex-r1` solver.c. The scan
+then holds no program for those runs, so the scan-based measures (H1 and the structure measures) are missing or
+wrong for one arm only. (H2, H3, H5 read source files directly and are not affected by the aperture.)
+
+**Rule, fixed before the appraisal's results are known:**
+1. Any run whose cell-language source GG did not read in full (excluded or truncated) is **flagged** in every table.
+2. The primary analysis of every scan-based measure is **re-run with those runs rescanned** under the same pinned
+   engine with the saturation guard lifted for that run only (if the engine exposes no such switch: the long lines
+   are wrapped at statement boundaries in a measurement copy, recorded per file), and the result is checked against
+   tree-sitter and ctags for that run before use.
+3. The analysis as first computed (with the flagged cells missing) is reported beside it, labelled, so a reader
+   sees both. Neither version is chosen by its outcome: version 2 is primary because it measures the code the agent
+   wrote; version 1 is the instrument's default.
