@@ -401,3 +401,24 @@ Pacing only. When K's lane (cores 0-2) finishes, a second K' lane starts there b
 take K's next pending run in its frozen order; a run's slot is fixed by that order, r1 of a repeat cell still starts
 before r2, and a simultaneous pick of the same run fails before any agent starts (the run directory is created
 atomically) and is retried. Same image, kit, cap and nudge rule; cores identical.
+
+### D14 (2026-11-02, after the scans, before any measure of any run was computed): the cell table, two clarifications
+
+**Order slip.** Section 7 says the confirmation cell table (`confirm/cells.py`) is written before the first scan. The
+80 scans (60 confirmation runs, 20 exploratory rescans; engine `7d2e1f627`, all exit 0) ran first. The table is fixed
+mechanically by the registered design (run id = task-language-arm-rN; r1 is the run that started first) and is
+written before any measure is computed. No scan output was read beyond its exit code.
+
+**How the frozen code is applied** (no frozen file is edited; each is imported and given only paths and repo lists):
+* `comments/extract.py`, `classify.py`, `analyze.py`: `REPOS` = the 60 runs (cell language as the repo language),
+  `OUT`, `TEXT_CACHE`, `CODE_DIR` redirected to `confirm/measure/` so the exploratory outputs are not overwritten.
+* `keyword_diff.py`: `ROOTS` = the scanned copies of the runs (`confirm/scan_src/confirm/`).
+* `landscape.py`: `SCANS` = `confirm/scans/confirm/`.
+
+**H1 clarification.** The registered H1 text measures doc/code lines "over the cell language's files"; the frozen
+`landscape.profile` sums over every code language in a repo. The registered text governs: the adapter restricts
+`landscape.NON_CODE` per call to every language except the cell's (configuration, not a code change). The
+all-languages figure is reported beside it.
+
+**Statistics.** The primary/secondary tests are one-sided sign tests (P(X >= k), X ~ Bin(n, 1/2), ties dropped);
+Families C, D, E are two-sided (`pooled.sign_p`). Holm within each family.
