@@ -422,3 +422,20 @@ all-languages figure is reported beside it.
 
 **Statistics.** The primary/secondary tests are one-sided sign tests (P(X >= k), X ~ Bin(n, 1/2), ties dropped);
 Families C, D, E are two-sided (`pooled.sign_p`). Holm within each family.
+
+### D15 (2026-11-02, before any measure value was looked at): extension-less Python programs
+
+While wiring the frozen code (D14), 12 runs, all in Python cells and spread over the arms, turned out to hold their
+program as an extension-less executable with a `#!...python` first line (`./engine`, `./solver`, as the prompt's
+interface asks), sometimes beside other `.py` files. GitGalaxy's scan classifies them as Python (H1 and H4 use the
+scan: unaffected). The frozen comment and keyword code (`comments/extract.py`, `keyword_diff.py`) finds source by
+file extension and would read these programs as absent, so H2, H3 and H5 would be computed on helpers or on nothing.
+
+**Rule (same for every run):** H2, H3 and H5 read a measurement copy (`confirm/measure_src/`) of each run in which
+every extension-less file whose first line is a `#!` naming python is renamed `<name>.py`; nothing else changes. No
+frozen file is edited. At the time of writing, no measure value of any run had been printed or read (the adapter
+had stopped on errors before writing its tables; only run ids of the comment pipeline's output were inspected).
+
+Two further facts from wiring, recorded here: `comments/analyze.py`'s descriptive flag-rate summary hard-codes the
+exploratory agent names and divides by zero for the confirmation arms; it runs after `per_repo.csv` (H2's only input)
+is written, so the adapter accepts that one failure only when `per_repo.csv` was written in the same run.
