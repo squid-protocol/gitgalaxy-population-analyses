@@ -23,7 +23,7 @@ Legend: ✓ supported · ✗ refuted · ⚠ inconclusive · ○ registered, not 
 Pre-registration: [`agent-habits-prereg/PREREGISTRATION.md`](../agent-habits-prereg/PREREGISTRATION.md),
 commit `5700b9e` (2026-11-01T12:41Z), PR #24. Exploratory set: 10 same-task, same-language pairs from
 acherm/agentic-* (chess engine in C, C++, Java, Python, Rust, COBOL; four COBOL tasks). Confirmation set:
-40 fresh repos (2 tasks × 5 languages × 2 agents × 2 repeats), not yet generated. The ids below are the
+as amended by D1-D10: 24 runs (S and X) plus 12 runs of arm K, generated 2026-11-01. The ids below are the
 note's (H1 there = AH-H1 here).
 
 | id | hypothesis (registered direction) | test / α | registered | verdict | evidence |
@@ -41,6 +41,21 @@ note's (H1 there = AH-H1 here).
 | AH-S6 | COBOL: Codex uses `CALL` subprograms more; Claude Code uses `EVALUATE` more | same | 2026-11-01 | ○ | — |
 | AH-V1 | Comment volume is a stable agent trait (between-agent gap > pooled within-agent SD in most cells) | per-cell ratio > 1 in a majority | 2026-11-01 | ○ | — |
 | AH-V2 | Overall structure is NOT a stable agent trait (within-agent / between-agent sfs distance ≥ 0.85, median over cells) | threshold | 2026-11-01 | ○ | — |
+
+Arms (deviations D2, D9, D10): **S** = Claude Code on Sonnet 5.5 (the AH-H/S/V rows above), **X** = Codex on
+gpt-6-luna, **K** = Claude Code on Haiku 5.5. Families B and C registered 2026-11-01 in D10 (commit `478a00d`),
+before any confirmation run of any arm was measured.
+
+| id | hypothesis (registered direction) | test / α | registered | verdict | evidence |
+|---|---|---|---|---|---|
+| AH-B1 | K (Haiku) writes more comments than X (Codex) | one-sided sign test over cells, Holm across AH-B1..B5 | 2026-11-01 | ○ | — |
+| AH-B2 | K documents more of its functions than X | same | 2026-11-01 | ○ | — |
+| AH-B3 | X exits early more than K | same | 2026-11-01 | ○ | — |
+| AH-B4 | X adds Python helper code to non-Python projects more than K | same (discordant cells) | 2026-11-01 | ○ | — |
+| AH-B5 | K uses `while` more than X (non-COBOL cells) | same | 2026-11-01 | ○ | — |
+| AH-C1..C5 | K (Haiku) vs S (Sonnet) differ on the H1-H5 measures (no direction) | two-sided sign test, Holm across AH-C1..C5 | 2026-11-01 | ○ | — |
+| AH-D1..D5 | S vs S' (two independent Sonnet rounds) differ on the H1-H5 measures: **predicted null** (negative control) | two-sided sign test, Holm across D1..D5 | 2026-11-01 | ○ | — |
+| AH-E1..E5 | K vs K' (two independent Haiku rounds) differ on the H1-H5 measures: **predicted null** (negative control) | two-sided sign test, Holm across E1..E5 | 2026-11-01 | ○ | — |
 
 ## Earlier studies (before this register)
 

@@ -1,0 +1,80 @@
+[
+ {
+  "file": "random-n150-0.cnf",
+  "n": 150,
+  "clauses": 639,
+  "status": "UNSAT"
+ },
+ {
+  "file": "random-n150-1.cnf",
+  "n": 150,
+  "clauses": 639,
+  "status": "UNSAT"
+ },
+ {
+  "file": "random-n150-2.cnf",
+  "n": 150,
+  "clauses": 639,
+  "status": "SAT"
+ },
+ {
+  "file": "random-n150-3.cnf",
+  "n": 150,
+  "clauses": 639,
+  "status": "SAT"
+ },
+ {
+  "file": "random-n200-0.cnf",
+  "n": 200,
+  "clauses": 852,
+  "status": "UNSAT"
+ },
+ {
+  "file": "random-n200-1.cnf",
+  "n": 200,
+  "clauses": 852,
+  "status": "UNSAT"
+ },
+ {
+  "file": "random-n200-2.cnf",
+  "n": 200,
+  "clauses": 852,
+  "status": "UNSAT"
+ },
+ {
+  "file": "random-n200-3.cnf",
+  "n": 200,
+  "clauses": 852,
+  "status": "SAT"
+ },
+ {
+  "file": "random-n250-0.cnf",
+  "n": 250,
+  "clauses": 1065,
+  "status": "UNSAT"
+ },
+ {
+  "file": "random-n250-1.cnf",
+  "n": 250,
+  "clauses": 1065,
+  "status": "SAT"
+ },
+ {
+  "file": "planted-n2000-0.cnf",
+  "n": 2000,
+  "clauses": 7000,
+  "status": "SAT"
+ },
+ {
+  "file": "planted-n2000-1.cnf",
+  "n": 2000,
+  "clauses": 7000,
+  "status": "SAT"
+ },
+ {
+  "file": "planted-n5000-0.cnf",
+  "n": 5000,
+  "clauses": 17500,
+  "status": "SAT"
+ }
+]
