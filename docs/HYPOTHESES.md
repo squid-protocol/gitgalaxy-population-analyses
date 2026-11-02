@@ -47,3 +47,14 @@ note's (H1 there = AH-H1 here).
 The data-v2.7.0 clustering experiments (`experiments/2.7.0/*/EXPERIMENT.md`) wrote their predictions into
 the experiment doc before results; they predate this register and are indexed in
 [`EXPERIMENTS.md`](EXPERIMENTS.md) without verdict rows here.
+
+### R3: model identification from structure (registered 2026-11-02)
+
+Pre-registration: [`agent-habits-round3/PREREGISTRATION.md`](../agent-habits-round3/PREREGISTRATION.md). Hypothesis
+from the agent-habits runs (exploratory: 83 % same-model nearest neighbour, chance 27 %); tested on new runs only.
+
+| id | hypothesis (registered direction) | test / α | registered | verdict | evidence |
+|---|---|---|---|---|---|
+| R3-H1 | Fresh runs, same tasks: the same-cell nearest structural neighbour is the same model more often than chance | one-sided label permutation, Holm across H1-H2, 0.05 | 2026-11-02 | ○ | — |
+| R3-H2 | New task (Huffman compressor): same | same | 2026-11-02 | ○ | — |
+| R3-S1..S4 | accuracy ≥ 0.60; per-model above chance; portable lens; cross-task identification | secondary, uncorrected | 2026-11-02 | ○ | — |
