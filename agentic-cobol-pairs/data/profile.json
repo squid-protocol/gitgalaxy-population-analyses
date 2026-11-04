@@ -1,0 +1,443 @@
+{
+ "min_loc": 3,
+ "families": [
+  {
+   "family": "chess engine",
+   "claude_code": {
+    "repo": "agentic-chessengine-cobol-cc",
+    "languages": {
+     "cobol": 2920
+    },
+    "cobol_share": 1.0,
+    "free_format": false,
+    "functions": 44,
+    "paragraphs": 44,
+    "main_lines": 0,
+    "main_line_share": 0.0,
+    "lowercase_paragraph_names_pct": 0.0,
+    "loc_median": 22.0,
+    "complexity_median": 5.5,
+    "complexity_ge10_pct": 29.5,
+    "state_mutation_per100": 29.34,
+    "io_per100": 0.0,
+    "fan_out_mean": 1.57,
+    "top5pct_hub_share": 0.147,
+    "hubs": [
+     {
+      "name": "EXTRACT-TOKEN",
+      "fan_in": 5,
+      "loc": 22
+     },
+     {
+      "name": "ADD-MOVE",
+      "fan_in": 5,
+      "loc": 7
+     },
+     {
+      "name": "CHECK-TARGET-FRIENDLY",
+      "fan_in": 4,
+      "loc": 19
+     }
+    ]
+   },
+   "codex": {
+    "repo": "agentic-chessengine-cobol-codex",
+    "languages": {
+     "cobol": 3359,
+     "python": 534,
+     "shell": 35
+    },
+    "cobol_share": 0.855,
+    "free_format": true,
+    "functions": 71,
+    "paragraphs": 57,
+    "main_lines": 14,
+    "main_line_share": 0.517,
+    "lowercase_paragraph_names_pct": 0.0,
+    "loc_median": 24,
+    "complexity_median": 5,
+    "complexity_ge10_pct": 32.4,
+    "state_mutation_per100": 40.57,
+    "io_per100": 0.0,
+    "fan_out_mean": 1.04,
+    "top5pct_hub_share": 0.23,
+    "hubs": [
+     {
+      "name": "ADD-MOVE",
+      "fan_in": 8,
+      "loc": 10
+     },
+     {
+      "name": "ADD-PROMOS",
+      "fan_in": 4,
+      "loc": 15
+     },
+     {
+      "name": "SLIDE-DIR",
+      "fan_in": 3,
+      "loc": 30
+     }
+    ]
+   }
+  },
+  {
+   "family": "compressor",
+   "claude_code": {
+    "repo": "agentic-cobol-compress-cc",
+    "languages": {
+     "cobol": 1819,
+     "python": 403,
+     "shell": 268
+    },
+    "cobol_share": 0.731,
+    "free_format": false,
+    "functions": 47,
+    "paragraphs": 47,
+    "main_lines": 0,
+    "main_line_share": 0.0,
+    "lowercase_paragraph_names_pct": 0.0,
+    "loc_median": 24,
+    "complexity_median": 4,
+    "complexity_ge10_pct": 14.9,
+    "state_mutation_per100": 31.96,
+    "io_per100": 0.48,
+    "fan_out_mean": 1.15,
+    "top5pct_hub_share": 0.111,
+    "hubs": [
+     {
+      "name": "TOKEN-NEXT",
+      "fan_in": 3,
+      "loc": 23
+     },
+     {
+      "name": "FREE-PAYLOADS",
+      "fan_in": 3,
+      "loc": 8
+     },
+     {
+      "name": "READ-CPC-FILE",
+      "fan_in": 2,
+      "loc": 235
+     }
+    ]
+   },
+   "codex": {
+    "repo": "agentic-cobol-compress",
+    "languages": {
+     "cobol": 1816,
+     "python": 654,
+     "shell": 157
+    },
+    "cobol_share": 0.691,
+    "free_format": true,
+    "functions": 74,
+    "paragraphs": 72,
+    "main_lines": 2,
+    "main_line_share": 0.052,
+    "lowercase_paragraph_names_pct": 100.0,
+    "loc_median": 14.0,
+    "complexity_median": 2.0,
+    "complexity_ge10_pct": 13.5,
+    "state_mutation_per100": 27.64,
+    "io_per100": 1.86,
+    "fan_out_mean": 1.47,
+    "top5pct_hub_share": 0.183,
+    "hubs": [
+     {
+      "name": "trim-helper",
+      "fan_in": 8,
+      "loc": 14
+     },
+     {
+      "name": "trim-arg-value",
+      "fan_in": 5,
+      "loc": 4
+     },
+     {
+      "name": "write-little-endian",
+      "fan_in": 4,
+      "loc": 9
+     }
+    ]
+   }
+  },
+  {
+   "family": "DOOM-like game",
+   "claude_code": {
+    "repo": "agentic-cobol-doom-cc",
+    "languages": {
+     "cobol": 1616,
+     "shell": 50
+    },
+    "cobol_share": 0.97,
+    "free_format": false,
+    "functions": 45,
+    "paragraphs": 45,
+    "main_lines": 0,
+    "main_line_share": 0.0,
+    "lowercase_paragraph_names_pct": 0.0,
+    "loc_median": 25,
+    "complexity_median": 4,
+    "complexity_ge10_pct": 17.8,
+    "state_mutation_per100": 55.81,
+    "io_per100": 1.04,
+    "fan_out_mean": 1.13,
+    "top5pct_hub_share": 0.098,
+    "hubs": [
+     {
+      "name": "READ-ONE-BYTE",
+      "fan_in": 3,
+      "loc": 8
+     },
+     {
+      "name": "LOAD-LEVEL",
+      "fan_in": 2,
+      "loc": 15
+     },
+     {
+      "name": "COMPUTE-CURRENT-SECS",
+      "fan_in": 2,
+      "loc": 6
+     }
+    ]
+   },
+   "codex": {
+    "repo": "agentic-cobol-doom-codex",
+    "languages": {
+     "c": 1626,
+     "cobol": 1910
+    },
+    "cobol_share": 0.54,
+    "free_format": true,
+    "functions": 101,
+    "paragraphs": 100,
+    "main_lines": 1,
+    "main_line_share": 0.008,
+    "lowercase_paragraph_names_pct": 100.0,
+    "loc_median": 9,
+    "complexity_median": 2,
+    "complexity_ge10_pct": 0.0,
+    "state_mutation_per100": 28.26,
+    "io_per100": 0.0,
+    "fan_out_mean": 1.12,
+    "top5pct_hub_share": 0.116,
+    "hubs": [
+     {
+      "name": "test-probe-cell",
+      "fan_in": 4,
+      "loc": 16
+     },
+     {
+      "name": "render-scene",
+      "fan_in": 3,
+      "loc": 7
+     },
+     {
+      "name": "start-selected-level",
+      "fan_in": 2,
+      "loc": 4
+     }
+    ]
+   }
+  },
+  {
+   "family": "pygame-style framework",
+   "claude_code": {
+    "repo": "agentic-cobol-pygame-cc",
+    "languages": {
+     "c": 283,
+     "cobol": 764
+    },
+    "cobol_share": 0.73,
+    "free_format": true,
+    "functions": 31,
+    "paragraphs": 31,
+    "main_lines": 0,
+    "main_line_share": 0.0,
+    "lowercase_paragraph_names_pct": 0.0,
+    "loc_median": 19,
+    "complexity_median": 2,
+    "complexity_ge10_pct": 6.5,
+    "state_mutation_per100": 17.47,
+    "io_per100": 0.47,
+    "fan_out_mean": 0.94,
+    "top5pct_hub_share": 0.138,
+    "hubs": [
+     {
+      "name": "RESET-GAME",
+      "fan_in": 2,
+      "loc": 13
+     },
+     {
+      "name": "RAND-GAP",
+      "fan_in": 2,
+      "loc": 10
+     },
+     {
+      "name": "UPDATE-STATE",
+      "fan_in": 1,
+      "loc": 27
+     }
+    ]
+   },
+   "codex": {
+    "repo": "agentic-cobol-pygame",
+    "languages": {
+     "c": 340,
+     "cobol": 398
+    },
+    "cobol_share": 0.539,
+    "free_format": true,
+    "functions": 13,
+    "paragraphs": 11,
+    "main_lines": 2,
+    "main_line_share": 0.395,
+    "lowercase_paragraph_names_pct": 0.0,
+    "loc_median": 21,
+    "complexity_median": 2,
+    "complexity_ge10_pct": 7.7,
+    "state_mutation_per100": 18.73,
+    "io_per100": 0.0,
+    "fan_out_mean": 1.23,
+    "top5pct_hub_share": 0.188,
+    "hubs": [
+     {
+      "name": "UPDATE-TITLE",
+      "fan_in": 3,
+      "loc": 22
+     },
+     {
+      "name": "RESET-GAME",
+      "fan_in": 2,
+      "loc": 15
+     },
+     {
+      "name": "RANDOMIZE-GAP",
+      "fan_in": 2,
+      "loc": 11
+     }
+    ]
+   }
+  },
+  {
+   "family": "SAT solver",
+   "claude_code": {
+    "repo": "agentic-cobol-sat-cc",
+    "languages": {
+     "cobol": 1347,
+     "shell": 558
+    },
+    "cobol_share": 0.707,
+    "free_format": false,
+    "functions": 55,
+    "paragraphs": 55,
+    "main_lines": 0,
+    "main_line_share": 0.0,
+    "lowercase_paragraph_names_pct": 0.0,
+    "loc_median": 17,
+    "complexity_median": 4,
+    "complexity_ge10_pct": 9.1,
+    "state_mutation_per100": 33.99,
+    "io_per100": 0.51,
+    "fan_out_mean": 1.24,
+    "top5pct_hub_share": 0.147,
+    "hubs": [
+     {
+      "name": "SKIP-WS",
+      "fan_in": 5,
+      "loc": 6
+     },
+     {
+      "name": "READ-WORD",
+      "fan_in": 3,
+      "loc": 13
+     },
+     {
+      "name": "ADD-WATCH-NODE",
+      "fan_in": 2,
+      "loc": 18
+     }
+    ]
+   },
+   "codex": {
+    "repo": "agentic-cobol-sat-codex",
+    "languages": {
+     "cobol": 1706,
+     "shell": 808
+    },
+    "cobol_share": 0.679,
+    "free_format": true,
+    "functions": 69,
+    "paragraphs": 69,
+    "main_lines": 0,
+    "main_line_share": 0.0,
+    "lowercase_paragraph_names_pct": 100.0,
+    "loc_median": 20,
+    "complexity_median": 3,
+    "complexity_ge10_pct": 7.2,
+    "state_mutation_per100": 26.1,
+    "io_per100": 0.36,
+    "fan_out_mean": 1.41,
+    "top5pct_hub_share": 0.175,
+    "hubs": [
+     {
+      "name": "format-signed-number",
+      "fan_in": 8,
+      "loc": 18
+     },
+     {
+      "name": "assign-solver-literal",
+      "fan_in": 5,
+      "loc": 42
+     },
+     {
+      "name": "parse-integer-token",
+      "fan_in": 4,
+      "loc": 42
+     }
+    ]
+   }
+  }
+ ],
+ "higher_in_pairs": {
+  "cobol_share": {
+   "claude_code": 5
+  },
+  "main_line_share": {
+   "codex": 4,
+   "tie": 1
+  },
+  "functions": {
+   "codex": 4,
+   "claude_code": 1
+  },
+  "loc_median": {
+   "codex": 3,
+   "claude_code": 2
+  },
+  "complexity_median": {
+   "claude_code": 4,
+   "tie": 1
+  },
+  "complexity_ge10_pct": {
+   "codex": 2,
+   "claude_code": 3
+  },
+  "state_mutation_per100": {
+   "codex": 2,
+   "claude_code": 3
+  },
+  "io_per100": {
+   "tie": 1,
+   "codex": 1,
+   "claude_code": 3
+  },
+  "fan_out_mean": {
+   "claude_code": 2,
+   "codex": 3
+  },
+  "top5pct_hub_share": {
+   "codex": 5
+  }
+ }
+}
