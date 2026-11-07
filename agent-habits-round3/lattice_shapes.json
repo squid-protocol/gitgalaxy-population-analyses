@@ -1,0 +1,7537 @@
+{
+ "total": 6936799,
+ "cover": 0.4972691294644691,
+ "families": [
+  {
+   "family": 7,
+   "shapes": 62,
+   "share": 0.1746087784870226,
+   "core": [
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "often": [
+    "arch_api",
+    "state_flux",
+    "struct_branch"
+   ],
+   "langs": [
+    [
+     "python",
+     0.2728400810418535
+    ],
+    [
+     "c",
+     0.2474988152500029
+    ],
+    [
+     "php",
+     0.10093492048552459
+    ],
+    [
+     "javascript",
+     0.06918857422149129
+    ]
+   ],
+   "repos": 504,
+   "top_repo": [
+    "linux",
+    98635
+   ],
+   "top_repo_share": 0.08143401809406337,
+   "arch": [
+    [
+     "Parameter Forwarders",
+     0.3217425979957498
+    ],
+    [
+     "Compute Cores",
+     0.17906732517300653
+    ],
+    [
+     "Interface Declarations",
+     0.1422170594092267
+    ]
+   ],
+   "tests": 0.2997442260981848,
+   "members": [
+    2,
+    5,
+    8,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "family": 8,
+   "shapes": 63,
+   "share": 0.15789631500062204,
+   "core": [
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "often": [
+    "def_encapsulation",
+    "state_flux",
+    "state_pointers",
+    "struct_branch"
+   ],
+   "langs": [
+    [
+     "c",
+     0.5682441716615159
+    ],
+    [
+     "cpp",
+     0.23794411551225925
+    ],
+    [
+     "python",
+     0.04018369480368303
+    ],
+    [
+     "csharp",
+     0.03107747227915767
+    ]
+   ],
+   "repos": 356,
+   "top_repo": [
+    "linux",
+    372402
+   ],
+   "top_repo_share": 0.34000155209327165,
+   "arch": [
+    [
+     "Encapsulated Accessors",
+     0.2562980749478451
+    ],
+    [
+     "C Struct Operations",
+     0.20709124025947348
+    ],
+    [
+     "Stateful Encapsulated Methods",
+     0.1902099434398952
+    ]
+   ],
+   "tests": 0.05842626872212509,
+   "members": [
+    3,
+    4,
+    6,
+    7,
+    19,
+    20
+   ]
+  },
+  {
+   "family": 6,
+   "shapes": 17,
+   "share": 0.04657537287731704,
+   "core": [
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "often": [],
+   "langs": [
+    [
+     "javascript",
+     0.2607030988845006
+    ],
+    [
+     "cpp",
+     0.1695843805326169
+    ],
+    [
+     "typescript",
+     0.16043505713684367
+    ],
+    [
+     "kotlin",
+     0.09615146525361826
+    ]
+   ],
+   "repos": 429,
+   "top_repo": [
+    "kotlin",
+    33106
+   ],
+   "top_repo_share": 0.10246870782830471,
+   "arch": [
+    [
+     "Parameter Forwarders",
+     0.4342740587587129
+    ],
+    [
+     "Interface Declarations",
+     0.2988913099998762
+    ],
+    [
+     "Callbacks & Closures",
+     0.16726300281041462
+    ]
+   ],
+   "tests": 0.30797563481942775,
+   "members": [
+    1,
+    22,
+    50,
+    67,
+    82,
+    101
+   ]
+  },
+  {
+   "family": 3,
+   "shapes": 17,
+   "share": 0.033476679949930796,
+   "core": [
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start"
+   ],
+   "often": [
+    "arch_api",
+    "def_test",
+    "struct_linear"
+   ],
+   "langs": [
+    [
+     "java",
+     0.49001166991788
+    ],
+    [
+     "rust",
+     0.17587126056644317
+    ],
+    [
+     "csharp",
+     0.1744975691259619
+    ],
+    [
+     "dart",
+     0.0628194693847671
+    ]
+   ],
+   "repos": 172,
+   "top_repo": [
+    "kotlin",
+    61681
+   ],
+   "top_repo_share": 0.265613359687539,
+   "arch": [
+    [
+     "Annotated & Test Methods",
+     0.8780428987903764
+    ],
+    [
+     "State Mutators",
+     0.03859254761627932
+    ],
+    [
+     "Generic / Templated Code",
+     0.030828391919766086
+    ]
+   ],
+   "tests": 0.5327597417976841,
+   "members": [
+    9,
+    21,
+    34,
+    58,
+    71,
+    84
+   ]
+  },
+  {
+   "family": 5,
+   "shapes": 10,
+   "share": 0.024643066636354894,
+   "core": [
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "often": [],
+   "langs": [
+    [
+     "cpp",
+     0.5907899663047548
+    ],
+    [
+     "ruby",
+     0.18065565331336578
+    ],
+    [
+     "cobol",
+     0.06898165481093224
+    ],
+    [
+     "assembly",
+     0.040434294271808315
+    ]
+   ],
+   "repos": 260,
+   "top_repo": [
+    "haiku",
+    18107
+   ],
+   "top_repo_share": 0.10592357731186822,
+   "arch": [
+    [
+     "Interface Declarations",
+     0.6232450393111194
+    ],
+    [
+     "Parameter Forwarders",
+     0.16613627854736054
+    ],
+    [
+     "I/O & Config Routines",
+     0.14873291838262823
+    ]
+   ],
+   "tests": 0.16569168850617746,
+   "members": [
+    14,
+    36,
+    54,
+    63,
+    72,
+    78
+   ]
+  },
+  {
+   "family": 11,
+   "shapes": 8,
+   "share": 0.020769522080717633,
+   "core": [
+    "struct_args",
+    "struct_func_start"
+   ],
+   "often": [
+    "state_flux"
+   ],
+   "langs": [
+    [
+     "javascript",
+     0.22237183669503172
+    ],
+    [
+     "csharp",
+     0.2023959909490956
+    ],
+    [
+     "typescript",
+     0.09542318530755028
+    ],
+    [
+     "cpp",
+     0.08969696128378472
+    ]
+   ],
+   "repos": 396,
+   "top_repo": [
+    "runtime",
+    21743
+   ],
+   "top_repo_share": 0.15091550175604204,
+   "arch": [
+    [
+     "State Mutators",
+     0.49411413579132946
+    ],
+    [
+     "Parameter Forwarders",
+     0.25401529769424047
+    ],
+    [
+     "Callbacks & Closures",
+     0.08640698529922124
+    ]
+   ],
+   "tests": 0.3169204714244069,
+   "members": [
+    16,
+    31,
+    46,
+    48,
+    93,
+    141
+   ]
+  },
+  {
+   "family": 12,
+   "shapes": 6,
+   "share": 0.01213729848594431,
+   "core": [
+    "struct_args",
+    "struct_func_start"
+   ],
+   "often": [],
+   "langs": [
+    [
+     "javascript",
+     0.2686533482195881
+    ],
+    [
+     "cpp",
+     0.19596408295127918
+    ],
+    [
+     "dart",
+     0.1551416965579495
+    ],
+    [
+     "rust",
+     0.11366605696367912
+    ]
+   ],
+   "repos": 295,
+   "top_repo": [
+    "sdk",
+    13374
+   ],
+   "top_repo_share": 0.1588474238069221,
+   "arch": [
+    [
+     "State Mutators",
+     0.8474475615839608
+    ],
+    [
+     "Callbacks & Closures",
+     0.06881725538636957
+    ],
+    [
+     "I/O & Config Routines",
+     0.055087060835689004
+    ]
+   ],
+   "tests": 0.3449889540822386,
+   "members": [
+    15,
+    100,
+    120,
+    128,
+    149,
+    184
+   ]
+  },
+  {
+   "family": 10,
+   "shapes": 5,
+   "share": 0.009858725905132901,
+   "core": [
+    "state_pointers",
+    "struct_args",
+    "struct_func_start"
+   ],
+   "often": [
+    "arch_api"
+   ],
+   "langs": [
+    [
+     "rust",
+     0.8516698836053108
+    ],
+    [
+     "cpp",
+     0.07243960928817922
+    ],
+    [
+     "zig",
+     0.03614669240217582
+    ],
+    [
+     "csharp",
+     0.020442182839094578
+    ]
+   ],
+   "repos": 112,
+   "top_repo": [
+    "rust",
+    20098
+   ],
+   "top_repo_share": 0.29388196759665436,
+   "arch": [
+    [
+     "State Mutators",
+     0.8472831490904837
+    ],
+    [
+     "Annotated & Test Methods",
+     0.07474995613265485
+    ],
+    [
+     "Generic / Templated Code",
+     0.06300813008130081
+    ]
+   ],
+   "tests": 0.13711469848511434,
+   "members": [
+    27,
+    61,
+    77,
+    144,
+    181
+   ]
+  },
+  {
+   "family": 9,
+   "shapes": 4,
+   "share": 0.0068404749798862555,
+   "core": [
+    "struct_args",
+    "struct_func_start",
+    "struct_generics"
+   ],
+   "often": [
+    "state_pointers",
+    "struct_linear"
+   ],
+   "langs": [
+    [
+     "rust",
+     0.4588312153590019
+    ],
+    [
+     "typescript",
+     0.11211565615055531
+    ],
+    [
+     "python",
+     0.09898632273292449
+    ],
+    [
+     "kotlin",
+     0.09896524836146763
+    ]
+   ],
+   "repos": 237,
+   "top_repo": [
+    "rust",
+    8800
+   ],
+   "top_repo_share": 0.18545446882046743,
+   "arch": [
+    [
+     "Generic / Templated Code",
+     0.9539314239952793
+    ],
+    [
+     "Many-Argument Workhorses",
+     0.02235990811574045
+    ],
+    [
+     "State Mutators",
+     0.011464458072537986
+    ]
+   ],
+   "tests": 0.24100651198078019,
+   "members": [
+    52,
+    76,
+    90,
+    132
+   ]
+  },
+  {
+   "family": 1,
+   "shapes": 2,
+   "share": 0.0043608009976936046,
+   "core": [
+    "struct_func_start"
+   ],
+   "often": [],
+   "langs": [
+    [
+     "cpp",
+     0.3173223140495868
+    ],
+    [
+     "c",
+     0.14128925619834712
+    ],
+    [
+     "assembly",
+     0.13745454545454547
+    ],
+    [
+     "makefile",
+     0.1255206611570248
+    ]
+   ],
+   "repos": 252,
+   "top_repo": [
+    "freebsd-src",
+    7858
+   ],
+   "top_repo_share": 0.2597685950413223,
+   "arch": [
+    [
+     "I/O & Config Routines",
+     0.7686942148760331
+    ],
+    [
+     "State Mutators",
+     0.22175206611570247
+    ],
+    [
+     "Many-Argument Workhorses",
+     0.009553719008264462
+    ]
+   ],
+   "tests": 0.17041322314049587,
+   "members": [
+    39,
+    145
+   ]
+  },
+  {
+   "family": 2,
+   "shapes": 3,
+   "share": 0.004084448749343898,
+   "core": [
+    "def_test",
+    "struct_func_start"
+   ],
+   "often": [
+    "struct_args",
+    "struct_linear"
+   ],
+   "langs": [
+    [
+     "cpp",
+     0.39416934316874314
+    ],
+    [
+     "groovy",
+     0.20467299615289591
+    ],
+    [
+     "kotlin",
+     0.10768361980729185
+    ],
+    [
+     "c",
+     0.07210673066741961
+    ]
+   ],
+   "repos": 150,
+   "top_repo": [
+    "gradle",
+    5044
+   ],
+   "top_repo_share": 0.1780256238308686,
+   "arch": [
+    [
+     "State Mutators",
+     0.5211237779267991
+    ],
+    [
+     "Interface Declarations",
+     0.20012000141178132
+    ],
+    [
+     "I/O & Config Routines",
+     0.1392722267320792
+    ]
+   ],
+   "tests": 0.5667596089365757,
+   "members": [
+    70,
+    87,
+    152
+   ]
+  },
+  {
+   "family": 14,
+   "shapes": 1,
+   "share": 0.0007308846630845149,
+   "core": [],
+   "often": [],
+   "langs": [
+    [
+     "shell",
+     0.8930966469428008
+    ],
+    [
+     "scheme",
+     0.058777120315581854
+    ],
+    [
+     "groovy",
+     0.014792899408284023
+    ],
+    [
+     "python",
+     0.01321499013806706
+    ]
+   ],
+   "repos": 28,
+   "top_repo": [
+    "freebsd-src",
+    3733
+   ],
+   "top_repo_share": 0.7362919132149901,
+   "arch": [
+    [
+     "I/O & Config Routines",
+     0.9658777120315581
+    ],
+    [
+     "State Mutators",
+     0.023274161735700197
+    ],
+    [
+     "Many-Argument Workhorses",
+     0.010848126232741617
+    ]
+   ],
+   "tests": 0.7686390532544378,
+   "members": [
+    163
+   ]
+  },
+  {
+   "family": 13,
+   "shapes": 1,
+   "share": 0.0007086842216417111,
+   "core": [
+    "struct_args"
+   ],
+   "often": [],
+   "langs": [
+    [
+     "typescript",
+     0.6413751017087063
+    ],
+    [
+     "groovy",
+     0.3334011391375102
+    ],
+    [
+     "shell",
+     0.022172497965825873
+    ],
+    [
+     "cpp",
+     0.0028478437754271765
+    ]
+   ],
+   "repos": 74,
+   "top_repo": [
+    "gradle",
+    1606
+   ],
+   "top_repo_share": 0.32668836452400324,
+   "arch": [
+    [
+     "State Mutators",
+     0.572620016273393
+    ],
+    [
+     "I/O & Config Routines",
+     0.4255492270138324
+    ],
+    [
+     "Many-Argument Workhorses",
+     0.0018307567127746134
+    ]
+   ],
+   "tests": 0.21094385679414157,
+   "members": [
+    166
+   ]
+  },
+  {
+   "family": 4,
+   "shapes": 1,
+   "share": 0.0005780764297769043,
+   "core": [
+    "arch_api",
+    "arch_io",
+    "arch_regex",
+    "bitwise_ops",
+    "def_test",
+    "state_safety_neg",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "often": [],
+   "langs": [
+    [
+     "java",
+     1.0
+    ]
+   ],
+   "repos": 1,
+   "top_repo": [
+    "kotlin",
+    4010
+   ],
+   "top_repo_share": 1.0,
+   "arch": [
+    [
+     "Annotated & Test Methods",
+     1.0
+    ]
+   ],
+   "tests": 0.714214463840399,
+   "members": [
+    200
+   ]
+  }
+ ],
+ "shapes": [
+  {
+   "rank": 1,
+   "signals": [
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 177180,
+   "parent": 14,
+   "repos": 386,
+   "langs": [
+    [
+     "javascript",
+     50347
+    ],
+    [
+     "cpp",
+     30680
+    ],
+    [
+     "typescript",
+     30554
+    ],
+    [
+     "kotlin",
+     14047
+    ],
+    [
+     "swift",
+     8526
+    ]
+   ]
+  },
+  {
+   "rank": 2,
+   "signals": [
+    "arch_api",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 170862,
+   "parent": 1,
+   "repos": 318,
+   "langs": [
+    [
+     "php",
+     37358
+    ],
+    [
+     "python",
+     31887
+    ],
+    [
+     "java",
+     29201
+    ],
+    [
+     "c",
+     24794
+    ],
+    [
+     "csharp",
+     17117
+    ]
+   ]
+  },
+  {
+   "rank": 3,
+   "signals": [
+    "def_encapsulation",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 98954,
+   "parent": 6,
+   "repos": 40,
+   "langs": [
+    [
+     "c",
+     98951
+    ],
+    [
+     "go",
+     2
+    ],
+    [
+     "cpp",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 4,
+   "signals": [
+    "def_encapsulation",
+    "state_pointers",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 87078,
+   "parent": 7,
+   "repos": 89,
+   "langs": [
+    [
+     "c",
+     83945
+    ],
+    [
+     "go",
+     2596
+    ],
+    [
+     "csharp",
+     302
+    ],
+    [
+     "solidity",
+     200
+    ],
+    [
+     "swift",
+     26
+    ]
+   ]
+  },
+  {
+   "rank": 5,
+   "signals": [
+    "arch_api",
+    "state_flux",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 84383,
+   "parent": 2,
+   "repos": 294,
+   "langs": [
+    [
+     "python",
+     33094
+    ],
+    [
+     "php",
+     23195
+    ],
+    [
+     "csharp",
+     9563
+    ],
+    [
+     "java",
+     8813
+    ],
+    [
+     "c",
+     3631
+    ]
+   ]
+  },
+  {
+   "rank": 6,
+   "signals": [
+    "def_encapsulation",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 73614,
+   "parent": 20,
+   "repos": 84,
+   "langs": [
+    [
+     "c",
+     72040
+    ],
+    [
+     "go",
+     1313
+    ],
+    [
+     "csharp",
+     165
+    ],
+    [
+     "livecode",
+     46
+    ],
+    [
+     "solidity",
+     36
+    ]
+   ]
+  },
+  {
+   "rank": 7,
+   "signals": [
+    "def_encapsulation",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 69728,
+   "parent": 1,
+   "repos": 227,
+   "langs": [
+    [
+     "c",
+     29665
+    ],
+    [
+     "java",
+     9450
+    ],
+    [
+     "php",
+     8781
+    ],
+    [
+     "csharp",
+     5961
+    ],
+    [
+     "python",
+     5909
+    ]
+   ]
+  },
+  {
+   "rank": 8,
+   "signals": [
+    "arch_api",
+    "def_test",
+    "state_flux",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 68071,
+   "parent": 5,
+   "repos": 151,
+   "langs": [
+    [
+     "python",
+     53224
+    ],
+    [
+     "php",
+     13711
+    ],
+    [
+     "java",
+     738
+    ],
+    [
+     "go",
+     233
+    ],
+    [
+     "rust",
+     64
+    ]
+   ]
+  },
+  {
+   "rank": 9,
+   "signals": [
+    "arch_api",
+    "def_test",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 66230,
+   "parent": 21,
+   "repos": 66,
+   "langs": [
+    [
+     "java",
+     57414
+    ],
+    [
+     "csharp",
+     7469
+    ],
+    [
+     "php",
+     994
+    ],
+    [
+     "rust",
+     161
+    ],
+    [
+     "python",
+     85
+    ]
+   ]
+  },
+  {
+   "rank": 10,
+   "signals": [
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 61571,
+   "parent": 1,
+   "repos": 325,
+   "langs": [
+    [
+     "typescript",
+     18505
+    ],
+    [
+     "javascript",
+     12060
+    ],
+    [
+     "cpp",
+     10780
+    ],
+    [
+     "kotlin",
+     2997
+    ],
+    [
+     "ruby",
+     2772
+    ]
+   ]
+  },
+  {
+   "rank": 11,
+   "signals": [
+    "arch_api",
+    "state_pointers",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 57409,
+   "parent": 2,
+   "repos": 138,
+   "langs": [
+    [
+     "c",
+     42716
+    ],
+    [
+     "go",
+     6147
+    ],
+    [
+     "zig",
+     5292
+    ],
+    [
+     "rust",
+     2325
+    ],
+    [
+     "assembly",
+     343
+    ]
+   ]
+  },
+  {
+   "rank": 12,
+   "signals": [
+    "arch_api",
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 54854,
+   "parent": 5,
+   "repos": 283,
+   "langs": [
+    [
+     "python",
+     25364
+    ],
+    [
+     "php",
+     10363
+    ],
+    [
+     "c",
+     6584
+    ],
+    [
+     "csharp",
+     4260
+    ],
+    [
+     "typescript",
+     2885
+    ]
+   ]
+  },
+  {
+   "rank": 13,
+   "signals": [
+    "arch_api",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 54522,
+   "parent": 12,
+   "repos": 129,
+   "langs": [
+    [
+     "c",
+     52490
+    ],
+    [
+     "go",
+     866
+    ],
+    [
+     "zig",
+     526
+    ],
+    [
+     "rust",
+     414
+    ],
+    [
+     "csharp",
+     177
+    ]
+   ]
+  },
+  {
+   "rank": 14,
+   "signals": [
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 54516,
+   "parent": 39,
+   "repos": 201,
+   "langs": [
+    [
+     "cpp",
+     20769
+    ],
+    [
+     "ruby",
+     19427
+    ],
+    [
+     "assembly",
+     3659
+    ],
+    [
+     "javascript",
+     1846
+    ],
+    [
+     "abap",
+     1562
+    ]
+   ]
+  },
+  {
+   "rank": 15,
+   "signals": [
+    "struct_args",
+    "struct_func_start"
+   ],
+   "n": 53079,
+   "parent": 39,
+   "repos": 241,
+   "langs": [
+    [
+     "javascript",
+     13065
+    ],
+    [
+     "cpp",
+     10555
+    ],
+    [
+     "dart",
+     10334
+    ],
+    [
+     "typescript",
+     4722
+    ],
+    [
+     "rust",
+     4231
+    ]
+   ]
+  },
+  {
+   "rank": 16,
+   "signals": [
+    "state_flux",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 47878,
+   "parent": 1,
+   "repos": 324,
+   "langs": [
+    [
+     "cpp",
+     9527
+    ],
+    [
+     "python",
+     9124
+    ],
+    [
+     "javascript",
+     8485
+    ],
+    [
+     "swift",
+     4060
+    ],
+    [
+     "typescript",
+     3625
+    ]
+   ]
+  },
+  {
+   "rank": 17,
+   "signals": [
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 41634,
+   "parent": 10,
+   "repos": 342,
+   "langs": [
+    [
+     "javascript",
+     9896
+    ],
+    [
+     "cpp",
+     8886
+    ],
+    [
+     "typescript",
+     7795
+    ],
+    [
+     "python",
+     3472
+    ],
+    [
+     "ruby",
+     2994
+    ]
+   ]
+  },
+  {
+   "rank": 18,
+   "signals": [
+    "arch_api",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 39873,
+   "parent": 2,
+   "repos": 279,
+   "langs": [
+    [
+     "python",
+     11331
+    ],
+    [
+     "csharp",
+     7348
+    ],
+    [
+     "c",
+     6686
+    ],
+    [
+     "php",
+     4176
+    ],
+    [
+     "typescript",
+     2780
+    ]
+   ]
+  },
+  {
+   "rank": 19,
+   "signals": [
+    "state_pointers",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 39442,
+   "parent": 1,
+   "repos": 125,
+   "langs": [
+    [
+     "cpp",
+     28995
+    ],
+    [
+     "rust",
+     6974
+    ],
+    [
+     "assembly",
+     1448
+    ],
+    [
+     "zig",
+     1040
+    ],
+    [
+     "c",
+     452
+    ]
+   ]
+  },
+  {
+   "rank": 20,
+   "signals": [
+    "def_encapsulation",
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 37238,
+   "parent": 17,
+   "repos": 224,
+   "langs": [
+    [
+     "python",
+     12997
+    ],
+    [
+     "c",
+     6962
+    ],
+    [
+     "php",
+     5718
+    ],
+    [
+     "csharp",
+     4268
+    ],
+    [
+     "go",
+     2686
+    ]
+   ]
+  },
+  {
+   "rank": 21,
+   "signals": [
+    "arch_api",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 36959,
+   "parent": 2,
+   "repos": 97,
+   "langs": [
+    [
+     "java",
+     31427
+    ],
+    [
+     "csharp",
+     1872
+    ],
+    [
+     "swift",
+     1448
+    ],
+    [
+     "php",
+     830
+    ],
+    [
+     "rust",
+     534
+    ]
+   ]
+  },
+  {
+   "rank": 22,
+   "signals": [
+    "struct_args",
+    "struct_closures",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 35969,
+   "parent": 1,
+   "repos": 206,
+   "langs": [
+    [
+     "javascript",
+     25462
+    ],
+    [
+     "typescript",
+     7068
+    ],
+    [
+     "dart",
+     1333
+    ],
+    [
+     "ruby",
+     404
+    ],
+    [
+     "cpp",
+     320
+    ]
+   ]
+  },
+  {
+   "rank": 23,
+   "signals": [
+    "def_encapsulation",
+    "state_pointers",
+    "struct_args",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 34737,
+   "parent": 4,
+   "repos": 22,
+   "langs": [
+    [
+     "c",
+     34734
+    ],
+    [
+     "go",
+     1
+    ],
+    [
+     "java",
+     1
+    ],
+    [
+     "swift",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 24,
+   "signals": [
+    "def_freeze_hits",
+    "state_pointers",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 34514,
+   "parent": 19,
+   "repos": 61,
+   "langs": [
+    [
+     "cpp",
+     34098
+    ],
+    [
+     "c",
+     357
+    ],
+    [
+     "rust",
+     43
+    ],
+    [
+     "objective-c",
+     13
+    ],
+    [
+     "assembly",
+     3
+    ]
+   ]
+  },
+  {
+   "rank": 25,
+   "signals": [
+    "def_encapsulation",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 33606,
+   "parent": 4,
+   "repos": 78,
+   "langs": [
+    [
+     "c",
+     32471
+    ],
+    [
+     "go",
+     915
+    ],
+    [
+     "csharp",
+     151
+    ],
+    [
+     "solidity",
+     36
+    ],
+    [
+     "swift",
+     17
+    ]
+   ]
+  },
+  {
+   "rank": 26,
+   "signals": [
+    "arch_api",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 33581,
+   "parent": 13,
+   "repos": 40,
+   "langs": [
+    [
+     "c",
+     33575
+    ],
+    [
+     "zig",
+     3
+    ],
+    [
+     "cpp",
+     3
+    ]
+   ]
+  },
+  {
+   "rank": 27,
+   "signals": [
+    "state_pointers",
+    "struct_args",
+    "struct_func_start"
+   ],
+   "n": 32021,
+   "parent": 15,
+   "repos": 99,
+   "langs": [
+    [
+     "rust",
+     26142
+    ],
+    [
+     "cpp",
+     4946
+    ],
+    [
+     "zig",
+     540
+    ],
+    [
+     "assembly",
+     147
+    ],
+    [
+     "go",
+     108
+    ]
+   ]
+  },
+  {
+   "rank": 28,
+   "signals": [
+    "def_freeze_hits",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 31463,
+   "parent": 30,
+   "repos": 67,
+   "langs": [
+    [
+     "cpp",
+     31256
+    ],
+    [
+     "c",
+     136
+    ],
+    [
+     "objective-c",
+     60
+    ],
+    [
+     "rust",
+     7
+    ],
+    [
+     "go",
+     3
+    ]
+   ]
+  },
+  {
+   "rank": 29,
+   "signals": [
+    "arch_api",
+    "struct_args",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 31292,
+   "parent": 2,
+   "repos": 204,
+   "langs": [
+    [
+     "python",
+     20452
+    ],
+    [
+     "java",
+     4149
+    ],
+    [
+     "csharp",
+     2416
+    ],
+    [
+     "typescript",
+     1571
+    ],
+    [
+     "swift",
+     1181
+    ]
+   ]
+  },
+  {
+   "rank": 30,
+   "signals": [
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 30874,
+   "parent": 17,
+   "repos": 118,
+   "langs": [
+    [
+     "cpp",
+     28600
+    ],
+    [
+     "rust",
+     1039
+    ],
+    [
+     "c",
+     437
+    ],
+    [
+     "assembly",
+     361
+    ],
+    [
+     "zig",
+     221
+    ]
+   ]
+  },
+  {
+   "rank": 31,
+   "signals": [
+    "state_flux",
+    "struct_args",
+    "struct_func_start"
+   ],
+   "n": 28776,
+   "parent": 15,
+   "repos": 227,
+   "langs": [
+    [
+     "javascript",
+     13498
+    ],
+    [
+     "typescript",
+     4984
+    ],
+    [
+     "dart",
+     2858
+    ],
+    [
+     "java",
+     2182
+    ],
+    [
+     "cpp",
+     1587
+    ]
+   ]
+  },
+  {
+   "rank": 32,
+   "signals": [
+    "def_encapsulation",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 28630,
+   "parent": 7,
+   "repos": 206,
+   "langs": [
+    [
+     "c",
+     9972
+    ],
+    [
+     "csharp",
+     4099
+    ],
+    [
+     "python",
+     3414
+    ],
+    [
+     "go",
+     3398
+    ],
+    [
+     "typescript",
+     2652
+    ]
+   ]
+  },
+  {
+   "rank": 33,
+   "signals": [
+    "bitwise_ops",
+    "def_encapsulation",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 28434,
+   "parent": 3,
+   "repos": 22,
+   "langs": [
+    [
+     "c",
+     28434
+    ]
+   ]
+  },
+  {
+   "rank": 34,
+   "signals": [
+    "def_test",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 28297,
+   "parent": 58,
+   "repos": 65,
+   "langs": [
+    [
+     "rust",
+     13513
+    ],
+    [
+     "java",
+     9557
+    ],
+    [
+     "kotlin",
+     4309
+    ],
+    [
+     "groovy",
+     519
+    ],
+    [
+     "swift",
+     377
+    ]
+   ]
+  },
+  {
+   "rank": 35,
+   "signals": [
+    "arch_api",
+    "def_safety",
+    "def_test",
+    "state_flux",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 27723,
+   "parent": 8,
+   "repos": 115,
+   "langs": [
+    [
+     "python",
+     26919
+    ],
+    [
+     "php",
+     735
+    ],
+    [
+     "java",
+     58
+    ],
+    [
+     "embedded_python",
+     11
+    ]
+   ]
+  },
+  {
+   "rank": 36,
+   "signals": [
+    "def_freeze_hits",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 27672,
+   "parent": 14,
+   "repos": 55,
+   "langs": [
+    [
+     "cpp",
+     27354
+    ],
+    [
+     "objective-c",
+     196
+    ],
+    [
+     "c",
+     41
+    ],
+    [
+     "ada",
+     40
+    ],
+    [
+     "dart",
+     19
+    ]
+   ]
+  },
+  {
+   "rank": 37,
+   "signals": [
+    "def_freeze_hits",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 25571,
+   "parent": 24,
+   "repos": 61,
+   "langs": [
+    [
+     "cpp",
+     25406
+    ],
+    [
+     "c",
+     79
+    ],
+    [
+     "objective-c",
+     65
+    ],
+    [
+     "rust",
+     18
+    ],
+    [
+     "ada",
+     3
+    ]
+   ]
+  },
+  {
+   "rank": 38,
+   "signals": [
+    "arch_api",
+    "def_test",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 25012,
+   "parent": 2,
+   "repos": 169,
+   "langs": [
+    [
+     "python",
+     15973
+    ],
+    [
+     "php",
+     5351
+    ],
+    [
+     "java",
+     1862
+    ],
+    [
+     "go",
+     1170
+    ],
+    [
+     "rust",
+     236
+    ]
+   ]
+  },
+  {
+   "rank": 39,
+   "signals": [
+    "struct_func_start"
+   ],
+   "n": 24753,
+   "parent": 163,
+   "repos": 251,
+   "langs": [
+    [
+     "cpp",
+     4783
+    ],
+    [
+     "c",
+     4255
+    ],
+    [
+     "makefile",
+     3797
+    ],
+    [
+     "assembly",
+     3535
+    ],
+    [
+     "yaml",
+     1801
+    ]
+   ]
+  },
+  {
+   "rank": 40,
+   "signals": [
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 24487,
+   "parent": 10,
+   "repos": 121,
+   "langs": [
+    [
+     "cpp",
+     19035
+    ],
+    [
+     "rust",
+     3211
+    ],
+    [
+     "assembly",
+     1343
+    ],
+    [
+     "zig",
+     495
+    ],
+    [
+     "c",
+     193
+    ]
+   ]
+  },
+  {
+   "rank": 41,
+   "signals": [
+    "def_safety",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 24413,
+   "parent": 10,
+   "repos": 256,
+   "langs": [
+    [
+     "javascript",
+     10084
+    ],
+    [
+     "typescript",
+     5596
+    ],
+    [
+     "dart",
+     2941
+    ],
+    [
+     "kotlin",
+     1423
+    ],
+    [
+     "rust",
+     929
+    ]
+   ]
+  },
+  {
+   "rank": 42,
+   "signals": [
+    "struct_args",
+    "struct_branch",
+    "struct_closures",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 24159,
+   "parent": 10,
+   "repos": 185,
+   "langs": [
+    [
+     "javascript",
+     17157
+    ],
+    [
+     "typescript",
+     4586
+    ],
+    [
+     "kotlin",
+     545
+    ],
+    [
+     "dart",
+     517
+    ],
+    [
+     "rust",
+     311
+    ]
+   ]
+  },
+  {
+   "rank": 43,
+   "signals": [
+    "def_encapsulation",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 23487,
+   "parent": 23,
+   "repos": 25,
+   "langs": [
+    [
+     "c",
+     23487
+    ]
+   ]
+  },
+  {
+   "rank": 44,
+   "signals": [
+    "arch_api",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 23047,
+   "parent": 11,
+   "repos": 117,
+   "langs": [
+    [
+     "c",
+     19325
+    ],
+    [
+     "zig",
+     1305
+    ],
+    [
+     "rust",
+     1145
+    ],
+    [
+     "go",
+     806
+    ],
+    [
+     "swift",
+     284
+    ]
+   ]
+  },
+  {
+   "rank": 45,
+   "signals": [
+    "def_encapsulation",
+    "state_flux",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 23006,
+   "parent": 7,
+   "repos": 218,
+   "langs": [
+    [
+     "python",
+     8615
+    ],
+    [
+     "php",
+     6295
+    ],
+    [
+     "c",
+     3045
+    ],
+    [
+     "java",
+     1613
+    ],
+    [
+     "csharp",
+     1308
+    ]
+   ]
+  },
+  {
+   "rank": 46,
+   "signals": [
+    "arch_api",
+    "struct_args",
+    "struct_func_start"
+   ],
+   "n": 22823,
+   "parent": 15,
+   "repos": 132,
+   "langs": [
+    [
+     "csharp",
+     11471
+    ],
+    [
+     "java",
+     3607
+    ],
+    [
+     "c",
+     1971
+    ],
+    [
+     "dart",
+     1672
+    ],
+    [
+     "zig",
+     1373
+    ]
+   ]
+  },
+  {
+   "rank": 47,
+   "signals": [
+    "def_encapsulation",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 21364,
+   "parent": 4,
+   "repos": 73,
+   "langs": [
+    [
+     "c",
+     20800
+    ],
+    [
+     "go",
+     427
+    ],
+    [
+     "csharp",
+     77
+    ],
+    [
+     "livecode",
+     26
+    ],
+    [
+     "solidity",
+     20
+    ]
+   ]
+  },
+  {
+   "rank": 48,
+   "signals": [
+    "arch_api",
+    "state_flux",
+    "struct_args",
+    "struct_func_start"
+   ],
+   "n": 21274,
+   "parent": 31,
+   "repos": 105,
+   "langs": [
+    [
+     "csharp",
+     13003
+    ],
+    [
+     "java",
+     4538
+    ],
+    [
+     "typescript",
+     2072
+    ],
+    [
+     "dart",
+     625
+    ],
+    [
+     "matlab",
+     341
+    ]
+   ]
+  },
+  {
+   "rank": 49,
+   "signals": [
+    "bitwise_ops",
+    "def_encapsulation",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 20884,
+   "parent": 6,
+   "repos": 56,
+   "langs": [
+    [
+     "c",
+     20834
+    ],
+    [
+     "go",
+     31
+    ],
+    [
+     "csharp",
+     18
+    ],
+    [
+     "solidity",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 50,
+   "signals": [
+    "def_freeze_hits",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 20769,
+   "parent": 1,
+   "repos": 105,
+   "langs": [
+    [
+     "cpp",
+     19139
+    ],
+    [
+     "typescript",
+     392
+    ],
+    [
+     "dart",
+     366
+    ],
+    [
+     "c",
+     349
+    ],
+    [
+     "java",
+     257
+    ]
+   ]
+  },
+  {
+   "rank": 51,
+   "signals": [
+    "def_encapsulation",
+    "def_freeze_hits",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 20445,
+   "parent": 6,
+   "repos": 59,
+   "langs": [
+    [
+     "c",
+     20426
+    ],
+    [
+     "go",
+     13
+    ],
+    [
+     "csharp",
+     5
+    ],
+    [
+     "assembly",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 52,
+   "signals": [
+    "struct_args",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 20265,
+   "parent": 1,
+   "repos": 220,
+   "langs": [
+    [
+     "typescript",
+     4702
+    ],
+    [
+     "kotlin",
+     3818
+    ],
+    [
+     "rust",
+     2833
+    ],
+    [
+     "swift",
+     2047
+    ],
+    [
+     "python",
+     1805
+    ]
+   ]
+  },
+  {
+   "rank": 53,
+   "signals": [
+    "def_encapsulation",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 19596,
+   "parent": 23,
+   "repos": 29,
+   "langs": [
+    [
+     "c",
+     19592
+    ],
+    [
+     "go",
+     4
+    ]
+   ]
+  },
+  {
+   "rank": 54,
+   "signals": [
+    "state_flux",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 19276,
+   "parent": 14,
+   "repos": 157,
+   "langs": [
+    [
+     "cobol",
+     6279
+    ],
+    [
+     "cpp",
+     5408
+    ],
+    [
+     "ruby",
+     3021
+    ],
+    [
+     "abap",
+     1644
+    ],
+    [
+     "makefile",
+     856
+    ]
+   ]
+  },
+  {
+   "rank": 55,
+   "signals": [
+    "def_encapsulation",
+    "def_freeze_hits",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 18879,
+   "parent": 3,
+   "repos": 27,
+   "langs": [
+    [
+     "c",
+     18877
+    ],
+    [
+     "cpp",
+     2
+    ]
+   ]
+  },
+  {
+   "rank": 56,
+   "signals": [
+    "arch_api",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 18203,
+   "parent": 5,
+   "repos": 118,
+   "langs": [
+    [
+     "c",
+     14610
+    ],
+    [
+     "go",
+     1916
+    ],
+    [
+     "rust",
+     1224
+    ],
+    [
+     "zig",
+     232
+    ],
+    [
+     "csharp",
+     112
+    ]
+   ]
+  },
+  {
+   "rank": 57,
+   "signals": [
+    "def_safety",
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 18096,
+   "parent": 17,
+   "repos": 264,
+   "langs": [
+    [
+     "javascript",
+     10128
+    ],
+    [
+     "typescript",
+     1606
+    ],
+    [
+     "dart",
+     1566
+    ],
+    [
+     "python",
+     964
+    ],
+    [
+     "cpp",
+     850
+    ]
+   ]
+  },
+  {
+   "rank": 58,
+   "signals": [
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 17694,
+   "parent": 1,
+   "repos": 86,
+   "langs": [
+    [
+     "rust",
+     7419
+    ],
+    [
+     "dart",
+     3796
+    ],
+    [
+     "groovy",
+     1482
+    ],
+    [
+     "kotlin",
+     1442
+    ],
+    [
+     "swift",
+     1388
+    ]
+   ]
+  },
+  {
+   "rank": 59,
+   "signals": [
+    "arch_api",
+    "def_test",
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 15754,
+   "parent": 8,
+   "repos": 133,
+   "langs": [
+    [
+     "python",
+     14394
+    ],
+    [
+     "php",
+     829
+    ],
+    [
+     "go",
+     282
+    ],
+    [
+     "java",
+     157
+    ],
+    [
+     "rust",
+     31
+    ]
+   ]
+  },
+  {
+   "rank": 60,
+   "signals": [
+    "def_encapsulation",
+    "state_flux",
+    "state_heat_triggers",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 15190,
+   "parent": 3,
+   "repos": 16,
+   "langs": [
+    [
+     "c",
+     15190
+    ]
+   ]
+  },
+  {
+   "rank": 61,
+   "signals": [
+    "arch_api",
+    "state_pointers",
+    "struct_args",
+    "struct_func_start"
+   ],
+   "n": 14840,
+   "parent": 27,
+   "repos": 82,
+   "langs": [
+    [
+     "rust",
+     11819
+    ],
+    [
+     "zig",
+     1887
+    ],
+    [
+     "c",
+     712
+    ],
+    [
+     "go",
+     214
+    ],
+    [
+     "csharp",
+     200
+    ]
+   ]
+  },
+  {
+   "rank": 62,
+   "signals": [
+    "def_encapsulation",
+    "def_freeze_hits",
+    "state_pointers",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 14740,
+   "parent": 4,
+   "repos": 54,
+   "langs": [
+    [
+     "c",
+     14733
+    ],
+    [
+     "csharp",
+     3
+    ],
+    [
+     "go",
+     3
+    ],
+    [
+     "cpp",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 63,
+   "signals": [
+    "state_flux",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 14552,
+   "parent": 54,
+   "repos": 147,
+   "langs": [
+    [
+     "cobol",
+     4875
+    ],
+    [
+     "ruby",
+     4008
+    ],
+    [
+     "cpp",
+     3528
+    ],
+    [
+     "pli",
+     845
+    ],
+    [
+     "abap",
+     303
+    ]
+   ]
+  },
+  {
+   "rank": 64,
+   "signals": [
+    "arch_api",
+    "def_safety",
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 13951,
+   "parent": 12,
+   "repos": 207,
+   "langs": [
+    [
+     "php",
+     5547
+    ],
+    [
+     "python",
+     4739
+    ],
+    [
+     "csharp",
+     1334
+    ],
+    [
+     "matlab",
+     658
+    ],
+    [
+     "go",
+     451
+    ]
+   ]
+  },
+  {
+   "rank": 65,
+   "signals": [
+    "arch_api",
+    "arch_concurrency",
+    "def_safety",
+    "def_test",
+    "state_flux",
+    "struct_args",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 13926,
+   "parent": 66,
+   "repos": 11,
+   "langs": [
+    [
+     "python",
+     13925
+    ],
+    [
+     "dart",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 66,
+   "signals": [
+    "arch_api",
+    "def_safety",
+    "def_test",
+    "state_flux",
+    "struct_args",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 13204,
+   "parent": 35,
+   "repos": 58,
+   "langs": [
+    [
+     "python",
+     13195
+    ],
+    [
+     "java",
+     8
+    ],
+    [
+     "rust",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 67,
+   "signals": [
+    "arch_api",
+    "struct_args",
+    "struct_closures",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 13143,
+   "parent": 2,
+   "repos": 120,
+   "langs": [
+    [
+     "go",
+     10283
+    ],
+    [
+     "csharp",
+     707
+    ],
+    [
+     "php",
+     506
+    ],
+    [
+     "java",
+     452
+    ],
+    [
+     "dart",
+     398
+    ]
+   ]
+  },
+  {
+   "rank": 68,
+   "signals": [
+    "arch_concurrency",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 13118,
+   "parent": 1,
+   "repos": 125,
+   "langs": [
+    [
+     "typescript",
+     4870
+    ],
+    [
+     "javascript",
+     3207
+    ],
+    [
+     "dart",
+     2712
+    ],
+    [
+     "kotlin",
+     943
+    ],
+    [
+     "swift",
+     743
+    ]
+   ]
+  },
+  {
+   "rank": 69,
+   "signals": [
+    "arch_api",
+    "def_freeze_hits",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 13058,
+   "parent": 13,
+   "repos": 69,
+   "langs": [
+    [
+     "c",
+     13041
+    ],
+    [
+     "go",
+     7
+    ],
+    [
+     "cpp",
+     5
+    ],
+    [
+     "csharp",
+     3
+    ],
+    [
+     "rust",
+     2
+    ]
+   ]
+  },
+  {
+   "rank": 70,
+   "signals": [
+    "def_test",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 12849,
+   "parent": 1,
+   "repos": 107,
+   "langs": [
+    [
+     "groovy",
+     5519
+    ],
+    [
+     "kotlin",
+     3022
+    ],
+    [
+     "cpp",
+     1508
+    ],
+    [
+     "rust",
+     724
+    ],
+    [
+     "dart",
+     545
+    ]
+   ]
+  },
+  {
+   "rank": 71,
+   "signals": [
+    "arch_api",
+    "def_test",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start"
+   ],
+   "n": 12615,
+   "parent": 156,
+   "repos": 18,
+   "langs": [
+    [
+     "csharp",
+     12438
+    ],
+    [
+     "scala",
+     82
+    ],
+    [
+     "rust",
+     50
+    ],
+    [
+     "groovy",
+     31
+    ],
+    [
+     "typescript",
+     13
+    ]
+   ]
+  },
+  {
+   "rank": 72,
+   "signals": [
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 12143,
+   "parent": 14,
+   "repos": 134,
+   "langs": [
+    [
+     "ruby",
+     4386
+    ],
+    [
+     "cpp",
+     3670
+    ],
+    [
+     "assembly",
+     1572
+    ],
+    [
+     "makefile",
+     502
+    ],
+    [
+     "dart",
+     381
+    ]
+   ]
+  },
+  {
+   "rank": 73,
+   "signals": [
+    "arch_api",
+    "bitwise_ops",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 11902,
+   "parent": 13,
+   "repos": 70,
+   "langs": [
+    [
+     "c",
+     11825
+    ],
+    [
+     "zig",
+     34
+    ],
+    [
+     "rust",
+     15
+    ],
+    [
+     "go",
+     9
+    ],
+    [
+     "csharp",
+     9
+    ]
+   ]
+  },
+  {
+   "rank": 74,
+   "signals": [
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_closures",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 11897,
+   "parent": 17,
+   "repos": 185,
+   "langs": [
+    [
+     "javascript",
+     7270
+    ],
+    [
+     "typescript",
+     2901
+    ],
+    [
+     "ruby",
+     909
+    ],
+    [
+     "dart",
+     158
+    ],
+    [
+     "cpp",
+     135
+    ]
+   ]
+  },
+  {
+   "rank": 75,
+   "signals": [
+    "arch_api",
+    "def_freeze_hits",
+    "state_pointers",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 11818,
+   "parent": 11,
+   "repos": 74,
+   "langs": [
+    [
+     "c",
+     11775
+    ],
+    [
+     "rust",
+     17
+    ],
+    [
+     "fortran",
+     6
+    ],
+    [
+     "go",
+     6
+    ],
+    [
+     "csharp",
+     5
+    ]
+   ]
+  },
+  {
+   "rank": 76,
+   "signals": [
+    "state_pointers",
+    "struct_args",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 11448,
+   "parent": 19,
+   "repos": 80,
+   "langs": [
+    [
+     "rust",
+     8864
+    ],
+    [
+     "cpp",
+     1693
+    ],
+    [
+     "c",
+     557
+    ],
+    [
+     "swift",
+     247
+    ],
+    [
+     "zig",
+     58
+    ]
+   ]
+  },
+  {
+   "rank": 77,
+   "signals": [
+    "arch_api",
+    "state_pointers",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start"
+   ],
+   "n": 11419,
+   "parent": 61,
+   "repos": 41,
+   "langs": [
+    [
+     "rust",
+     10241
+    ],
+    [
+     "csharp",
+     1178
+    ]
+   ]
+  },
+  {
+   "rank": 78,
+   "signals": [
+    "def_freeze_hits",
+    "state_pointers",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 11040,
+   "parent": 36,
+   "repos": 52,
+   "langs": [
+    [
+     "cpp",
+     10971
+    ],
+    [
+     "c",
+     61
+    ],
+    [
+     "objective-c",
+     8
+    ]
+   ]
+  },
+  {
+   "rank": 79,
+   "signals": [
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 10866,
+   "parent": 16,
+   "repos": 103,
+   "langs": [
+    [
+     "cpp",
+     9520
+    ],
+    [
+     "rust",
+     713
+    ],
+    [
+     "c",
+     180
+    ],
+    [
+     "zig",
+     138
+    ],
+    [
+     "swift",
+     126
+    ]
+   ]
+  },
+  {
+   "rank": 80,
+   "signals": [
+    "def_freeze_hits",
+    "state_cast_hits",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 10713,
+   "parent": 28,
+   "repos": 45,
+   "langs": [
+    [
+     "cpp",
+     10671
+    ],
+    [
+     "objective-c",
+     22
+    ],
+    [
+     "c",
+     17
+    ],
+    [
+     "go",
+     1
+    ],
+    [
+     "rust",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 81,
+   "signals": [
+    "arch_api",
+    "def_test",
+    "state_flux",
+    "state_memory_alloc",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 10593,
+   "parent": 8,
+   "repos": 20,
+   "langs": [
+    [
+     "php",
+     10572
+    ],
+    [
+     "go",
+     9
+    ],
+    [
+     "rust",
+     7
+    ],
+    [
+     "embedded_python",
+     5
+    ]
+   ]
+  },
+  {
+   "rank": 82,
+   "signals": [
+    "state_bailout_hits",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 10536,
+   "parent": 1,
+   "repos": 99,
+   "langs": [
+    [
+     "kotlin",
+     9614
+    ],
+    [
+     "typescript",
+     263
+    ],
+    [
+     "python",
+     193
+    ],
+    [
+     "ruby",
+     181
+    ],
+    [
+     "cpp",
+     85
+    ]
+   ]
+  },
+  {
+   "rank": 83,
+   "signals": [
+    "state_pointers",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 10429,
+   "parent": 14,
+   "repos": 69,
+   "langs": [
+    [
+     "cpp",
+     9195
+    ],
+    [
+     "assembly",
+     929
+    ],
+    [
+     "c",
+     158
+    ],
+    [
+     "agc_assembly",
+     63
+    ],
+    [
+     "rust",
+     44
+    ]
+   ]
+  },
+  {
+   "rank": 84,
+   "signals": [
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start"
+   ],
+   "n": 10417,
+   "parent": 15,
+   "repos": 39,
+   "langs": [
+    [
+     "dart",
+     7489
+    ],
+    [
+     "rust",
+     1284
+    ],
+    [
+     "groovy",
+     765
+    ],
+    [
+     "csharp",
+     615
+    ],
+    [
+     "java",
+     193
+    ]
+   ]
+  },
+  {
+   "rank": 85,
+   "signals": [
+    "def_encapsulation",
+    "def_freeze_hits",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 10317,
+   "parent": 25,
+   "repos": 50,
+   "langs": [
+    [
+     "c",
+     10305
+    ],
+    [
+     "cpp",
+     4
+    ],
+    [
+     "csharp",
+     4
+    ],
+    [
+     "go",
+     3
+    ],
+    [
+     "ada",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 86,
+   "signals": [
+    "arch_api",
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 10264,
+   "parent": 12,
+   "repos": 173,
+   "langs": [
+    [
+     "python",
+     8107
+    ],
+    [
+     "csharp",
+     1022
+    ],
+    [
+     "java",
+     419
+    ],
+    [
+     "typescript",
+     304
+    ],
+    [
+     "swift",
+     130
+    ]
+   ]
+  },
+  {
+   "rank": 87,
+   "signals": [
+    "def_test",
+    "struct_args",
+    "struct_func_start"
+   ],
+   "n": 10112,
+   "parent": 15,
+   "repos": 89,
+   "langs": [
+    [
+     "cpp",
+     6370
+    ],
+    [
+     "javascript",
+     1216
+    ],
+    [
+     "rust",
+     754
+    ],
+    [
+     "dart",
+     635
+    ],
+    [
+     "c",
+     319
+    ]
+   ]
+  },
+  {
+   "rank": 88,
+   "signals": [
+    "arch_api",
+    "state_flux",
+    "struct_args",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 9906,
+   "parent": 5,
+   "repos": 163,
+   "langs": [
+    [
+     "python",
+     7412
+    ],
+    [
+     "java",
+     1282
+    ],
+    [
+     "csharp",
+     418
+    ],
+    [
+     "rust",
+     297
+    ],
+    [
+     "swift",
+     214
+    ]
+   ]
+  },
+  {
+   "rank": 89,
+   "signals": [
+    "arch_api",
+    "state_pointers",
+    "struct_args",
+    "struct_closures",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 9783,
+   "parent": 11,
+   "repos": 26,
+   "langs": [
+    [
+     "go",
+     9755
+    ],
+    [
+     "rust",
+     18
+    ],
+    [
+     "swift",
+     4
+    ],
+    [
+     "csharp",
+     4
+    ],
+    [
+     "java",
+     2
+    ]
+   ]
+  },
+  {
+   "rank": 90,
+   "signals": [
+    "state_pointers",
+    "struct_args",
+    "struct_func_start",
+    "struct_generics"
+   ],
+   "n": 9610,
+   "parent": 27,
+   "repos": 50,
+   "langs": [
+    [
+     "rust",
+     9578
+    ],
+    [
+     "zig",
+     15
+    ],
+    [
+     "go",
+     8
+    ],
+    [
+     "objective-c",
+     3
+    ],
+    [
+     "dart",
+     3
+    ]
+   ]
+  },
+  {
+   "rank": 91,
+   "signals": [
+    "def_freeze_hits",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 9260,
+   "parent": 10,
+   "repos": 86,
+   "langs": [
+    [
+     "cpp",
+     8579
+    ],
+    [
+     "typescript",
+     372
+    ],
+    [
+     "ada",
+     123
+    ],
+    [
+     "objective-c",
+     57
+    ],
+    [
+     "dart",
+     51
+    ]
+   ]
+  },
+  {
+   "rank": 92,
+   "signals": [
+    "def_encapsulation",
+    "def_safety",
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 9023,
+   "parent": 20,
+   "repos": 155,
+   "langs": [
+    [
+     "php",
+     3125
+    ],
+    [
+     "python",
+     1997
+    ],
+    [
+     "csharp",
+     1528
+    ],
+    [
+     "dart",
+     719
+    ],
+    [
+     "go",
+     674
+    ]
+   ]
+  },
+  {
+   "rank": 93,
+   "signals": [
+    "state_flux",
+    "struct_args",
+    "struct_closures",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 8844,
+   "parent": 16,
+   "repos": 160,
+   "langs": [
+    [
+     "javascript",
+     5583
+    ],
+    [
+     "typescript",
+     2039
+    ],
+    [
+     "ruby",
+     304
+    ],
+    [
+     "dart",
+     246
+    ],
+    [
+     "html",
+     199
+    ]
+   ]
+  },
+  {
+   "rank": 94,
+   "signals": [
+    "def_safety",
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_closures",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 8457,
+   "parent": 57,
+   "repos": 153,
+   "langs": [
+    [
+     "javascript",
+     7000
+    ],
+    [
+     "typescript",
+     763
+    ],
+    [
+     "dart",
+     240
+    ],
+    [
+     "ruby",
+     203
+    ],
+    [
+     "html",
+     57
+    ]
+   ]
+  },
+  {
+   "rank": 95,
+   "signals": [
+    "arch_api",
+    "def_safety",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 8341,
+   "parent": 18,
+   "repos": 204,
+   "langs": [
+    [
+     "python",
+     1827
+    ],
+    [
+     "csharp",
+     1757
+    ],
+    [
+     "php",
+     1375
+    ],
+    [
+     "zig",
+     946
+    ],
+    [
+     "dart",
+     652
+    ]
+   ]
+  },
+  {
+   "rank": 96,
+   "signals": [
+    "arch_api",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 8329,
+   "parent": 18,
+   "repos": 169,
+   "langs": [
+    [
+     "python",
+     5507
+    ],
+    [
+     "csharp",
+     1135
+    ],
+    [
+     "typescript",
+     451
+    ],
+    [
+     "swift",
+     427
+    ],
+    [
+     "java",
+     331
+    ]
+   ]
+  },
+  {
+   "rank": 97,
+   "signals": [
+    "def_encapsulation",
+    "struct_args",
+    "struct_func_start"
+   ],
+   "n": 8235,
+   "parent": 15,
+   "repos": 84,
+   "langs": [
+    [
+     "csharp",
+     4226
+    ],
+    [
+     "go",
+     1115
+    ],
+    [
+     "java",
+     857
+    ],
+    [
+     "groovy",
+     781
+    ],
+    [
+     "dart",
+     524
+    ]
+   ]
+  },
+  {
+   "rank": 98,
+   "signals": [
+    "state_flux",
+    "state_pointers",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 8128,
+   "parent": 63,
+   "repos": 68,
+   "langs": [
+    [
+     "cpp",
+     7761
+    ],
+    [
+     "abap",
+     138
+    ],
+    [
+     "c",
+     134
+    ],
+    [
+     "assembly",
+     59
+    ],
+    [
+     "rust",
+     10
+    ]
+   ]
+  },
+  {
+   "rank": 99,
+   "signals": [
+    "arch_api",
+    "state_pointers",
+    "struct_args",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 8094,
+   "parent": 11,
+   "repos": 31,
+   "langs": [
+    [
+     "c",
+     8081
+    ],
+    [
+     "zig",
+     8
+    ],
+    [
+     "swift",
+     3
+    ],
+    [
+     "rust",
+     2
+    ]
+   ]
+  },
+  {
+   "rank": 100,
+   "signals": [
+    "struct_args",
+    "struct_branch",
+    "struct_func_start"
+   ],
+   "n": 7962,
+   "parent": 15,
+   "repos": 188,
+   "langs": [
+    [
+     "javascript",
+     2476
+    ],
+    [
+     "typescript",
+     1875
+    ],
+    [
+     "cpp",
+     798
+    ],
+    [
+     "rust",
+     648
+    ],
+    [
+     "assembly",
+     476
+    ]
+   ]
+  },
+  {
+   "rank": 101,
+   "signals": [
+    "arch_api",
+    "state_cast_hits",
+    "state_safety_neg",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 7825,
+   "parent": 148,
+   "repos": 55,
+   "langs": [
+    [
+     "java",
+     6865
+    ],
+    [
+     "zig",
+     412
+    ],
+    [
+     "c",
+     389
+    ],
+    [
+     "python",
+     84
+    ],
+    [
+     "csharp",
+     57
+    ]
+   ]
+  },
+  {
+   "rank": 102,
+   "signals": [
+    "state_bailout_hits",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 7618,
+   "parent": 10,
+   "repos": 173,
+   "langs": [
+    [
+     "kotlin",
+     4637
+    ],
+    [
+     "typescript",
+     861
+    ],
+    [
+     "javascript",
+     699
+    ],
+    [
+     "python",
+     426
+    ],
+    [
+     "ruby",
+     261
+    ]
+   ]
+  },
+  {
+   "rank": 103,
+   "signals": [
+    "state_cast_hits",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 7543,
+   "parent": 30,
+   "repos": 69,
+   "langs": [
+    [
+     "cpp",
+     7044
+    ],
+    [
+     "assembly",
+     233
+    ],
+    [
+     "rust",
+     163
+    ],
+    [
+     "objective-c",
+     58
+    ],
+    [
+     "c",
+     20
+    ]
+   ]
+  },
+  {
+   "rank": 104,
+   "signals": [
+    "def_safety",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 7502,
+   "parent": 1,
+   "repos": 172,
+   "langs": [
+    [
+     "javascript",
+     2047
+    ],
+    [
+     "cpp",
+     1795
+    ],
+    [
+     "typescript",
+     1086
+    ],
+    [
+     "dart",
+     1004
+    ],
+    [
+     "kotlin",
+     444
+    ]
+   ]
+  },
+  {
+   "rank": 105,
+   "signals": [
+    "arch_api",
+    "def_safety",
+    "def_test",
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 7454,
+   "parent": 35,
+   "repos": 114,
+   "langs": [
+    [
+     "python",
+     6947
+    ],
+    [
+     "go",
+     253
+    ],
+    [
+     "php",
+     210
+    ],
+    [
+     "java",
+     18
+    ],
+    [
+     "rust",
+     13
+    ]
+   ]
+  },
+  {
+   "rank": 106,
+   "signals": [
+    "arch_api",
+    "def_encapsulation",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 7442,
+   "parent": 2,
+   "repos": 90,
+   "langs": [
+    [
+     "csharp",
+     4486
+    ],
+    [
+     "java",
+     1385
+    ],
+    [
+     "php",
+     517
+    ],
+    [
+     "c",
+     380
+    ],
+    [
+     "kotlin",
+     326
+    ]
+   ]
+  },
+  {
+   "rank": 107,
+   "signals": [
+    "arch_api",
+    "bitwise_ops",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 7289,
+   "parent": 26,
+   "repos": 29,
+   "langs": [
+    [
+     "c",
+     7286
+    ],
+    [
+     "cpp",
+     3
+    ]
+   ]
+  },
+  {
+   "rank": 108,
+   "signals": [
+    "def_safety",
+    "struct_args",
+    "struct_branch",
+    "struct_closures",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 7257,
+   "parent": 41,
+   "repos": 156,
+   "langs": [
+    [
+     "javascript",
+     4295
+    ],
+    [
+     "typescript",
+     1517
+    ],
+    [
+     "kotlin",
+     662
+    ],
+    [
+     "dart",
+     482
+    ],
+    [
+     "html",
+     62
+    ]
+   ]
+  },
+  {
+   "rank": 109,
+   "signals": [
+    "def_encapsulation",
+    "def_safety",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 7255,
+   "parent": 32,
+   "repos": 152,
+   "langs": [
+    [
+     "csharp",
+     1710
+    ],
+    [
+     "dart",
+     1614
+    ],
+    [
+     "go",
+     960
+    ],
+    [
+     "php",
+     773
+    ],
+    [
+     "typescript",
+     746
+    ]
+   ]
+  },
+  {
+   "rank": 110,
+   "signals": [
+    "arch_api",
+    "def_freeze_hits",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 7172,
+   "parent": 26,
+   "repos": 32,
+   "langs": [
+    [
+     "c",
+     7172
+    ]
+   ]
+  },
+  {
+   "rank": 111,
+   "signals": [
+    "arch_api",
+    "arch_concurrency",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 7130,
+   "parent": 2,
+   "repos": 100,
+   "langs": [
+    [
+     "dart",
+     4262
+    ],
+    [
+     "php",
+     765
+    ],
+    [
+     "csharp",
+     737
+    ],
+    [
+     "python",
+     636
+    ],
+    [
+     "typescript",
+     490
+    ]
+   ]
+  },
+  {
+   "rank": 112,
+   "signals": [
+    "arch_api",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 7093,
+   "parent": 44,
+   "repos": 29,
+   "langs": [
+    [
+     "c",
+     7089
+    ],
+    [
+     "zig",
+     2
+    ],
+    [
+     "cpp",
+     1
+    ],
+    [
+     "rust",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 113,
+   "signals": [
+    "arch_api",
+    "def_safety",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 7084,
+   "parent": 13,
+   "repos": 102,
+   "langs": [
+    [
+     "c",
+     4734
+    ],
+    [
+     "zig",
+     1147
+    ],
+    [
+     "go",
+     899
+    ],
+    [
+     "rust",
+     260
+    ],
+    [
+     "csharp",
+     37
+    ]
+   ]
+  },
+  {
+   "rank": 114,
+   "signals": [
+    "def_encapsulation",
+    "def_safety",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 7020,
+   "parent": 6,
+   "repos": 66,
+   "langs": [
+    [
+     "c",
+     6168
+    ],
+    [
+     "go",
+     782
+    ],
+    [
+     "csharp",
+     58
+    ],
+    [
+     "python",
+     7
+    ],
+    [
+     "assembly",
+     2
+    ]
+   ]
+  },
+  {
+   "rank": 115,
+   "signals": [
+    "arch_api",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 7005,
+   "parent": 21,
+   "repos": 58,
+   "langs": [
+    [
+     "java",
+     5674
+    ],
+    [
+     "swift",
+     537
+    ],
+    [
+     "csharp",
+     341
+    ],
+    [
+     "rust",
+     329
+    ],
+    [
+     "kotlin",
+     60
+    ]
+   ]
+  },
+  {
+   "rank": 116,
+   "signals": [
+    "arch_api",
+    "def_test",
+    "state_flux",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 6892,
+   "parent": 8,
+   "repos": 53,
+   "langs": [
+    [
+     "csharp",
+     3134
+    ],
+    [
+     "java",
+     1940
+    ],
+    [
+     "php",
+     1472
+    ],
+    [
+     "python",
+     270
+    ],
+    [
+     "rust",
+     41
+    ]
+   ]
+  },
+  {
+   "rank": 117,
+   "signals": [
+    "struct_args",
+    "struct_linear"
+   ],
+   "n": 6868,
+   "parent": 166,
+   "repos": 92,
+   "langs": [
+    [
+     "typescript",
+     5112
+    ],
+    [
+     "php",
+     1230
+    ],
+    [
+     "cpp",
+     494
+    ],
+    [
+     "shell",
+     28
+    ],
+    [
+     "ruby",
+     2
+    ]
+   ]
+  },
+  {
+   "rank": 118,
+   "signals": [
+    "def_freeze_hits",
+    "state_pointers",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 6854,
+   "parent": 78,
+   "repos": 42,
+   "langs": [
+    [
+     "cpp",
+     6830
+    ],
+    [
+     "objective-c",
+     12
+    ],
+    [
+     "c",
+     12
+    ]
+   ]
+  },
+  {
+   "rank": 119,
+   "signals": [
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 6850,
+   "parent": 52,
+   "repos": 45,
+   "langs": [
+    [
+     "rust",
+     3367
+    ],
+    [
+     "dart",
+     1305
+    ],
+    [
+     "csharp",
+     1171
+    ],
+    [
+     "swift",
+     379
+    ],
+    [
+     "groovy",
+     245
+    ]
+   ]
+  },
+  {
+   "rank": 120,
+   "signals": [
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start"
+   ],
+   "n": 6805,
+   "parent": 31,
+   "repos": 176,
+   "langs": [
+    [
+     "javascript",
+     2583
+    ],
+    [
+     "typescript",
+     1815
+    ],
+    [
+     "cpp",
+     802
+    ],
+    [
+     "dart",
+     660
+    ],
+    [
+     "csharp",
+     267
+    ]
+   ]
+  },
+  {
+   "rank": 121,
+   "signals": [
+    "arch_globals",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 6709,
+   "parent": 14,
+   "repos": 57,
+   "langs": [
+    [
+     "cpp",
+     6353
+    ],
+    [
+     "assembly",
+     238
+    ],
+    [
+     "ruby",
+     40
+    ],
+    [
+     "makefile",
+     37
+    ],
+    [
+     "yaml",
+     6
+    ]
+   ]
+  },
+  {
+   "rank": 122,
+   "signals": [
+    "def_encapsulation",
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 6540,
+   "parent": 20,
+   "repos": 136,
+   "langs": [
+    [
+     "python",
+     3814
+    ],
+    [
+     "csharp",
+     1383
+    ],
+    [
+     "java",
+     756
+    ],
+    [
+     "typescript",
+     212
+    ],
+    [
+     "dart",
+     186
+    ]
+   ]
+  },
+  {
+   "rank": 123,
+   "signals": [
+    "bitwise_ops",
+    "def_encapsulation",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 6518,
+   "parent": 47,
+   "repos": 37,
+   "langs": [
+    [
+     "c",
+     6513
+    ],
+    [
+     "csharp",
+     2
+    ],
+    [
+     "solidity",
+     2
+    ],
+    [
+     "go",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 124,
+   "signals": [
+    "state_pointers",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 6479,
+   "parent": 72,
+   "repos": 62,
+   "langs": [
+    [
+     "cpp",
+     5983
+    ],
+    [
+     "assembly",
+     321
+    ],
+    [
+     "c",
+     74
+    ],
+    [
+     "rust",
+     51
+    ],
+    [
+     "abap",
+     24
+    ]
+   ]
+  },
+  {
+   "rank": 125,
+   "signals": [
+    "def_freeze_hits",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 6449,
+   "parent": 24,
+   "repos": 48,
+   "langs": [
+    [
+     "cpp",
+     6389
+    ],
+    [
+     "c",
+     47
+    ],
+    [
+     "objective-c",
+     12
+    ],
+    [
+     "rust",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 126,
+   "signals": [
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 6398,
+   "parent": 40,
+   "repos": 73,
+   "langs": [
+    [
+     "rust",
+     5624
+    ],
+    [
+     "cpp",
+     678
+    ],
+    [
+     "swift",
+     66
+    ],
+    [
+     "zig",
+     19
+    ],
+    [
+     "kotlin",
+     4
+    ]
+   ]
+  },
+  {
+   "rank": 127,
+   "signals": [
+    "def_freeze_hits",
+    "state_cast_hits",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 6355,
+   "parent": 37,
+   "repos": 42,
+   "langs": [
+    [
+     "cpp",
+     6339
+    ],
+    [
+     "objective-c",
+     12
+    ],
+    [
+     "c",
+     2
+    ],
+    [
+     "assembly",
+     1
+    ],
+    [
+     "rust",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 128,
+   "signals": [
+    "struct_args",
+    "struct_closures",
+    "struct_func_start"
+   ],
+   "n": 6352,
+   "parent": 15,
+   "repos": 107,
+   "langs": [
+    [
+     "javascript",
+     4490
+    ],
+    [
+     "dart",
+     1125
+    ],
+    [
+     "html",
+     315
+    ],
+    [
+     "typescript",
+     114
+    ],
+    [
+     "groovy",
+     96
+    ]
+   ]
+  },
+  {
+   "rank": 129,
+   "signals": [
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 6292,
+   "parent": 10,
+   "repos": 175,
+   "langs": [
+    [
+     "typescript",
+     2449
+    ],
+    [
+     "rust",
+     1113
+    ],
+    [
+     "kotlin",
+     669
+    ],
+    [
+     "swift",
+     573
+    ],
+    [
+     "cpp",
+     496
+    ]
+   ]
+  },
+  {
+   "rank": 130,
+   "signals": [
+    "arch_api",
+    "state_flux",
+    "state_safety_neg",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 6181,
+   "parent": 12,
+   "repos": 179,
+   "langs": [
+    [
+     "python",
+     3548
+    ],
+    [
+     "java",
+     931
+    ],
+    [
+     "php",
+     763
+    ],
+    [
+     "csharp",
+     417
+    ],
+    [
+     "typescript",
+     316
+    ]
+   ]
+  },
+  {
+   "rank": 131,
+   "signals": [
+    "def_test",
+    "state_safety_neg",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 6153,
+   "parent": 34,
+   "repos": 52,
+   "langs": [
+    [
+     "rust",
+     4837
+    ],
+    [
+     "java",
+     875
+    ],
+    [
+     "kotlin",
+     389
+    ],
+    [
+     "groovy",
+     47
+    ],
+    [
+     "dart",
+     4
+    ]
+   ]
+  },
+  {
+   "rank": 132,
+   "signals": [
+    "state_flux",
+    "struct_args",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 6128,
+   "parent": 16,
+   "repos": 167,
+   "langs": [
+    [
+     "python",
+     2892
+    ],
+    [
+     "kotlin",
+     874
+    ],
+    [
+     "typescript",
+     618
+    ],
+    [
+     "swift",
+     566
+    ],
+    [
+     "rust",
+     497
+    ]
+   ]
+  },
+  {
+   "rank": 133,
+   "signals": [
+    "arch_api",
+    "arch_concurrency",
+    "struct_args",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 6017,
+   "parent": 29,
+   "repos": 61,
+   "langs": [
+    [
+     "python",
+     4728
+    ],
+    [
+     "dart",
+     538
+    ],
+    [
+     "csharp",
+     479
+    ],
+    [
+     "typescript",
+     144
+    ],
+    [
+     "rust",
+     55
+    ]
+   ]
+  },
+  {
+   "rank": 134,
+   "signals": [
+    "arch_api",
+    "def_freeze_hits",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5986,
+   "parent": 37,
+   "repos": 57,
+   "langs": [
+    [
+     "c",
+     5974
+    ],
+    [
+     "rust",
+     6
+    ],
+    [
+     "objective-c",
+     2
+    ],
+    [
+     "csharp",
+     2
+    ],
+    [
+     "cpp",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 135,
+   "signals": [
+    "arch_api",
+    "def_test",
+    "struct_args",
+    "struct_closures",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 5980,
+   "parent": 9,
+   "repos": 13,
+   "langs": [
+    [
+     "csharp",
+     5801
+    ],
+    [
+     "java",
+     118
+    ],
+    [
+     "scala",
+     60
+    ],
+    [
+     "python",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 136,
+   "signals": [
+    "def_test",
+    "state_flux",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5964,
+   "parent": 34,
+   "repos": 51,
+   "langs": [
+    [
+     "java",
+     3179
+    ],
+    [
+     "kotlin",
+     1359
+    ],
+    [
+     "rust",
+     1207
+    ],
+    [
+     "groovy",
+     133
+    ],
+    [
+     "swift",
+     73
+    ]
+   ]
+  },
+  {
+   "rank": 137,
+   "signals": [
+    "arch_api",
+    "state_flux",
+    "state_heat_triggers",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5836,
+   "parent": 26,
+   "repos": 17,
+   "langs": [
+    [
+     "c",
+     5836
+    ]
+   ]
+  },
+  {
+   "rank": 138,
+   "signals": [
+    "def_freeze_hits",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5785,
+   "parent": 36,
+   "repos": 46,
+   "langs": [
+    [
+     "cpp",
+     5698
+    ],
+    [
+     "objective-c",
+     47
+    ],
+    [
+     "c",
+     14
+    ],
+    [
+     "ada",
+     12
+    ],
+    [
+     "dart",
+     8
+    ]
+   ]
+  },
+  {
+   "rank": 139,
+   "signals": [
+    "arch_api",
+    "state_cast_hits",
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5739,
+   "parent": 12,
+   "repos": 173,
+   "langs": [
+    [
+     "python",
+     3345
+    ],
+    [
+     "php",
+     873
+    ],
+    [
+     "csharp",
+     680
+    ],
+    [
+     "c",
+     279
+    ],
+    [
+     "go",
+     217
+    ]
+   ]
+  },
+  {
+   "rank": 140,
+   "signals": [
+    "arch_api",
+    "def_safety",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5728,
+   "parent": 2,
+   "repos": 161,
+   "langs": [
+    [
+     "python",
+     1681
+    ],
+    [
+     "csharp",
+     1518
+    ],
+    [
+     "php",
+     826
+    ],
+    [
+     "java",
+     713
+    ],
+    [
+     "dart",
+     315
+    ]
+   ]
+  },
+  {
+   "rank": 141,
+   "signals": [
+    "state_flux",
+    "struct_func_start"
+   ],
+   "n": 5638,
+   "parent": 39,
+   "repos": 92,
+   "langs": [
+    [
+     "cobol",
+     2528
+    ],
+    [
+     "cpp",
+     1709
+    ],
+    [
+     "kotlin",
+     569
+    ],
+    [
+     "makefile",
+     219
+    ],
+    [
+     "javascript",
+     166
+    ]
+   ]
+  },
+  {
+   "rank": 142,
+   "signals": [
+    "arch_api",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5582,
+   "parent": 56,
+   "repos": 31,
+   "langs": [
+    [
+     "c",
+     5579
+    ],
+    [
+     "zig",
+     1
+    ],
+    [
+     "cpp",
+     1
+    ],
+    [
+     "python",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 143,
+   "signals": [
+    "def_safety",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5560,
+   "parent": 30,
+   "repos": 89,
+   "langs": [
+    [
+     "cpp",
+     4146
+    ],
+    [
+     "zig",
+     813
+    ],
+    [
+     "rust",
+     514
+    ],
+    [
+     "c",
+     62
+    ],
+    [
+     "swift",
+     13
+    ]
+   ]
+  },
+  {
+   "rank": 144,
+   "signals": [
+    "state_pointers",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start"
+   ],
+   "n": 5504,
+   "parent": 27,
+   "repos": 37,
+   "langs": [
+    [
+     "rust",
+     5498
+    ],
+    [
+     "csharp",
+     3
+    ],
+    [
+     "cpp",
+     2
+    ],
+    [
+     "dart",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 145,
+   "signals": [
+    "bitwise_ops",
+    "struct_func_start"
+   ],
+   "n": 5497,
+   "parent": 39,
+   "repos": 48,
+   "langs": [
+    [
+     "cpp",
+     4816
+    ],
+    [
+     "assembly",
+     623
+    ],
+    [
+     "objective-c",
+     36
+    ],
+    [
+     "c",
+     19
+    ],
+    [
+     "dart",
+     2
+    ]
+   ]
+  },
+  {
+   "rank": 146,
+   "signals": [
+    "arch_ui_framework",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5485,
+   "parent": 1,
+   "repos": 61,
+   "langs": [
+    [
+     "javascript",
+     4563
+    ],
+    [
+     "typescript",
+     655
+    ],
+    [
+     "dart",
+     103
+    ],
+    [
+     "ruby",
+     49
+    ],
+    [
+     "kotlin",
+     39
+    ]
+   ]
+  },
+  {
+   "rank": 147,
+   "signals": [
+    "def_encapsulation",
+    "state_flux",
+    "state_pointers",
+    "state_safety_neg",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5462,
+   "parent": 6,
+   "repos": 53,
+   "langs": [
+    [
+     "c",
+     5410
+    ],
+    [
+     "go",
+     36
+    ],
+    [
+     "solidity",
+     10
+    ],
+    [
+     "csharp",
+     6
+    ]
+   ]
+  },
+  {
+   "rank": 148,
+   "signals": [
+    "arch_api",
+    "state_safety_neg",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5454,
+   "parent": 2,
+   "repos": 150,
+   "langs": [
+    [
+     "python",
+     1369
+    ],
+    [
+     "java",
+     1287
+    ],
+    [
+     "c",
+     755
+    ],
+    [
+     "csharp",
+     643
+    ],
+    [
+     "php",
+     415
+    ]
+   ]
+  },
+  {
+   "rank": 149,
+   "signals": [
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start"
+   ],
+   "n": 5433,
+   "parent": 27,
+   "repos": 77,
+   "langs": [
+    [
+     "rust",
+     4540
+    ],
+    [
+     "cpp",
+     633
+    ],
+    [
+     "zig",
+     103
+    ],
+    [
+     "go",
+     75
+    ],
+    [
+     "assembly",
+     46
+    ]
+   ]
+  },
+  {
+   "rank": 150,
+   "signals": [
+    "def_encapsulation",
+    "struct_args",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 5421,
+   "parent": 7,
+   "repos": 120,
+   "langs": [
+    [
+     "python",
+     2231
+    ],
+    [
+     "java",
+     1232
+    ],
+    [
+     "csharp",
+     1023
+    ],
+    [
+     "kotlin",
+     428
+    ],
+    [
+     "dart",
+     156
+    ]
+   ]
+  },
+  {
+   "rank": 151,
+   "signals": [
+    "arch_api",
+    "def_test",
+    "state_cast_hits",
+    "state_flux",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5419,
+   "parent": 8,
+   "repos": 94,
+   "langs": [
+    [
+     "python",
+     4828
+    ],
+    [
+     "php",
+     474
+    ],
+    [
+     "solidity",
+     81
+    ],
+    [
+     "go",
+     16
+    ],
+    [
+     "rust",
+     7
+    ]
+   ]
+  },
+  {
+   "rank": 152,
+   "signals": [
+    "def_test",
+    "struct_func_start"
+   ],
+   "n": 5372,
+   "parent": 39,
+   "repos": 61,
+   "langs": [
+    [
+     "cpp",
+     3290
+    ],
+    [
+     "c",
+     1703
+    ],
+    [
+     "shell",
+     182
+    ],
+    [
+     "yaml",
+     75
+    ],
+    [
+     "javascript",
+     72
+    ]
+   ]
+  },
+  {
+   "rank": 153,
+   "signals": [
+    "arch_api",
+    "state_bailout_hits",
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5371,
+   "parent": 12,
+   "repos": 165,
+   "langs": [
+    [
+     "python",
+     3932
+    ],
+    [
+     "csharp",
+     462
+    ],
+    [
+     "java",
+     248
+    ],
+    [
+     "c",
+     156
+    ],
+    [
+     "fortran",
+     154
+    ]
+   ]
+  },
+  {
+   "rank": 154,
+   "signals": [
+    "arch_api",
+    "state_flux",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5355,
+   "parent": 5,
+   "repos": 87,
+   "langs": [
+    [
+     "java",
+     3267
+    ],
+    [
+     "python",
+     597
+    ],
+    [
+     "swift",
+     461
+    ],
+    [
+     "rust",
+     339
+    ],
+    [
+     "csharp",
+     311
+    ]
+   ]
+  },
+  {
+   "rank": 155,
+   "signals": [
+    "def_safety",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5341,
+   "parent": 40,
+   "repos": 88,
+   "langs": [
+    [
+     "cpp",
+     2880
+    ],
+    [
+     "zig",
+     1258
+    ],
+    [
+     "rust",
+     1137
+    ],
+    [
+     "c",
+     38
+    ],
+    [
+     "swift",
+     14
+    ]
+   ]
+  },
+  {
+   "rank": 156,
+   "signals": [
+    "def_test",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start"
+   ],
+   "n": 5310,
+   "parent": 84,
+   "repos": 50,
+   "langs": [
+    [
+     "rust",
+     4998
+    ],
+    [
+     "dart",
+     164
+    ],
+    [
+     "groovy",
+     77
+    ],
+    [
+     "apex",
+     45
+    ],
+    [
+     "csharp",
+     20
+    ]
+   ]
+  },
+  {
+   "rank": 157,
+   "signals": [
+    "arch_api",
+    "def_safety",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5262,
+   "parent": 44,
+   "repos": 86,
+   "langs": [
+    [
+     "zig",
+     2155
+    ],
+    [
+     "go",
+     1317
+    ],
+    [
+     "c",
+     1211
+    ],
+    [
+     "rust",
+     509
+    ],
+    [
+     "csharp",
+     62
+    ]
+   ]
+  },
+  {
+   "rank": 158,
+   "signals": [
+    "def_freeze_hits",
+    "def_safety",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5241,
+   "parent": 28,
+   "repos": 44,
+   "langs": [
+    [
+     "cpp",
+     5209
+    ],
+    [
+     "c",
+     26
+    ],
+    [
+     "rust",
+     5
+    ],
+    [
+     "csharp",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 159,
+   "signals": [
+    "state_cast_hits",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5224,
+   "parent": 1,
+   "repos": 158,
+   "langs": [
+    [
+     "cpp",
+     3046
+    ],
+    [
+     "typescript",
+     392
+    ],
+    [
+     "javascript",
+     313
+    ],
+    [
+     "kotlin",
+     235
+    ],
+    [
+     "swift",
+     201
+    ]
+   ]
+  },
+  {
+   "rank": 160,
+   "signals": [
+    "def_freeze_hits",
+    "state_flux",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5177,
+   "parent": 17,
+   "repos": 80,
+   "langs": [
+    [
+     "cpp",
+     4654
+    ],
+    [
+     "typescript",
+     284
+    ],
+    [
+     "objective-c",
+     69
+    ],
+    [
+     "java",
+     54
+    ],
+    [
+     "dart",
+     34
+    ]
+   ]
+  },
+  {
+   "rank": 161,
+   "signals": [
+    "def_encapsulation",
+    "def_freeze_hits",
+    "def_safety",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5164,
+   "parent": 51,
+   "repos": 48,
+   "langs": [
+    [
+     "c",
+     5156
+    ],
+    [
+     "go",
+     5
+    ],
+    [
+     "csharp",
+     3
+    ]
+   ]
+  },
+  {
+   "rank": 162,
+   "signals": [
+    "state_cast_hits",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 5155,
+   "parent": 40,
+   "repos": 68,
+   "langs": [
+    [
+     "cpp",
+     4389
+    ],
+    [
+     "assembly",
+     491
+    ],
+    [
+     "rust",
+     212
+    ],
+    [
+     "objective-c",
+     37
+    ],
+    [
+     "go",
+     9
+    ]
+   ]
+  },
+  {
+   "rank": 163,
+   "signals": [],
+   "n": 5070,
+   "parent": null,
+   "repos": 28,
+   "langs": [
+    [
+     "shell",
+     4528
+    ],
+    [
+     "scheme",
+     298
+    ],
+    [
+     "groovy",
+     75
+    ],
+    [
+     "python",
+     67
+    ],
+    [
+     "ruby",
+     40
+    ]
+   ]
+  },
+  {
+   "rank": 164,
+   "signals": [
+    "arch_api",
+    "arch_concurrency",
+    "struct_args",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4996,
+   "parent": 111,
+   "repos": 9,
+   "langs": [
+    [
+     "dart",
+     4981
+    ],
+    [
+     "swift",
+     5
+    ],
+    [
+     "python",
+     4
+    ],
+    [
+     "kotlin",
+     3
+    ],
+    [
+     "zig",
+     2
+    ]
+   ]
+  },
+  {
+   "rank": 165,
+   "signals": [
+    "arch_api",
+    "def_encapsulation",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4930,
+   "parent": 21,
+   "repos": 51,
+   "langs": [
+    [
+     "java",
+     4034
+    ],
+    [
+     "kotlin",
+     468
+    ],
+    [
+     "csharp",
+     201
+    ],
+    [
+     "rust",
+     137
+    ],
+    [
+     "swift",
+     59
+    ]
+   ]
+  },
+  {
+   "rank": 166,
+   "signals": [
+    "struct_args"
+   ],
+   "n": 4916,
+   "parent": 163,
+   "repos": 74,
+   "langs": [
+    [
+     "typescript",
+     3153
+    ],
+    [
+     "groovy",
+     1639
+    ],
+    [
+     "shell",
+     109
+    ],
+    [
+     "cpp",
+     14
+    ],
+    [
+     "dart",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 167,
+   "signals": [
+    "def_test",
+    "struct_args",
+    "struct_closures",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4908,
+   "parent": 34,
+   "repos": 32,
+   "langs": [
+    [
+     "java",
+     4264
+    ],
+    [
+     "rust",
+     324
+    ],
+    [
+     "kotlin",
+     178
+    ],
+    [
+     "groovy",
+     104
+    ],
+    [
+     "csharp",
+     26
+    ]
+   ]
+  },
+  {
+   "rank": 168,
+   "signals": [
+    "def_encapsulation",
+    "def_safety",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4870,
+   "parent": 3,
+   "repos": 27,
+   "langs": [
+    [
+     "c",
+     4868
+    ],
+    [
+     "go",
+     2
+    ]
+   ]
+  },
+  {
+   "rank": 169,
+   "signals": [
+    "bitwise_ops",
+    "def_encapsulation",
+    "def_freeze_hits",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4868,
+   "parent": 33,
+   "repos": 21,
+   "langs": [
+    [
+     "c",
+     4868
+    ]
+   ]
+  },
+  {
+   "rank": 170,
+   "signals": [
+    "def_freeze_hits",
+    "state_flux",
+    "state_pointers",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4834,
+   "parent": 98,
+   "repos": 46,
+   "langs": [
+    [
+     "cpp",
+     4779
+    ],
+    [
+     "c",
+     51
+    ],
+    [
+     "abap",
+     2
+    ],
+    [
+     "objective-c",
+     2
+    ]
+   ]
+  },
+  {
+   "rank": 171,
+   "signals": [
+    "bitwise_ops",
+    "def_encapsulation",
+    "state_flux",
+    "state_heat_triggers",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4823,
+   "parent": 33,
+   "repos": 11,
+   "langs": [
+    [
+     "c",
+     4823
+    ]
+   ]
+  },
+  {
+   "rank": 172,
+   "signals": [
+    "def_encapsulation",
+    "def_freeze_hits",
+    "def_safety",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_class_start",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4822,
+   "parent": 55,
+   "repos": 29,
+   "langs": [
+    [
+     "c",
+     4822
+    ]
+   ]
+  },
+  {
+   "rank": 173,
+   "signals": [
+    "def_encapsulation",
+    "state_flux",
+    "state_heat_triggers",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4821,
+   "parent": 6,
+   "repos": 37,
+   "langs": [
+    [
+     "c",
+     4694
+    ],
+    [
+     "go",
+     95
+    ],
+    [
+     "csharp",
+     20
+    ],
+    [
+     "livecode",
+     10
+    ],
+    [
+     "yacc",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 174,
+   "signals": [
+    "state_safety_neg",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4813,
+   "parent": 1,
+   "repos": 181,
+   "langs": [
+    [
+     "typescript",
+     1214
+    ],
+    [
+     "cpp",
+     801
+    ],
+    [
+     "javascript",
+     597
+    ],
+    [
+     "kotlin",
+     496
+    ],
+    [
+     "rust",
+     328
+    ]
+   ]
+  },
+  {
+   "rank": 175,
+   "signals": [
+    "def_encapsulation",
+    "state_flux",
+    "struct_args",
+    "struct_func_start"
+   ],
+   "n": 4782,
+   "parent": 31,
+   "repos": 85,
+   "langs": [
+    [
+     "csharp",
+     2477
+    ],
+    [
+     "java",
+     986
+    ],
+    [
+     "typescript",
+     440
+    ],
+    [
+     "go",
+     374
+    ],
+    [
+     "dart",
+     287
+    ]
+   ]
+  },
+  {
+   "rank": 176,
+   "signals": [
+    "state_flux",
+    "struct_args",
+    "struct_closures",
+    "struct_func_start"
+   ],
+   "n": 4759,
+   "parent": 31,
+   "repos": 102,
+   "langs": [
+    [
+     "javascript",
+     4276
+    ],
+    [
+     "html",
+     188
+    ],
+    [
+     "dart",
+     127
+    ],
+    [
+     "typescript",
+     68
+    ],
+    [
+     "groovy",
+     47
+    ]
+   ]
+  },
+  {
+   "rank": 177,
+   "signals": [
+    "def_encapsulation",
+    "state_flux",
+    "struct_args",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 4739,
+   "parent": 45,
+   "repos": 110,
+   "langs": [
+    [
+     "python",
+     3880
+    ],
+    [
+     "java",
+     470
+    ],
+    [
+     "csharp",
+     201
+    ],
+    [
+     "kotlin",
+     94
+    ],
+    [
+     "typescript",
+     27
+    ]
+   ]
+  },
+  {
+   "rank": 178,
+   "signals": [
+    "def_encapsulation",
+    "struct_args",
+    "struct_closures",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4663,
+   "parent": 7,
+   "repos": 71,
+   "langs": [
+    [
+     "java",
+     2089
+    ],
+    [
+     "go",
+     1284
+    ],
+    [
+     "csharp",
+     569
+    ],
+    [
+     "python",
+     174
+    ],
+    [
+     "php",
+     171
+    ]
+   ]
+  },
+  {
+   "rank": 179,
+   "signals": [
+    "arch_api",
+    "state_flux",
+    "state_memory_alloc",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4636,
+   "parent": 5,
+   "repos": 45,
+   "langs": [
+    [
+     "php",
+     4550
+    ],
+    [
+     "rust",
+     19
+    ],
+    [
+     "perl",
+     18
+    ],
+    [
+     "matlab",
+     13
+    ],
+    [
+     "go",
+     12
+    ]
+   ]
+  },
+  {
+   "rank": 180,
+   "signals": [
+    "state_heat_triggers",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4626,
+   "parent": 1,
+   "repos": 137,
+   "langs": [
+    [
+     "javascript",
+     2072
+    ],
+    [
+     "kotlin",
+     1641
+    ],
+    [
+     "python",
+     426
+    ],
+    [
+     "typescript",
+     144
+    ],
+    [
+     "rust",
+     90
+    ]
+   ]
+  },
+  {
+   "rank": 181,
+   "signals": [
+    "arch_api",
+    "state_pointers",
+    "struct_args",
+    "struct_func_start",
+    "struct_generics"
+   ],
+   "n": 4604,
+   "parent": 61,
+   "repos": 50,
+   "langs": [
+    [
+     "rust",
+     4544
+    ],
+    [
+     "zig",
+     45
+    ],
+    [
+     "dart",
+     10
+    ],
+    [
+     "go",
+     3
+    ],
+    [
+     "csharp",
+     2
+    ]
+   ]
+  },
+  {
+   "rank": 182,
+   "signals": [
+    "arch_api",
+    "state_flux",
+    "state_pointers",
+    "state_safety_neg",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4599,
+   "parent": 13,
+   "repos": 73,
+   "langs": [
+    [
+     "c",
+     4492
+    ],
+    [
+     "zig",
+     54
+    ],
+    [
+     "rust",
+     32
+    ],
+    [
+     "go",
+     15
+    ],
+    [
+     "csharp",
+     4
+    ]
+   ]
+  },
+  {
+   "rank": 183,
+   "signals": [
+    "arch_api",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_closures",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4582,
+   "parent": 56,
+   "repos": 13,
+   "langs": [
+    [
+     "go",
+     4576
+    ],
+    [
+     "rust",
+     5
+    ],
+    [
+     "swift",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 184,
+   "signals": [
+    "def_freeze_hits",
+    "struct_args",
+    "struct_func_start"
+   ],
+   "n": 4563,
+   "parent": 15,
+   "repos": 56,
+   "langs": [
+    [
+     "cpp",
+     3700
+    ],
+    [
+     "dart",
+     529
+    ],
+    [
+     "typescript",
+     133
+    ],
+    [
+     "rust",
+     81
+    ],
+    [
+     "java",
+     57
+    ]
+   ]
+  },
+  {
+   "rank": 185,
+   "signals": [
+    "bitwise_ops",
+    "def_encapsulation",
+    "def_freeze_hits",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4503,
+   "parent": 49,
+   "repos": 47,
+   "langs": [
+    [
+     "c",
+     4498
+    ],
+    [
+     "go",
+     4
+    ],
+    [
+     "cpp",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 186,
+   "signals": [
+    "def_freeze_hits",
+    "def_safety",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4419,
+   "parent": 37,
+   "repos": 35,
+   "langs": [
+    [
+     "cpp",
+     4404
+    ],
+    [
+     "c",
+     8
+    ],
+    [
+     "rust",
+     7
+    ]
+   ]
+  },
+  {
+   "rank": 187,
+   "signals": [
+    "struct_args",
+    "struct_closures",
+    "struct_linear"
+   ],
+   "n": 4385,
+   "parent": 117,
+   "repos": 67,
+   "langs": [
+    [
+     "typescript",
+     4369
+    ],
+    [
+     "cpp",
+     7
+    ],
+    [
+     "php",
+     6
+    ],
+    [
+     "dart",
+     2
+    ],
+    [
+     "groovy",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 188,
+   "signals": [
+    "arch_api",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start"
+   ],
+   "n": 4351,
+   "parent": 46,
+   "repos": 35,
+   "langs": [
+    [
+     "csharp",
+     2567
+    ],
+    [
+     "rust",
+     620
+    ],
+    [
+     "java",
+     493
+    ],
+    [
+     "dart",
+     402
+    ],
+    [
+     "scala",
+     221
+    ]
+   ]
+  },
+  {
+   "rank": 189,
+   "signals": [
+    "state_safety_neg",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4339,
+   "parent": 14,
+   "repos": 46,
+   "langs": [
+    [
+     "cobol",
+     3711
+    ],
+    [
+     "assembly",
+     247
+    ],
+    [
+     "cpp",
+     153
+    ],
+    [
+     "ruby",
+     73
+    ],
+    [
+     "dart",
+     45
+    ]
+   ]
+  },
+  {
+   "rank": 190,
+   "signals": [
+    "arch_api",
+    "def_test",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4275,
+   "parent": 18,
+   "repos": 128,
+   "langs": [
+    [
+     "python",
+     2913
+    ],
+    [
+     "go",
+     1025
+    ],
+    [
+     "php",
+     92
+    ],
+    [
+     "csharp",
+     74
+    ],
+    [
+     "java",
+     62
+    ]
+   ]
+  },
+  {
+   "rank": 191,
+   "signals": [
+    "struct_args",
+    "struct_branch",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4193,
+   "parent": 10,
+   "repos": 72,
+   "langs": [
+    [
+     "rust",
+     2147
+    ],
+    [
+     "dart",
+     1161
+    ],
+    [
+     "swift",
+     262
+    ],
+    [
+     "java",
+     171
+    ],
+    [
+     "kotlin",
+     157
+    ]
+   ]
+  },
+  {
+   "rank": 192,
+   "signals": [
+    "arch_api",
+    "state_cast_hits",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4187,
+   "parent": 2,
+   "repos": 157,
+   "langs": [
+    [
+     "python",
+     1410
+    ],
+    [
+     "csharp",
+     1038
+    ],
+    [
+     "php",
+     574
+    ],
+    [
+     "c",
+     471
+    ],
+    [
+     "objective-c",
+     171
+    ]
+   ]
+  },
+  {
+   "rank": 193,
+   "signals": [
+    "state_cast_hits",
+    "state_pointers",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4171,
+   "parent": 19,
+   "repos": 64,
+   "langs": [
+    [
+     "cpp",
+     3451
+    ],
+    [
+     "assembly",
+     442
+    ],
+    [
+     "rust",
+     189
+    ],
+    [
+     "objective-c",
+     27
+    ],
+    [
+     "c",
+     16
+    ]
+   ]
+  },
+  {
+   "rank": 194,
+   "signals": [
+    "def_encapsulation",
+    "state_flux",
+    "state_memory_alloc",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4144,
+   "parent": 45,
+   "repos": 22,
+   "langs": [
+    [
+     "php",
+     4100
+    ],
+    [
+     "go",
+     34
+    ],
+    [
+     "embedded_python",
+     2
+    ],
+    [
+     "csharp",
+     2
+    ],
+    [
+     "c",
+     2
+    ]
+   ]
+  },
+  {
+   "rank": 195,
+   "signals": [
+    "def_freeze_hits",
+    "def_safety",
+    "state_cast_hits",
+    "state_flux",
+    "state_pointers",
+    "struct_args",
+    "struct_branch",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4083,
+   "parent": 80,
+   "repos": 33,
+   "langs": [
+    [
+     "cpp",
+     4079
+    ],
+    [
+     "c",
+     3
+    ],
+    [
+     "go",
+     1
+    ]
+   ]
+  },
+  {
+   "rank": 196,
+   "signals": [
+    "arch_api",
+    "def_encapsulation",
+    "state_flux",
+    "struct_args",
+    "struct_func_start"
+   ],
+   "n": 4082,
+   "parent": 48,
+   "repos": 50,
+   "langs": [
+    [
+     "csharp",
+     3754
+    ],
+    [
+     "java",
+     215
+    ],
+    [
+     "rust",
+     44
+    ],
+    [
+     "c",
+     21
+    ],
+    [
+     "go",
+     19
+    ]
+   ]
+  },
+  {
+   "rank": 197,
+   "signals": [
+    "arch_api",
+    "arch_concurrency",
+    "def_test",
+    "struct_args",
+    "struct_class_start",
+    "struct_closures",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4053,
+   "parent": 9,
+   "repos": 2,
+   "langs": [
+    [
+     "csharp",
+     4053
+    ]
+   ]
+  },
+  {
+   "rank": 198,
+   "signals": [
+    "bitwise_ops",
+    "def_encapsulation",
+    "struct_args",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4040,
+   "parent": 7,
+   "repos": 88,
+   "langs": [
+    [
+     "c",
+     3280
+    ],
+    [
+     "go",
+     241
+    ],
+    [
+     "php",
+     167
+    ],
+    [
+     "csharp",
+     164
+    ],
+    [
+     "dart",
+     56
+    ]
+   ]
+  },
+  {
+   "rank": 199,
+   "signals": [
+    "arch_api",
+    "def_test",
+    "state_flux",
+    "struct_args",
+    "struct_func_start",
+    "struct_generics",
+    "struct_linear"
+   ],
+   "n": 4030,
+   "parent": 8,
+   "repos": 70,
+   "langs": [
+    [
+     "python",
+     3799
+    ],
+    [
+     "java",
+     192
+    ],
+    [
+     "rust",
+     19
+    ],
+    [
+     "csharp",
+     10
+    ],
+    [
+     "go",
+     6
+    ]
+   ]
+  },
+  {
+   "rank": 200,
+   "signals": [
+    "arch_api",
+    "arch_io",
+    "arch_regex",
+    "bitwise_ops",
+    "def_test",
+    "state_safety_neg",
+    "struct_args",
+    "struct_decorators",
+    "struct_func_start",
+    "struct_linear"
+   ],
+   "n": 4010,
+   "parent": 9,
+   "repos": 1,
+   "langs": [
+    [
+     "java",
+     4010
+    ]
+   ]
+  }
+ ]
+}

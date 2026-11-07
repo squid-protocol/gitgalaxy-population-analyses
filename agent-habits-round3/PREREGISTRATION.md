@@ -70,3 +70,36 @@ sample. Every outcome is reported.
 ## 5. Deviations
 
 Any departure is added here, dated, with a reason, before its results are reported.
+
+### A1 (2026-11-07, before any round 3 run, scan or result exists): secondary claim R3-S5, the lattice lens
+
+**What it adds.** One more secondary identification claim, registered now so that round 3 tests it on fresh data.
+
+| id | claim | test | α |
+|---|---|---|---|
+| R3-S5 | **Lattice lens.** A program's nearest same-cell neighbour by **lattice family × rung mix** is the same model more often than chance (R3-A cells, and separately R3-B). | as R3-H1: one-sided label permutation within cells, 10,000 draws | 0.05 each, uncorrected (secondary) |
+
+**Why.**
+- temporal-crucible placed the agent-habits programs on its population fingerprint lattice: 200 common
+  keyword-presence shapes from 6.9M functions, in 14 families.
+- On those (already seen, exploratory) programs, the family × rung mix alone found a same-model nearest neighbour in
+  42 of 50 (84%; chance 29%). That is a coarse, function-level, language-agnostic representation, independent of
+  sfs.
+- The temporal-crucible write-up is `docs/journal/2026-11-07-agent-code-on-the-lattice.md`.
+- R3-S5 asks whether that holds on runs that did not exist when it was seen.
+
+**Method (frozen).**
+- **Script:** `lattice_lens.py`, sha256 `8d724f645969c9c44c0f9e5206abb8a15565724be9f2fa1c08e41ba470859ac1`.
+- **Frozen lattice:** `lattice_shapes.json`, sha256 prefix `a27d2c93f817ac25`.
+- **Representation:** a program = shares of its functions (loc ≥ 3, in the cell's language) over 15 family slots
+  (14 + unassigned) × 3 rung bands.
+- **Distance:** L1 nearest neighbour.
+- **Exclusion:** the registered floor (fewer than 3 functions → excluded and counted).
+- **Input:** the same round 3 GitGalaxy scans as every other claim (engine pinned per §3).
+- **Validation:** on the agent-habits programs the script reproduces the exploratory 42/50. That run used old data
+  only.
+
+**Reading, fixed now.**
+- R3-S5 passing alongside R3-H1 → model handwriting shows at the function-shape level too.
+- R3-S5 failing while R3-H1 passes → the fine-grained sfs profile carries it but the coarse lattice does not.
+- R3-S5 is secondary: it cannot rescue a failed R3-H1.
