@@ -16,10 +16,36 @@ import numpy as np
 from .reference import DENSITY_PREFIX, Reference
 
 
-def raw_features(ref: Reference, loc, complexity, args, keyword_density, signals) -> np.ndarray:
+KEYWORD_MODES = ("density", "smoothed_density", "presence", "counts", "composition")
+
+
+def raw_features(
+    ref: Reference,
+    loc,
+    complexity,
+    args,
+    keyword_density,
+    signals,
+    *,
+    keyword_mode: str = "density",
+    smoothing_k: float = 5.0,
+) -> np.ndarray:
+    """Build the raw function feature matrix under a standardized keyword mode.
+
+    ``keyword_mode`` controls how signal columns are normalized:
+    - ``density``: ``log1p(min(hits / max(loc, 1) * 100, cap))`` (engine parity default)
+    - ``smoothed_density``: ``log1p(min(hits / (loc + smoothing_k) * 100, cap))``
+    - ``presence``: binary ``1.0`` if ``hits > 0`` else ``0.0``
+    - ``counts``: ``log1p(hits)``
+    - ``composition``: ``hits / max(sum(hits), 1.0)`` across signal columns
+    """
+    if keyword_mode not in KEYWORD_MODES:
+        raise ValueError(f"unknown keyword_mode {keyword_mode!r}; expected one of {KEYWORD_MODES}")
     loc = np.asarray(loc, dtype=np.float64)
     complexity = np.asarray(complexity, dtype=np.float64)
+    signals = np.asarray(signals, dtype=np.float64)
     denom = np.where(loc > 0, loc, 1.0)
+    total_hits = np.maximum(signals.sum(axis=1), 1.0) if signals.ndim == 2 and signals.shape[1] > 0 else np.ones(len(loc))
     cols = []
     sig_index = {c: j for j, c in enumerate(ref.signal_columns)}
     for name in ref.feature_names:
@@ -35,11 +61,20 @@ def raw_features(ref: Reference, loc, complexity, args, keyword_density, signals
             cols.append(complexity / denom)
         elif name.startswith(DENSITY_PREFIX):
             col = name[len(DENSITY_PREFIX):]
-            dens = signals[:, sig_index[col]] / denom * 100.0
-            cap = ref.caps.get(col)
-            if cap is not None:
-                dens = np.minimum(dens, cap)
-            cols.append(np.log1p(dens))
+            hits = signals[:, sig_index[col]]
+            if keyword_mode == "presence":
+                cols.append((hits > 0).astype(np.float64))
+            elif keyword_mode == "counts":
+                cols.append(np.log1p(hits))
+            elif keyword_mode == "composition":
+                cols.append(hits / total_hits)
+            else:
+                rate_denom = (loc + smoothing_k) if keyword_mode == "smoothed_density" else denom
+                dens = hits / rate_denom * 100.0
+                cap = ref.caps.get(col)
+                if cap is not None:
+                    dens = np.minimum(dens, cap)
+                cols.append(np.log1p(dens))
         else:  # pragma: no cover - load_reference rejects unknown feature names
             raise ValueError(f"unknown feature {name}")
     return np.column_stack(cols) if cols else np.zeros((len(loc), 0))

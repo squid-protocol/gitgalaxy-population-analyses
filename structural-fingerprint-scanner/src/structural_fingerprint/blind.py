@@ -533,7 +533,7 @@ def ablations(p: BlindParams) -> dict[str, BlindParams]:
     }
 
 
-def _tables(db, lenses: tuple[str, ...], min_loc: int) -> dict[str, FunctionTable]:
+def _tables(db, lenses: tuple[str, ...], min_loc: int, keyword_mode: str = "density") -> dict[str, FunctionTable]:
     from .fingerprint import build
     from .reference import load_reference
     from .scan_io import load_scan
@@ -541,18 +541,19 @@ def _tables(db, lenses: tuple[str, ...], min_loc: int) -> dict[str, FunctionTabl
     out = {}
     for lens in lenses:
         ref = load_reference(lens)
-        out[lens] = build(load_scan(db, ref.signal_columns), ref, min_loc=min_loc).functions
+        out[lens] = build(load_scan(db, ref.signal_columns), ref, min_loc=min_loc,
+                          keyword_mode=keyword_mode).functions
     return out
 
 
 def _job(args: tuple) -> dict:
-    db, ref_db, tax_path, lens, min_loc, params, draws, rewire_draws, with_ablations, lens_weights = args
+    db, ref_db, tax_path, lens, min_loc, params, draws, rewire_draws, with_ablations, lens_weights, keyword_mode = args
     from .reference import load_reference
     from .twins import TwinParams, find_twins
 
     tax = Taxonomy.load(tax_path) if tax_path else None
-    rt = _tables(ref_db, ("structure", lens), min_loc)
-    pt = _tables(db, ("structure", lens), min_loc)
+    rt = _tables(ref_db, ("structure", lens), min_loc, keyword_mode=keyword_mode)
+    pt = _tables(db, ("structure", lens), min_loc, keyword_mode=keyword_mode)
     tax = tax or Taxonomy.from_directories(rt["structure"])
     ref_labels, ref = reference_context(rt[lens], tax)
     lref = load_reference(lens)
@@ -583,6 +584,7 @@ def main(argv: list[str] | None = None) -> int:
     from concurrent.futures import ProcessPoolExecutor
     from pathlib import Path
 
+    from .features import KEYWORD_MODES
     from .scan_io import resolve_scans
 
     ap = argparse.ArgumentParser(prog="python -m structural_fingerprint.blind", description=__doc__.split("\n")[0])
@@ -591,6 +593,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--ports", required=True, help="comma-separated scan names")
     ap.add_argument("--taxonomy")
     ap.add_argument("--lens", default="portable", help="lens of the blind descriptors (default portable)")
+    ap.add_argument("--keyword-mode", choices=KEYWORD_MODES, default="density")
     ap.add_argument("--min-loc", type=int, default=3)
     ap.add_argument("--method", default="fgw", choices=("fgw", "features"))
     ap.add_argument("--alpha", type=float, default=BlindParams.alpha)
@@ -612,12 +615,12 @@ def main(argv: list[str] | None = None) -> int:
         by[name] = resolve_scans([root / name])[0]
     params = BlindParams(method=a.method, alpha=a.alpha, epsilon=a.epsilon, smooth=a.smooth, decision=a.decision)
     jobs = [(by[p], by[a.reference], a.taxonomy, a.lens, a.min_loc, params, a.draws, a.rewire_draws, a.ablations,
-             a.lens_weights)
+             a.lens_weights, a.keyword_mode)
             for p in a.ports.split(",")]
     with ProcessPoolExecutor(max(1, a.workers)) as ex:
         results = list(ex.map(_job, jobs))
-    doc = {"reference": a.reference, "lens": a.lens, "params": params.__dict__, "lens_weights": a.lens_weights,
-           "ports": results}
+    doc = {"reference": a.reference, "lens": a.lens, "keyword_mode": a.keyword_mode, "params": params.__dict__,
+           "lens_weights": a.lens_weights, "ports": results}
     Path(a.out).write_text(json.dumps(_finite(doc), indent=1, allow_nan=False) + "\n")
     for r in results:
         print(f"{r['repo']:24s} acc {r['accuracy']:.3f} (null {r['accuracy_null']['mean']:.3f}) "

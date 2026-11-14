@@ -17,6 +17,7 @@ from . import crosscheck as CC
 from . import subsystems as SS
 from . import subway as SW
 from .compare import COMPONENTS, IncomparableError, compare_cohort, explain
+from .features import KEYWORD_MODES
 from .fingerprint import Fingerprint, build, safe_name
 from .lineage import descent_matrix, evaluate_lineage, read_declared_lineage
 from .reference import LENSES, load_reference
@@ -27,7 +28,13 @@ from .twins import TwinParams, find_twins
 log = logging.getLogger("structural_fingerprint")
 
 
-def _inputs(paths: list[str], lens: str, min_loc: int) -> list[Fingerprint]:
+def _inputs(
+    paths: list[str],
+    lens: str,
+    min_loc: int,
+    keyword_mode: str = "density",
+    smoothing_k: float = 5.0,
+) -> list[Fingerprint]:
     """Load fingerprints (``*.sfp.json``, or directories of them) and build any scans."""
     fps: list[Fingerprint] = []
     scans: list[Path] = []
@@ -43,7 +50,15 @@ def _inputs(paths: list[str], lens: str, min_loc: int) -> list[Fingerprint]:
         ref = load_reference(lens)
         for db in resolve_scans(scans):
             log.info("fingerprinting %s", db)
-            fps.append(build(load_scan(db, ref.signal_columns), ref, min_loc=min_loc))
+            fps.append(
+                build(
+                    load_scan(db, ref.signal_columns),
+                    ref,
+                    min_loc=min_loc,
+                    keyword_mode=keyword_mode,
+                    smoothing_k=smoothing_k,
+                )
+            )
     names = [fp.name for fp in fps]
     dupes = {n for n in names if names.count(n) > 1}
     if dupes:
@@ -70,7 +85,7 @@ def _weights(text: str | None) -> dict[str, float]:
 
 
 def cmd_fingerprint(a: argparse.Namespace) -> int:
-    fps = _inputs(a.inputs, a.lens, a.min_loc)
+    fps = _inputs(a.inputs, a.lens, a.min_loc, a.keyword_mode, a.smoothing_k)
     for fp in fps:
         p = fp.save(Path(a.out))
         d = fp.data
@@ -79,7 +94,7 @@ def cmd_fingerprint(a: argparse.Namespace) -> int:
 
 
 def cmd_compare(a: argparse.Namespace) -> int:
-    fps = _inputs(a.inputs, a.lens, a.min_loc)
+    fps = _inputs(a.inputs, a.lens, a.min_loc, a.keyword_mode, a.smoothing_k)
     if len(fps) < 2:
         raise SystemExit("compare needs at least two repositories")
     out = Path(a.out)
@@ -150,7 +165,7 @@ def _crosscheck_section(fps: list[Fingerprint], maps: list[SW.SubwayMap], out: P
 def cmd_subway(a: argparse.Namespace) -> int:
     from .html import page
 
-    fps = _inputs(a.inputs, a.lens, a.min_loc)
+    fps = _inputs(a.inputs, a.lens, a.min_loc, a.keyword_mode, a.smoothing_k)
     missing = [fp.name for fp in fps if fp.functions is None]
     if missing:
         raise SystemExit(f"subway maps need function tables; missing for {missing}")
@@ -210,7 +225,7 @@ def cmd_timeline(a: argparse.Namespace) -> int:
 
 
 def cmd_twins(a: argparse.Namespace) -> int:
-    fps = _inputs([a.query, a.target], a.lens, a.min_loc)
+    fps = _inputs([a.query, a.target], a.lens, a.min_loc, a.keyword_mode, a.smoothing_k)
     q, t = fps
     if q.functions is None or t.functions is None:
         raise SystemExit("twin search needs the .sfp.npz function table beside each fingerprint")
@@ -234,7 +249,7 @@ def cmd_twins(a: argparse.Namespace) -> int:
 
 
 def cmd_explain(a: argparse.Namespace) -> int:
-    fps = _inputs([a.a, a.b], a.lens, a.min_loc)
+    fps = _inputs([a.a, a.b], a.lens, a.min_loc, a.keyword_mode, a.smoothing_k)
     try:
         e = explain(fps[0], fps[1], top=a.top)
     except IncomparableError as err:
@@ -291,6 +306,10 @@ def main(argv: list[str] | None = None) -> int:
                        help="structure (engine space, default) or portable (cross-language weights)")
         p.add_argument("--min-loc", type=int, default=3,
                        help="ignore functions shorter than this in fingerprints (default 3, as the engine trainer)")
+        p.add_argument("--keyword-mode", choices=KEYWORD_MODES, default="density",
+                       help="how signal counts are normalized: density (default), smoothed_density, presence, counts, composition")
+        p.add_argument("--smoothing-k", type=float, default=5.0,
+                       help="LOC smoothing constant k for smoothed_density (default 5.0)")
 
     def crosscheck_opts(p: argparse.ArgumentParser) -> None:
         p.add_argument("--crosscheck", help="CSV of source-text verdicts per reference function and port "

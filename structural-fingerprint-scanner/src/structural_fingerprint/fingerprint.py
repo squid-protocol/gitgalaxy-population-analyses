@@ -140,13 +140,27 @@ def _gini(x: np.ndarray) -> float:
     return float(((2 * np.arange(1, n + 1) - n - 1) * x).sum() / (n * x.sum()))
 
 
-def build(scan: ScanData, ref: Reference, min_loc: int = 1) -> Fingerprint:
+def build(
+    scan: ScanData,
+    ref: Reference,
+    min_loc: int = 1,
+    keyword_mode: str = "density",
+    smoothing_k: float = 5.0,
+) -> Fingerprint:
     """Fingerprint one scan. ``min_loc`` drops functions shorter than that many lines
     from every component (the engine's own archetype trainer used 3)."""
     keep = scan.loc >= min_loc
     loc = scan.loc[keep]
-    raw = F.raw_features(ref, loc, scan.complexity[keep], scan.args[keep], scan.keyword_density[keep],
-                         scan.signals[keep])
+    raw = F.raw_features(
+        ref,
+        loc,
+        scan.complexity[keep],
+        scan.args[keep],
+        scan.keyword_density[keep],
+        scan.signals[keep],
+        keyword_mode=keyword_mode,
+        smoothing_k=smoothing_k,
+    )
     z = F.standardize(ref, raw)
     vec = F.embed(ref, z)
     arch_idx, _ = F.engine_archetypes(ref, z)
@@ -203,6 +217,8 @@ def build(scan: ScanData, ref: Reference, min_loc: int = 1) -> Fingerprint:
         "name": scan.name,
         "tool": {"name": "structural-fingerprint-scanner", "version": __version__},
         "spec": {"lens": ref.lens, "spec_hash": ref.spec_hash, "min_loc": min_loc,
+                 "keyword_mode": keyword_mode,
+                 **({"smoothing_k": smoothing_k} if keyword_mode == "smoothed_density" else {}),
                  "reference": ref.provenance, "lens_source": ref.lens_provenance},
         "source": {"scan_db": str(scan.db_path), **scan.metadata,
                    "missing_signals": list(scan.missing_signals)},
