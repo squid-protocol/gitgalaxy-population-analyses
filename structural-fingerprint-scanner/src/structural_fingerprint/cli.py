@@ -14,6 +14,7 @@ from pathlib import Path
 from . import __version__
 from . import browser as BR
 from . import crosscheck as CC
+from . import lattice as LT
 from . import subsystems as SS
 from . import subway as SW
 from .compare import COMPONENTS, IncomparableError, compare_cohort, explain
@@ -277,6 +278,24 @@ def cmd_explain(a: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_lattice_compare(a: argparse.Namespace) -> int:
+    ref = load_reference(a.lens)
+    scans = resolve_scans([Path(a.a), Path(a.b)])
+    sc_a = load_scan(scans[0], ref.signal_columns)
+    sc_b = load_scan(scans[1], ref.signal_columns)
+    res = LT.seed_and_extend_with_lattice(sc_a, sc_b, ref, min_loc=a.min_loc)
+    if a.json:
+        print(json.dumps(res.to_dict(), indent=2))
+    else:
+        print(
+            f"{res.repo_a} vs {res.repo_b}: "
+            f"FGW={res.fgw_cost:.3f}, SE={res.se_n} ({res.se_coverage:.1%}), "
+            f"kw_JSD={res.kw_jsd:.3f}, kw_cos={res.matched_kw_cos:.3f}, "
+            f"kw_dom={res.matched_kw_dom_agree:.1%}, arch_agree={res.matched_arch_agree:.1%}"
+        )
+    return 0
+
+
 def cmd_spec(a: argparse.Namespace) -> int:
     ref = load_reference(a.lens)
     d = ref.describe()
@@ -389,6 +408,13 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--json", action="store_true")
     common(p)
     p.set_defaults(func=cmd_explain)
+
+    p = sub.add_parser("lattice-compare", help="two-layer FGW Seed-and-Extend + 32-keyword-family lattice comparison")
+    p.add_argument("a")
+    p.add_argument("b")
+    p.add_argument("--json", action="store_true")
+    common(p)
+    p.set_defaults(func=cmd_lattice_compare)
 
     p = sub.add_parser("spec", help="print the reference frame and lens")
     p.add_argument("--json", action="store_true")
